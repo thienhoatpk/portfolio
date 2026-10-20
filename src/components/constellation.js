@@ -105,16 +105,20 @@ export function initConstellation() {
     const centerY = height / 2;
     const radiusStep = Math.min(width, height) * 0.38;
 
+    const existingMap = new Map((nodes || []).map(n => [n.id, n]));
+
     nodes = rawNodes.map((n, i) => {
+      const existing = existingMap.get(n.id);
       const angle = i * 2.39996; // Golden ratio spiral distribution
-      const dist = 48 + Math.sqrt(i + 1) * (radiusStep / Math.sqrt(rawNodes.length || 1));
+      const dist = 54 + Math.sqrt(i + 1) * (radiusStep / Math.sqrt(rawNodes.length || 1));
       const iconKey = n.icon || n.id;
       return {
         ...n,
-        x: centerX + Math.cos(angle) * dist,
-        y: centerY + Math.sin(angle) * dist,
-        vx: (Math.random() - 0.5) * 0.15,
-        vy: (Math.random() - 0.5) * 0.15,
+        x: existing ? existing.x : (centerX + Math.cos(angle) * dist),
+        y: existing ? existing.y : (centerY + Math.sin(angle) * dist),
+        baseX: existing ? existing.baseX : (centerX + Math.cos(angle) * dist),
+        baseY: existing ? existing.baseY : (centerY + Math.sin(angle) * dist),
+        isDragged: false,
         baseDist: dist,
         baseAngle: angle,
         color: categoryColors[n.category] || '#00F0FF',
@@ -152,14 +156,14 @@ export function initConstellation() {
         </div>
 
         <div class="arch-meta-row">
-          <span class="arch-meta-label">Connected Technologies</span>
+          <span class="arch-meta-label">Connected Technologies <span style="font-size:0.6875rem; color:var(--accent-cyan); font-weight:normal;">(⇄ Bidirectional)</span></span>
           <div class="arch-tech-pills">
             ${(selectedNode.links || []).map(linkId => {
               const target = rawNodes.find(n => n.id === linkId);
               return target ? `
                 <span class="badge badge-purple badge-jump-link" data-jump="${target.id}">
                   ${getTechIconSvg(target.icon || target.id)}
-                  <span>${target.name}</span>
+                  <span>⇄ ${target.name}</span>
                 </span>
               ` : '';
             }).join('')}
@@ -245,7 +249,7 @@ export function initConstellation() {
 
       const now = performance.now() * 0.001;
 
-      // 1. Draw connecting relationship lines with gentle organic curves and subtle pulses
+      // 1. Draw connecting relationship lines with gentle organic curves and bidirectional energy pulses
       const drawnLinks = new Set();
       nodes.forEach(source => {
         (source.links || []).forEach(targetId => {
@@ -276,16 +280,38 @@ export function initConstellation() {
             grad.addColorStop(0, source.color || '#00F0FF');
             grad.addColorStop(1, target.color || '#E879F9');
             ctx.strokeStyle = grad;
-            ctx.lineWidth = 1.6;
+            ctx.lineWidth = 1.8;
             ctx.stroke();
 
-            // Animated glowing energy packet along the curve
-            const t = ((now * 0.8) + (source.baseDist || 0) * 0.02) % 1;
-            const px = (1 - t) * (1 - t) * source.x + 2 * (1 - t) * t * cx + t * t * target.x;
-            const py = (1 - t) * (1 - t) * source.y + 2 * (1 - t) * t * cy + t * t * target.y;
+            // Hiệu ứng 2 chiều: Bidirectional Glowing Energy Packets
+            const speed = 0.65;
+            // Packet 1: Forward (source -> target)
+            const t1 = ((now * speed) + (source.baseDist || 0) * 0.02) % 1;
+            const px1 = (1 - t1) * (1 - t1) * source.x + 2 * (1 - t1) * t1 * cx + t1 * t1 * target.x;
+            const py1 = (1 - t1) * (1 - t1) * source.y + 2 * (1 - t1) * t1 * cy + t1 * t1 * target.y;
 
             ctx.beginPath();
-            ctx.arc(px, py, 2, 0, Math.PI * 2);
+            ctx.arc(px1, py1, 4.5, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(0, 240, 255, 0.4)';
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(px1, py1, 2.2, 0, Math.PI * 2);
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fill();
+
+            // Packet 2: Reverse (target -> source, opposing direction)
+            const t2 = (1 - ((now * speed + (source.baseDist || 0) * 0.02 + 0.5) % 1));
+            const px2 = (1 - t2) * (1 - t2) * source.x + 2 * (1 - t2) * t2 * cx + t2 * t2 * target.x;
+            const py2 = (1 - t2) * (1 - t2) * source.y + 2 * (1 - t2) * t2 * cy + t2 * t2 * target.y;
+
+            ctx.beginPath();
+            ctx.arc(px2, py2, 4.5, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(232, 121, 249, 0.4)';
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(px2, py2, 2.2, 0, Math.PI * 2);
             ctx.fillStyle = '#FFFFFF';
             ctx.fill();
           } else {
@@ -293,6 +319,26 @@ export function initConstellation() {
             ctx.strokeStyle = 'rgba(168, 85, 247, 0.16)';
             ctx.lineWidth = 0.85;
             ctx.stroke();
+
+            // Subtle ambient bidirectional flow
+            const speed = 0.35;
+            const tAmb1 = ((now * speed) + (source.baseDist || 0) * 0.02) % 1;
+            const apx1 = (1 - tAmb1) * (1 - tAmb1) * source.x + 2 * (1 - tAmb1) * tAmb1 * cx + tAmb1 * tAmb1 * target.x;
+            const apy1 = (1 - tAmb1) * (1 - tAmb1) * source.y + 2 * (1 - tAmb1) * tAmb1 * cy + tAmb1 * tAmb1 * target.y;
+
+            ctx.beginPath();
+            ctx.arc(apx1, apy1, 1.4, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(0, 240, 255, 0.35)';
+            ctx.fill();
+
+            const tAmb2 = (1 - ((now * speed + (source.baseDist || 0) * 0.02 + 0.5) % 1));
+            const apx2 = (1 - tAmb2) * (1 - tAmb2) * source.x + 2 * (1 - tAmb2) * tAmb2 * cx + tAmb2 * tAmb2 * target.x;
+            const apy2 = (1 - tAmb2) * (1 - tAmb2) * source.y + 2 * (1 - tAmb2) * tAmb2 * cy + tAmb2 * tAmb2 * target.y;
+
+            ctx.beginPath();
+            ctx.arc(apx2, apy2, 1.4, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(232, 121, 249, 0.3)';
+            ctx.fill();
           }
         });
       });
@@ -304,14 +350,16 @@ export function initConstellation() {
         const isHovered = (node.id === hoveredNode?.id);
         const isFilteredOut = (activeCategory !== 'All' && node.category !== activeCategory);
 
-        if (!prefersReducedMotion) {
-          node.x += Math.sin(now + node.baseAngle) * 0.15;
-          node.y += Math.cos(now + node.baseAngle) * 0.15;
+        if (!prefersReducedMotion && !node.isDragged) {
+          node.x += Math.sin(now + node.baseAngle) * 0.12;
+          node.y += Math.cos(now + node.baseAngle) * 0.12;
         }
 
-        const radius = isSelected ? 18 : (isHovered ? 16 : 14);
-        const iconSize = isSelected ? 20 : (isHovered ? 18 : 15);
+        // Slightly larger nodes ("các node to lên 1 xíu")
+        const radius = isSelected ? 22 : (isHovered ? 19 : 16.5);
+        const iconSize = isSelected ? 25 : (isHovered ? 22 : 18);
         const alpha = isFilteredOut ? 0.25 : 1.0;
+        node.currentRadius = radius;
 
         ctx.save();
         ctx.globalAlpha = alpha;
@@ -351,7 +399,7 @@ export function initConstellation() {
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
           ctx.fillStyle = node.color;
-          ctx.font = '700 9px "JetBrains Mono", monospace';
+          ctx.font = '700 11px "JetBrains Mono", monospace';
           ctx.fillText(node.monogram || '•', node.x, node.y);
         }
 
@@ -359,8 +407,8 @@ export function initConstellation() {
         ctx.textAlign = 'center';
         ctx.textBaseline = 'alphabetic';
         ctx.fillStyle = isSelected ? '#FFFFFF' : (isHovered ? '#00F0FF' : '#CBD5E1');
-        ctx.font = isSelected ? '700 11px "JetBrains Mono", monospace' : '500 10px "JetBrains Mono", monospace';
-        ctx.fillText(node.name, node.x, node.y + radius + 13);
+        ctx.font = isSelected ? '700 12px "JetBrains Mono", monospace' : '500 10.5px "JetBrains Mono", monospace';
+        ctx.fillText(node.name, node.x, node.y + radius + 15);
 
         ctx.restore();
       });
@@ -369,34 +417,118 @@ export function initConstellation() {
     }
   }
 
-  // Pointer interactions on canvas
-  canvas.addEventListener('mousemove', (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+  // Drag and Drop & Pointer interactions
+  let draggedNode = null;
+  let isDragging = false;
+  let dragStartX = 0;
+  let dragStartY = 0;
+  let dragOffsetX = 0;
+  let dragOffsetY = 0;
 
-    hoveredNode = nodes.find(n => {
-      const dist = Math.hypot(n.x - x, n.y - y);
-      return dist <= 24;
+  function findNodeAt(x, y) {
+    return nodes.find(n => {
+      const hitDist = (n.currentRadius || 17) + 8;
+      return Math.hypot(n.x - x, n.y - y) <= hitDist;
     }) || null;
+  }
 
-    canvas.style.cursor = hoveredNode ? 'pointer' : 'default';
+  function handlePointerDown(clientX, clientY) {
+    const rect = canvas.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+
+    const clicked = findNodeAt(x, y);
+    if (clicked) {
+      draggedNode = clicked;
+      isDragging = false;
+      dragStartX = clientX;
+      dragStartY = clientY;
+      dragOffsetX = clicked.x - x;
+      dragOffsetY = clicked.y - y;
+      clicked.isDragged = true;
+      canvas.style.cursor = 'grabbing';
+    }
+  }
+
+  function handlePointerMove(clientX, clientY) {
+    const rect = canvas.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+
+    if (draggedNode) {
+      const moveDist = Math.hypot(clientX - dragStartX, clientY - dragStartY);
+      if (moveDist > 3) {
+        isDragging = true;
+      }
+      if (isDragging) {
+        const width = canvas.clientWidth || 700;
+        const height = canvas.clientHeight || 480;
+        const targetX = x + dragOffsetX;
+        const targetY = y + dragOffsetY;
+        draggedNode.x = Math.max(35, Math.min(width - 35, targetX));
+        draggedNode.y = Math.max(35, Math.min(height - 35, targetY));
+        draggedNode.baseX = draggedNode.x;
+        draggedNode.baseY = draggedNode.y;
+        canvas.style.cursor = 'grabbing';
+        return;
+      }
+    }
+
+    hoveredNode = findNodeAt(x, y);
+    canvas.style.cursor = hoveredNode ? 'grab' : 'default';
+  }
+
+  function handlePointerUp() {
+    if (draggedNode) {
+      if (!isDragging) {
+        selectedNode = draggedNode;
+        renderSidebar();
+      }
+      draggedNode.isDragged = false;
+      draggedNode = null;
+      isDragging = false;
+      canvas.style.cursor = hoveredNode ? 'grab' : 'default';
+    }
+  }
+
+  canvas.addEventListener('mousedown', (e) => {
+    handlePointerDown(e.clientX, e.clientY);
   });
 
-  canvas.addEventListener('click', (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+  window.addEventListener('mousemove', (e) => {
+    handlePointerMove(e.clientX, e.clientY);
+  });
 
-    const clicked = nodes.find(n => {
-      const dist = Math.hypot(n.x - x, n.y - y);
-      return dist <= 24;
-    });
+  window.addEventListener('mouseup', () => {
+    handlePointerUp();
+  });
 
-    if (clicked) {
-      selectedNode = clicked;
-      renderSidebar();
+  canvas.addEventListener('mouseleave', () => {
+    if (!draggedNode) {
+      hoveredNode = null;
+      canvas.style.cursor = 'default';
     }
+  });
+
+  // Touch support for mobile / touchpads
+  canvas.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      handlePointerDown(e.touches[0].clientX, e.touches[0].clientY);
+      if (draggedNode) {
+        e.preventDefault();
+      }
+    }
+  }, { passive: false });
+
+  window.addEventListener('touchmove', (e) => {
+    if (draggedNode && e.touches.length === 1) {
+      handlePointerMove(e.touches[0].clientX, e.touches[0].clientY);
+      e.preventDefault();
+    }
+  }, { passive: false });
+
+  window.addEventListener('touchend', () => {
+    handlePointerUp();
   });
 
   // Toggle View button

@@ -136,7 +136,7 @@
       "name": "TimescaleDB",
       "category": "Databases",
       "icon": "timescale",
-      "is_active": 1,
+      "is_active": 0,
       "role": "Hypertable partitioned time-series storage & columnar compression",
       "links": [
         "postgres",

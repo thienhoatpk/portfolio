@@ -67,7 +67,8 @@
       "role": "Complex relational queries, indexing strategies, window functions",
       "links": [
         "postgres",
-        "timescale"
+        "timescale",
+        "mysql"
       ]
     },
     {
@@ -102,7 +103,8 @@
       "is_active": 1,
       "role": "Event-driven runtime for API gateways and microservices",
       "links": [
-        "ts"
+        "ts",
+        "mongodb"
       ]
     },
     {
@@ -201,7 +203,8 @@
       "links": [
         "k8s",
         "go",
-        "linux"
+        "linux",
+        "aws"
       ]
     },
     {
@@ -213,7 +216,9 @@
       "role": "Pod orchestration, horizontal pod autoscaling, ingress control",
       "links": [
         "docker",
-        "prometheus"
+        "prometheus",
+        "aws",
+        "cloudflare"
       ]
     },
     {
@@ -286,6 +291,73 @@
       "role": "Lightning-fast frontend asset bundling and modern ES modules",
       "links": [
         "ts"
+      ]
+    },
+    {
+      "id": "php",
+      "name": "PHP",
+      "category": "Languages",
+      "icon": "php",
+      "is_active": 1,
+      "role": "Server-side web scripting, modern PHP 8.x, Composer ecosystem & RESTful APIs",
+      "links": [
+        "mysql",
+        "docker",
+        "linux"
+      ]
+    },
+    {
+      "id": "mysql",
+      "name": "MySQL",
+      "category": "Databases",
+      "icon": "mysql",
+      "is_active": 1,
+      "role": "Relational database management, ACID transactions, InnoDB engine & replication",
+      "links": [
+        "sql",
+        "php",
+        "go",
+        "docker"
+      ]
+    },
+    {
+      "id": "mongodb",
+      "name": "MongoDB",
+      "category": "Databases",
+      "icon": "mongodb",
+      "is_active": 1,
+      "role": "Document-oriented NoSQL storage, flexible BSON schemas & aggregation pipelines",
+      "links": [
+        "nodejs",
+        "docker",
+        "redis"
+      ]
+    },
+    {
+      "id": "cloudflare",
+      "name": "Cloudflare",
+      "category": "Infrastructure",
+      "icon": "cloudflare",
+      "is_active": 1,
+      "role": "Global edge CDN, DDoS mitigation, DNS routing, WAF & Serverless Workers",
+      "links": [
+        "aws",
+        "k8s",
+        "docker"
+      ]
+    },
+    {
+      "id": "aws",
+      "name": "AWS Cloud",
+      "category": "Infrastructure",
+      "icon": "aws",
+      "is_active": 1,
+      "role": "Cloud infrastructure, S3 object storage, ECS/EKS clusters, RDS & IAM security",
+      "links": [
+        "docker",
+        "k8s",
+        "cloudflare",
+        "linux"
       ]
     }
   ]

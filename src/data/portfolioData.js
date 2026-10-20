@@ -13,7 +13,7 @@ export const CONFIG = {
   status: "ONLINE // ACCEPTING SELECT ARCHITECTURAL INQUIRIES",
   location: "Vietnam // Asia-East",
   githubUser: "thienhoa",
-  email: "hoa@gmail.com",
+  email: "nguyenthienhoatpk@gmail.com",
   social: {
     github: "https://github.com/thienhoa",
     gitlab: "https://gitlab.com/thienhoa",
@@ -253,40 +253,10 @@ export const ARCHITECTURE_SYSTEMS = [
   }
 ];
 
-export const CONSTELLATION_NODES = [
-  // Languages
-  { id: "go", name: "Go (Golang)", category: "Languages", role: "Primary backend language for microservices, concurrency, low-latency APIs", links: ["grpc", "kafka", "docker", "postgres", "redis"] },
-  { id: "ts", name: "TypeScript", category: "Languages", role: "Type-safe frontend logic, full-stack tooling, Node/Deno runtimes", links: ["vite", "nodejs", "react"] },
-  { id: "python", name: "Python", category: "Languages", role: "Data scripting, ML embeddings, semantic search pipelines, FastAPI", links: ["qdrant", "fastapi"] },
-  { id: "sql", name: "SQL", category: "Languages", role: "Complex relational queries, indexing strategies, window functions", links: ["postgres", "timescale"] },
+import techStackConfig from './tech-stack.json';
 
-  // Backend Frameworks & Systems
-  { id: "grpc", name: "gRPC & Protobuf", category: "Backend Frameworks", role: "High-performance inter-service RPC with binary serialization", links: ["go", "microservices"] },
-  { id: "fastapi", name: "FastAPI", category: "Backend Frameworks", role: "Asynchronous Python web service framework for AI/RAG APIs", links: ["python", "qdrant"] },
-  { id: "nodejs", name: "Node.js", category: "Backend Frameworks", role: "Event-driven runtime for API gateways and microservices", links: ["ts"] },
-  { id: "microservices", name: "Microservices Architecture", category: "Backend Frameworks", role: "Domain-driven decomposition, API contracts, service meshes", links: ["go", "docker", "k8s"] },
-
-  // Databases & Storage
-  { id: "postgres", name: "PostgreSQL", category: "Databases", role: "ACID transactions, relational modeling, JSONB, pgvector", links: ["sql", "go", "timescale"] },
-  { id: "timescale", name: "TimescaleDB", category: "Databases", role: "Hypertable partitioned time-series storage & columnar compression", links: ["postgres", "kafka"] },
-  { id: "qdrant", name: "Qdrant Vector DB", category: "Databases", role: "Approximate Nearest Neighbor (HNSW) vector search for embeddings", links: ["python", "ai-rag"] },
-
-  // Caching & Messaging
-  { id: "redis", name: "Redis", category: "Caching & Queues", role: "In-memory caching, pub/sub, distributed locks, rate limiting", links: ["go", "postgres"] },
-  { id: "kafka", name: "Apache Kafka", category: "Caching & Queues", role: "Distributed partitioned streaming log for high-volume event ingestion", links: ["go", "timescale"] },
-  { id: "rabbitmq", name: "RabbitMQ", category: "Caching & Queues", role: "AMQP task queues with complex routing and acknowledgment models", links: ["go", "python"] },
-
-  // Infrastructure & Cloud
-  { id: "docker", name: "Docker & OCI", category: "Infrastructure", role: "Multi-stage reproducible container builds, minimal scratch images", links: ["k8s", "go", "linux"] },
-  { id: "k8s", name: "Kubernetes", category: "Infrastructure", role: "Pod orchestration, horizontal pod autoscaling, ingress control", links: ["docker", "prometheus"] },
-  { id: "linux", name: "Linux & Shell", category: "Infrastructure", role: "Kernel tuning, systemd, networking namespaces, eBPF inspection", links: ["docker", "go"] },
-  { id: "prometheus", name: "Prometheus & Grafana", category: "Infrastructure", role: "Time-series metrics collection, PromQL dashboards, alerting rules", links: ["k8s", "go"] },
-
-  // AI & Developer Tools
-  { id: "ai-rag", name: "RAG & LLM Orchestration", category: "AI & Tools", role: "Vector chunking, reciprocal rank fusion, context augmentation", links: ["python", "qdrant"] },
-  { id: "git", name: "Git & CI/CD", category: "AI & Tools", role: "Trunk-based development, GitHub Actions, automated testing pipelines", links: ["docker", "go"] },
-  { id: "vite", name: "Vite & Vanilla Web", category: "AI & Tools", role: "Lightning-fast frontend asset bundling and modern ES modules", links: ["ts"] }
-];
+export const CONSTELLATION_NODES = techStackConfig.nodes;
+export const TECH_STACK_CONFIG = techStackConfig;
 
 export const TIMELINE_MILESTONES = [
   {

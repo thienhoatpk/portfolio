@@ -57,61 +57,99 @@ export function initProjects() {
       return;
     }
 
-    container.innerHTML = list.map(project => `
-      <article class="spotlight-card project-card" data-project-id="${project.id}">
-        <div class="project-card-header">
-          <span class="project-category">${project.category}</span>
-          ${project.featured ? '<span class="badge badge-cyan">Featured Architecture</span>' : ''}
-        </div>
+    const PROJECT_THEMES = {
+      'apexpulse-stream-engine': {
+        color: '#00F0FF',
+        tag: 'DISTRIBUTED INGESTION',
+        iconSvg: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00F0FF" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`
+      },
+      'cloud-rag-orchestrator': {
+        color: '#E879F9',
+        tag: 'HYBRID VECTOR RAG',
+        iconSvg: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E879F9" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="M11 8v6"/><path d="M8 11h6"/></svg>`
+      },
+      'distributed-cache-proxy': {
+        color: '#F59E0B',
+        tag: 'CONSISTENT HASHING',
+        iconSvg: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2.2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>`
+      },
+      'devops-telemetry-hub': {
+        color: '#10B981',
+        tag: 'LINUX EBPF DAEMON',
+        iconSvg: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`
+      }
+    };
 
-        <h3 class="project-title">${project.title}</h3>
-        <p class="project-summary">${project.summary}</p>
+    container.innerHTML = list.map(project => {
+      const theme = PROJECT_THEMES[project.id] || {
+        color: '#00F0FF',
+        tag: project.category.toUpperCase(),
+        iconSvg: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00F0FF" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>`
+      };
 
-        <!-- Technical Metrics Grid -->
-        <div class="project-metrics-row">
-          ${project.metrics.map(m => `
-            <div class="pm-item">
-              <span class="pm-val">${m.value}</span>
-              <span class="pm-lbl">${m.label}</span>
+      return `
+        <article class="spotlight-card project-card" data-project-id="${project.id}" style="--proj-color: ${theme.color};">
+          <div class="project-card-header">
+            <div class="project-header-left">
+              <div class="project-icon-box" style="border-color: ${theme.color}44; box-shadow: 0 0 14px ${theme.color}22;">
+                ${theme.iconSvg}
+              </div>
+              <div class="project-title-group">
+                <div class="project-tag-row">
+                  <span class="project-category-badge" style="color: ${theme.color}; border-color: ${theme.color}44;">
+                    ${theme.tag}
+                  </span>
+                  ${project.featured ? '<span class="project-featured-chip">Featured</span>' : ''}
+                </div>
+                <h3 class="project-title">${project.title}</h3>
+              </div>
             </div>
-          `).join('')}
-        </div>
-
-        <!-- Tech Tags -->
-        <div class="project-tags">
-          ${project.tags.map(t => `<span class="project-tag">${t}</span>`).join('')}
-        </div>
-
-        <!-- Action Links -->
-        <div class="project-card-footer">
-          <button class="btn btn-primary btn-sm open-arch-btn" data-id="${project.id}">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-            <span>System Architecture ↗</span>
-          </button>
-          
-          <div class="project-links">
-            ${project.githubUrl ? `
-              <a href="${project.githubUrl}" target="_blank" rel="noopener noreferrer" class="icon-link" aria-label="GitHub Repository for ${project.title}">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
-                </svg>
-                <span>Code</span>
-              </a>
-            ` : ''}
-            ${project.demoUrl ? `
-              <a href="${project.demoUrl}" target="_blank" rel="noopener noreferrer" class="icon-link" aria-label="Live Demo for ${project.title}">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                  <polyline points="15 3 21 3 21 9"></polyline>
-                  <line x1="10" y1="14" x2="21" y2="3"></line>
-                </svg>
-                <span>Demo</span>
-              </a>
-            ` : ''}
+            <span class="project-status-pulse" style="background: ${theme.color}; box-shadow: 0 0 8px ${theme.color};"></span>
           </div>
-        </div>
-      </article>
-    `).join('');
+
+          <p class="project-summary">${project.summary}</p>
+
+          <!-- Sleek Compact Telemetry Ribbon -->
+          <div class="project-metrics-ribbon">
+            ${project.metrics.map(m => `
+              <div class="pm-metric-item">
+                <span class="pm-metric-val" style="color: ${theme.color};">${m.value}</span>
+                <span class="pm-metric-lbl">${m.label}</span>
+              </div>
+            `).join('')}
+          </div>
+
+          <!-- Tech Stack Chips -->
+          <div class="project-tags">
+            ${project.tags.slice(0, 5).map(t => `<span class="project-tag">${t}</span>`).join('')}
+            ${project.tags.length > 5 ? `<span class="project-tag project-tag-more">+${project.tags.length - 5}</span>` : ''}
+          </div>
+
+          <!-- Card Action Footer -->
+          <div class="project-card-footer">
+            <div class="project-cta-badge">
+              <span>System Architecture</span>
+              <span class="cta-arrow">↗</span>
+            </div>
+
+            <div class="project-links">
+              ${project.githubUrl ? `
+                <a href="${project.githubUrl}" target="_blank" rel="noopener noreferrer" class="icon-link" aria-label="GitHub Repository for ${project.title}">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                  <span>Code</span>
+                </a>
+              ` : ''}
+              ${project.demoUrl ? `
+                <a href="${project.demoUrl}" target="_blank" rel="noopener noreferrer" class="icon-link" aria-label="Live Demo for ${project.title}">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                  <span>Demo</span>
+                </a>
+              ` : ''}
+            </div>
+          </div>
+        </article>
+      `;
+    }).join('');
 
     // Clicking anywhere on a project card opens the System Architecture sliding drawer
     container.querySelectorAll('.project-card').forEach(card => {

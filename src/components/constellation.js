@@ -133,57 +133,103 @@ export function initConstellation() {
     const color = categoryColors[selectedNode.category] || 'var(--accent-cyan)';
 
     const relatedProjects = PROJECTS.filter(p => 
-      p.tags.some(t => t.toLowerCase().includes(selectedNode.name.toLowerCase().split(' ')[0]))
+      p.tags.some(t => {
+        const tLower = t.toLowerCase();
+        const nameLower = selectedNode.name.toLowerCase();
+        const idLower = selectedNode.id.toLowerCase();
+        return tLower.includes(idLower) || nameLower.includes(tLower) || tLower.includes(nameLower.split(' ')[0]);
+      })
     );
+
+    detailPanel.style.setProperty('--node-color', color);
+    detailPanel.classList.remove('anim-swap');
+    void detailPanel.offsetWidth; // trigger reflow
+    detailPanel.classList.add('anim-swap');
 
     detailPanel.innerHTML = `
       <div class="constellation-sidebar-header">
-        <div class="constellation-sidebar-badge" style="border-color:${color};">
+        <div class="constellation-sidebar-badge" style="border-color:${color}; box-shadow: 0 0 20px ${color}44;">
           ${getTechIconSvg(selectedNode.icon || selectedNode.id)}
         </div>
-        <div>
-          <span class="badge" style="border-color:${color}; color:${color};">
-            ${selectedNode.category}
-          </span>
+        <div class="constellation-header-text">
+          <div class="node-meta-top">
+            <span class="badge node-cat-badge" style="border-color:${color}; color:${color};">
+              <span class="pulse-dot" style="background:${color}; box-shadow:0 0 8px ${color};"></span>
+              ${selectedNode.category}
+            </span>
+            <span class="node-status-tag">ONLINE</span>
+          </div>
           <h3 class="constellation-node-title">${selectedNode.name}</h3>
         </div>
       </div>
 
       <div class="arch-meta-list">
-        <div class="arch-meta-row">
-          <span class="arch-meta-label">Architectural Role</span>
-          <p class="arch-meta-val">${selectedNode.role}</p>
-        </div>
-
-        <div class="arch-meta-row">
-          <span class="arch-meta-label">Connected Technologies <span style="font-size:0.6875rem; color:var(--accent-cyan); font-weight:normal;">(⇄ Bidirectional)</span></span>
-          <div class="arch-tech-pills">
-            ${(selectedNode.links || []).map(linkId => {
-              const target = rawNodes.find(n => n.id === linkId);
-              return target ? `
-                <span class="badge badge-purple badge-jump-link" data-jump="${target.id}">
-                  ${getTechIconSvg(target.icon || target.id)}
-                  <span>⇄ ${target.name}</span>
-                </span>
-              ` : '';
-            }).join('')}
+        <div class="arch-meta-block">
+          <div class="arch-meta-header">
+            <svg class="arch-meta-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            <span class="arch-meta-label">ARCHITECTURAL ROLE</span>
+          </div>
+          <div class="arch-role-box" style="border-left-color:${color};">
+            <p class="arch-meta-val">${selectedNode.role}</p>
           </div>
         </div>
 
-        <div class="arch-meta-row">
-          <span class="arch-meta-label">Applied in Projects</span>
-          <div class="arch-tech-pills">
+        <div class="arch-meta-block">
+          <div class="arch-meta-header">
+            <svg class="arch-meta-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            <span class="arch-meta-label">INTERCONNECTED TOPOLOGY</span>
+            <span class="arch-meta-pill-tag">⇄ 2-WAY FLOW</span>
+          </div>
+          <div class="arch-tech-grid">
+            ${(selectedNode.links || []).length > 0 ? (selectedNode.links || []).map(linkId => {
+              const target = rawNodes.find(n => n.id === linkId);
+              if (!target) return '';
+              const targetColor = categoryColors[target.category] || '#00F0FF';
+              return `
+                <button type="button" class="tech-jump-card" data-jump="${target.id}" style="--target-color: ${targetColor};">
+                  <div class="tech-jump-icon">
+                    ${getTechIconSvg(target.icon || target.id)}
+                  </div>
+                  <div class="tech-jump-info">
+                    <span class="tech-jump-name">${target.name}</span>
+                    <span class="tech-jump-cat">${target.category}</span>
+                  </div>
+                  <span class="tech-jump-arrow">⇄</span>
+                </button>
+              `;
+            }).join('') : `<div class="arch-empty-tip">Autonomous root component</div>`}
+          </div>
+        </div>
+
+        <div class="arch-meta-block">
+          <div class="arch-meta-header">
+            <svg class="arch-meta-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <span class="arch-meta-label">APPLIED IN PRODUCTION</span>
+          </div>
+          <div class="arch-projects-wrap">
             ${relatedProjects.length > 0 
-              ? relatedProjects.map(p => `<span class="badge badge-cyan">${p.title}</span>`).join('')
-              : '<span style="color:var(--text-muted); font-size:0.8125rem;">Core Systems & Internal Tooling</span>'
+              ? relatedProjects.map(p => `
+                <a href="#projects" class="arch-project-chip">
+                  <span class="chip-dot" style="background:${color};"></span>
+                  <span class="chip-title">${p.title}</span>
+                  <span class="chip-arrow">↗</span>
+                </a>
+              `).join('')
+              : `<div class="arch-empty-tip">Core Infrastructure &amp; Foundation Services</div>`
             }
           </div>
         </div>
       </div>
+
+      <div class="constellation-sidebar-footer">
+        <span class="footer-hud-dot"></span>
+        <span>Click any node to navigate • Drag to reposition</span>
+      </div>
     `;
 
     detailPanel.querySelectorAll('[data-jump]').forEach(btn => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
         const jumpId = btn.getAttribute('data-jump');
         const next = rawNodes.find(n => n.id === jumpId);
         if (next) {

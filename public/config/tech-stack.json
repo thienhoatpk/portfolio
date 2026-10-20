@@ -156,11 +156,19 @@
     },
     {
       "id": "prometheus",
-      "name": "Prometheus & Grafana",
+      "name": "Prometheus",
       "category": "Infrastructure",
       "icon": "prometheus",
-      "role": "Time-series metrics collection, PromQL dashboards, alerting rules",
-      "links": ["k8s", "go"]
+      "role": "Time-series metrics collection, multi-dimensional PromQL alerting & scraping",
+      "links": ["k8s", "grafana", "go"]
+    },
+    {
+      "id": "grafana",
+      "name": "Grafana",
+      "category": "Infrastructure",
+      "icon": "grafana",
+      "role": "Unified observability dashboards, real-time telemetry visualization & SLO tracking",
+      "links": ["prometheus", "timescale"]
     },
     {
       "id": "ai-rag",

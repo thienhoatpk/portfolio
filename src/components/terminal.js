@@ -5,6 +5,7 @@
  */
 
 import { CONFIG, PROJECTS, CONSTELLATION_NODES } from '../data/portfolioData.js';
+import { openArchitectureDrawer } from './architecture.js';
 
 export function initTerminal(containerId = 'terminalBody', inputId = 'terminalInput') {
   const terminalBody = document.getElementById(containerId);
@@ -55,9 +56,8 @@ SUMMARY:     ${CONFIG.bio}
         .join('\n\n');
     },
     arch: () => {
-      const el = document.getElementById('architecture');
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
-      return `Targeted #architecture: Displaying interactive event-driven microservices topology.\nClick any node in the visualizer to inspect latency, protocols, and data flow.`;
+      openArchitectureDrawer('apexpulse-stream-engine');
+      return `Opened System Architecture Visualizer side drawer for ApexPulse.\nDisplaying interactive event-driven microservices topology.\nClick any node in the visualizer to inspect latency, protocols, and data flow.`;
     },
     blog: () => {
       const el = document.getElementById('blog');

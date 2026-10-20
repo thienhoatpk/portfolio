@@ -5,6 +5,7 @@
  */
 
 import { PROJECTS } from '../data/portfolioData.js';
+import { openArchitectureDrawer } from './architecture.js';
 
 export function initProjects() {
   const container = document.getElementById('projectsContainer');
@@ -83,8 +84,9 @@ export function initProjects() {
 
         <!-- Action Links -->
         <div class="project-card-footer">
-          <button class="btn btn-secondary btn-sm open-cs-btn" data-id="${project.id}" aria-haspopup="dialog">
-            Read Case Study ↗
+          <button class="btn btn-primary btn-sm open-arch-btn" data-id="${project.id}">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span>System Architecture ↗</span>
           </button>
           
           <div class="project-links">
@@ -111,11 +113,25 @@ export function initProjects() {
       </article>
     `).join('');
 
-    // Bind Case Study buttons across both top hero showcase and projects grid
-    document.querySelectorAll('.open-cs-btn').forEach(btn => {
-      btn.onclick = () => {
+    // Clicking anywhere on a project card opens the System Architecture sliding drawer
+    container.querySelectorAll('.project-card').forEach(card => {
+      card.addEventListener('click', (e) => {
+        if (e.target.closest('.icon-link') || e.target.closest('a')) return;
+        const id = card.getAttribute('data-project-id');
+        if (id) {
+          openArchitectureDrawer(id);
+        }
+      });
+    });
+
+    // Also handle direct button clicks
+    container.querySelectorAll('.open-arch-btn, .open-cs-btn').forEach(btn => {
+      btn.onclick = (e) => {
+        e.stopPropagation();
         const id = btn.getAttribute('data-id');
-        openCaseStudy(id, btn);
+        if (id) {
+          openArchitectureDrawer(id);
+        }
       };
     });
   }

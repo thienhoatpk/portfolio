@@ -5,6 +5,7 @@
  */
 
 import { CONFIG } from '../data/portfolioData.js';
+import { openArchitectureDrawer } from './architecture.js';
 
 export function initCommandPalette() {
   const modal = document.getElementById('commandPaletteModal');
@@ -23,7 +24,7 @@ export function initCommandPalette() {
     { id: 'nav-home', label: 'Go to System Overview (Hero)', group: 'Navigation', icon: '⚡', action: () => scrollToSection('hero') },
     { id: 'nav-skills', label: 'Go to Tech Stack Constellation', group: 'Navigation', icon: '🌌', action: () => scrollToSection('skills') },
     { id: 'nav-projects', label: 'Go to Featured Projects & Case Studies', group: 'Navigation', icon: '🛠️', action: () => scrollToSection('projects') },
-    { id: 'nav-arch', label: 'Go to System Architecture Visualizer', group: 'Navigation', icon: '📐', action: () => scrollToSection('architecture') },
+    { id: 'nav-arch', label: 'Explore System Architecture Visualizer', group: 'Navigation', icon: '📐', action: () => openArchitectureDrawer('apexpulse-stream-engine') },
     { id: 'nav-timeline', label: 'Go to Engineering Timeline', group: 'Navigation', icon: '⏱️', action: () => scrollToSection('timeline') },
     { id: 'nav-blog', label: 'Go to Technical Blog & Deep Dives', group: 'Navigation', icon: '📝', action: () => scrollToSection('blog') },
     { id: 'nav-github', label: 'Go to GitHub Activity Explorer', group: 'Navigation', icon: '🐙', action: () => scrollToSection('github') },
@@ -44,9 +45,9 @@ export function initCommandPalette() {
       window.open(CONFIG.social.github, '_blank', 'noopener,noreferrer');
     }},
     { id: 'act-toggle-flow', label: 'Toggle Architecture Data Flow Animation', group: 'Actions', icon: '🔄', action: () => {
+      openArchitectureDrawer('apexpulse-stream-engine');
       const btn = document.getElementById('toggleFlowBtn');
       if (btn) btn.click();
-      scrollToSection('architecture');
     }}
   ];
 

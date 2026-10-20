@@ -36,7 +36,6 @@
           <a href="#hero" class="capsule-link active">Portfolio</a>
           <a href="#projects" class="capsule-link">Projects</a>
           <a href="#skills" class="capsule-link">Skills</a>
-          <a href="#architecture" class="capsule-link">Architecture</a>
           <a href="#timeline" class="capsule-link">Timeline</a>
           <a href="#blog" class="capsule-link">Blog</a>
           <a href="#terminal" class="capsule-link">Terminal</a>
@@ -65,7 +64,6 @@
       <a href="#hero" class="nav-link">Portfolio Overview</a>
       <a href="#projects" class="nav-link">Featured Projects</a>
       <a href="#skills" class="nav-link">Tech Constellation</a>
-      <a href="#architecture" class="nav-link">System Architecture</a>
       <a href="#timeline" class="nav-link">Engineering Timeline</a>
       <a href="#blog" class="nav-link">Technical Deep Dives</a>
       <a href="#github" class="nav-link">GitHub Explorer</a>
@@ -314,28 +312,11 @@
         </div>
       </section>
 
-      <!-- 6. Component 2 — System Architecture Visualizer -->
-      <section id="architecture" class="section">
-        <div class="container">
-          <div class="section-header">
-            <span class="section-tag">04 // Architecture Topology</span>
-            <h2 class="section-title">System Architecture Visualizer</h2>
-            <p class="section-subtitle">
-              Interactive topology of ApexPulse: a resilient, high-volume event ingestion and real-time processing engine. Click any node to inspect data flow, latency, and failure mitigation strategies.
-            </p>
-          </div>
-
-          <div id="archVisualizer" class="arch-container">
-            <!-- Dynamically populated SVG diagram & detail drawer -->
-          </div>
-        </div>
-      </section>
-
-      <!-- 7. Component 5 — Engineering Timeline -->
+      <!-- 6. Component 5 — Engineering Timeline -->
       <section id="timeline" class="section">
         <div class="container">
           <div class="section-header">
-            <span class="section-tag">05 // Track Record</span>
+            <span class="section-tag">04 // Track Record</span>
             <h2 class="section-title">Engineering Career &amp; Milestones</h2>
             <p class="section-subtitle">
               Chronological timeline of verified professional roles, technical achievements, and systems engineering experience.
@@ -355,11 +336,11 @@
         </div>
       </section>
 
-      <!-- 8. Component 8 — Technical Blog -->
+      <!-- 7. Component 8 — Technical Blog -->
       <section id="blog" class="section">
         <div class="container">
           <div class="section-header">
-            <span class="section-tag">06 // Technical Deep Dives</span>
+            <span class="section-tag">05 // Technical Deep Dives</span>
             <h2 class="section-title">Architecture Articles &amp; Writeups</h2>
             <p class="section-subtitle">
               In-depth articles detailing low-level performance profiling, distributed hashing algorithms, and RAG retrieval architectures.
@@ -389,11 +370,11 @@
         </div>
       </section>
 
-      <!-- 9. Component 9 — GitHub Activity & Repository Explorer -->
+      <!-- 8. Component 9 — GitHub Activity & Repository Explorer -->
       <section id="github" class="section">
         <div class="container">
           <div class="section-header">
-            <span class="section-tag">07 // Open Source Integration</span>
+            <span class="section-tag">06 // Open Source Integration</span>
             <h2 class="section-title">GitHub Activity &amp; Public Repositories</h2>
             <p class="section-subtitle">
               Live sync with public GitHub API for verified repository updates, primary programming languages, stars, and commit metrics.
@@ -406,11 +387,11 @@
         </div>
       </section>
 
-      <!-- 10. Component 1 — Interactive Terminal -->
+      <!-- 9. Component 1 — Interactive Terminal -->
       <section id="terminal" class="section">
         <div class="container">
           <div class="section-header">
-            <span class="section-tag">08 // Interactive CLI</span>
+            <span class="section-tag">07 // Interactive CLI</span>
             <h2 class="section-title">Engineering Terminal Session</h2>
             <p class="section-subtitle">
               Query portfolio data directly using Unix-inspired commands. Supports command history (↑/↓), command auto-routing, and quick action chips.
@@ -454,11 +435,11 @@
         </div>
       </section>
 
-      <!-- 11. Contact Section -->
+      <!-- 10. Contact Section -->
       <section id="contact" class="section">
         <div class="container">
           <div class="section-header">
-            <span class="section-tag">09 // Communication Dispatch</span>
+            <span class="section-tag">08 // Communication Dispatch</span>
             <h2 class="section-title">Initialize Transmission</h2>
             <p class="section-subtitle">
               Have an engineering challenge, distributed systems inquiry, or architectural consulting project? Let's connect.
@@ -540,6 +521,54 @@
         </div>
       </div>
     </footer>
+
+    <!-- System Architecture Sliding Drawer (Slides in from the right when clicking a project) -->
+    <div id="archDrawerBackdrop" class="arch-drawer-backdrop" aria-hidden="true">
+      <div id="archDrawer" class="arch-drawer-panel" role="dialog" aria-modal="true" aria-labelledby="archDrawerTitle">
+        <!-- Header -->
+        <div class="arch-drawer-header">
+          <div class="arch-drawer-header-info">
+            <div class="arch-drawer-badge-row">
+              <span class="badge badge-cyan" id="archDrawerProjectCategory">System Architecture</span>
+              <span class="arch-drawer-status-pill">
+                <span class="status-indicator" style="background:#10B981; width:6px; height:6px; border-radius:50%; display:inline-block; box-shadow:0 0 8px #10B981;"></span>
+                LIVE SYSTEM TOPOLOGY
+              </span>
+            </div>
+            <h3 id="archDrawerTitle" class="arch-drawer-title">System Architecture Visualizer</h3>
+            <p id="archDrawerSubtitle" class="arch-drawer-subtitle">Interactive architecture topology, event telemetry flow, and failure mitigation strategies</p>
+          </div>
+          <button id="archDrawerClose" class="arch-drawer-close-btn" aria-label="Close Architecture Drawer">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            <span class="esc-hint">ESC</span>
+          </button>
+        </div>
+
+        <!-- Body (scrollable) -->
+        <div class="arch-drawer-body">
+          <div class="arch-drawer-tabs">
+            <button class="arch-drawer-tab active" data-tab="topology">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              <span>Architecture Topology</span>
+            </button>
+            <button class="arch-drawer-tab" data-tab="casestudy">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              <span>Technical Case Study</span>
+            </button>
+          </div>
+
+          <!-- Tab 1: Architecture Visualizer (SVG diagram + controls + sidebar) -->
+          <div id="archVisualizer" class="arch-container">
+            <!-- Dynamically populated SVG diagram & detail drawer -->
+          </div>
+
+          <!-- Tab 2: Technical Case Study -->
+          <div id="archDrawerCaseStudy" class="arch-drawer-casestudy" style="display: none;">
+            <!-- Dynamically populated case study -->
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Case Study Modal Dialog -->
     <div class="modal-backdrop" id="caseStudyModal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="csModalTitle">

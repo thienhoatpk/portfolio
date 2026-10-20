@@ -145,13 +145,16 @@ export const PROJECTS = [
 
 export const ARCHITECTURE_SYSTEMS = [
   {
-    id: "sys-event-pipeline",
+    id: "apexpulse-stream-engine",
+    projectId: "apexpulse-stream-engine",
     name: "ApexPulse: Distributed Ingestion & Stream Processing",
     description: "Multi-tier architecture separating ingest gateways, partitioned event queues, hot cache layers, and analytical time-series databases.",
     subsystems: ["Ingestion", "Messaging", "Storage", "Observability"],
     nodes: [
       {
         id: "client-edge",
+        x: 60,
+        y: 190,
         label: "Client / Edge Gateways",
         category: "Client / Frontend",
         status: "Active",
@@ -163,6 +166,8 @@ export const ARCHITECTURE_SYSTEMS = [
       },
       {
         id: "api-gateway",
+        x: 220,
+        y: 190,
         label: "API Gateway & Auth",
         category: "API Gateway",
         status: "Active",
@@ -174,6 +179,8 @@ export const ARCHITECTURE_SYSTEMS = [
       },
       {
         id: "cache-redis",
+        x: 220,
+        y: 350,
         label: "Redis L1 Hot Cache",
         category: "Cache",
         status: "Active",
@@ -185,6 +192,8 @@ export const ARCHITECTURE_SYSTEMS = [
       },
       {
         id: "buffer-service",
+        x: 380,
+        y: 190,
         label: "Stream Buffer Service",
         category: "Backend Service",
         status: "Active",
@@ -196,6 +205,8 @@ export const ARCHITECTURE_SYSTEMS = [
       },
       {
         id: "kafka-cluster",
+        x: 540,
+        y: 190,
         label: "Kafka Message Broker",
         category: "Message Queue",
         status: "Active",
@@ -207,6 +218,8 @@ export const ARCHITECTURE_SYSTEMS = [
       },
       {
         id: "consumer-worker",
+        x: 700,
+        y: 110,
         label: "Batch Persist Workers",
         category: "Backend Service",
         status: "Active",
@@ -218,6 +231,8 @@ export const ARCHITECTURE_SYSTEMS = [
       },
       {
         id: "db-timescale",
+        x: 870,
+        y: 110,
         label: "TimescaleDB Time-Series",
         category: "Database",
         status: "Active",
@@ -229,6 +244,8 @@ export const ARCHITECTURE_SYSTEMS = [
       },
       {
         id: "stream-analytics",
+        x: 700,
+        y: 280,
         label: "Real-time AI / Anomaly Detector",
         category: "AI Service",
         status: "Active",
@@ -240,6 +257,8 @@ export const ARCHITECTURE_SYSTEMS = [
       },
       {
         id: "alert-hub",
+        x: 870,
+        y: 280,
         label: "Notification & Webhooks",
         category: "External Integration",
         status: "Active",
@@ -248,6 +267,358 @@ export const ARCHITECTURE_SYSTEMS = [
         tech: ["Webhook Queue", "Retry Backoff"],
         connections: [],
         details: "Implements exponential backoff with jitter to guarantee alert delivery without flooding downstream endpoints."
+      }
+    ]
+  },
+  {
+    id: "cloud-rag-orchestrator",
+    projectId: "cloud-rag-orchestrator",
+    name: "NeuroMesh: Cloud-Native Semantic Search & RAG Service",
+    description: "Hybrid vector-keyword indexing pipeline with embedding deduplication cache and low-latency streaming token responses.",
+    subsystems: ["Ingress & Auth", "Caching & Chunking", "Vector Search", "LLM Generation"],
+    nodes: [
+      {
+        id: "client-query",
+        x: 60,
+        y: 190,
+        label: "Client Apps / Web SDK",
+        category: "Client / Frontend",
+        status: "Active",
+        protocol: "HTTPS / REST",
+        description: "Enterprise web consoles and API clients dispatching natural-language search and RAG prompts.",
+        tech: ["TypeScript", "REST", "SSE"],
+        connections: ["fastapi-gateway"],
+        details: "Maintains persistent HTTP/2 connection for Server-Sent Events token stream."
+      },
+      {
+        id: "fastapi-gateway",
+        x: 220,
+        y: 190,
+        label: "FastAPI / Go Gateway",
+        category: "API Gateway",
+        status: "Active",
+        protocol: "HTTP/2",
+        description: "High-concurrency API gateway performing OAuth2 validation, prompt normalization, and rate limiting.",
+        tech: ["FastAPI", "Go Gateway", "Pydantic"],
+        connections: ["semantic-cache", "rag-orchestrator"],
+        details: "Calculates query hash signatures for sub-millisecond semantic cache lookups."
+      },
+      {
+        id: "semantic-cache",
+        x: 220,
+        y: 350,
+        label: "Redis Semantic Cache",
+        category: "Cache",
+        status: "Active",
+        protocol: "RESP3",
+        description: "Vector embedding cache returning instant matches for previously computed user queries.",
+        tech: ["Redis 7.2", "Cosine Sim", "TTL 24h"],
+        connections: ["rag-orchestrator"],
+        details: "Achieves 78% cache hit ratio on repeated queries, eliminating redundant LLM embedding expenses."
+      },
+      {
+        id: "doc-ingest-worker",
+        x: 390,
+        y: 60,
+        label: "Async Ingest & Chunking",
+        category: "Backend Service",
+        status: "Active",
+        protocol: "AMQP",
+        description: "Background worker pool processing massive document uploads (PDF, Markdown, Docs) into chunked vectors.",
+        tech: ["Celery", "RabbitMQ", "unstructured"],
+        connections: ["qdrant-vector", "postgres-hybrid"],
+        details: "Uses semantic recursive character splitters with 15% overlap to preserve semantic context."
+      },
+      {
+        id: "rag-orchestrator",
+        x: 430,
+        y: 210,
+        label: "RAG Pipeline Orchestrator",
+        category: "Backend Service",
+        status: "Active",
+        protocol: "Internal Async",
+        description: "Executes hybrid vector similarity search, BM25 keyword matching, and Reciprocal Rank Fusion (RRF).",
+        tech: ["Python 3.11", "LangChain Core", "RRF"],
+        connections: ["qdrant-vector", "postgres-hybrid", "llm-streamer"],
+        details: "Blends dense embeddings and sparse keyword scores to rank technical jargon with high precision."
+      },
+      {
+        id: "qdrant-vector",
+        x: 650,
+        y: 110,
+        label: "Qdrant HNSW Vector DB",
+        category: "Database",
+        status: "Active",
+        protocol: "gRPC",
+        description: "Vector database storing 1536-dimensional OpenAI embeddings indexed with hierarchical navigable small-world graphs.",
+        tech: ["Qdrant", "HNSW Index", "Cosine Sim"],
+        connections: ["llm-streamer"],
+        details: "P95 retrieval latency under 14ms across 1.5 million chunked document vectors."
+      },
+      {
+        id: "postgres-hybrid",
+        x: 650,
+        y: 310,
+        label: "PostgreSQL pgvector (RRF)",
+        category: "Database",
+        status: "Active",
+        protocol: "PostgreSQL Wire",
+        description: "Relational storage maintaining source citations, tenant access policies, and full-text inverted indexes.",
+        tech: ["PostgreSQL 16", "pgvector", "BM25"],
+        connections: ["llm-streamer"],
+        details: "Enforces row-level tenant security so users only retrieve documents matching their role permissions."
+      },
+      {
+        id: "llm-streamer",
+        x: 870,
+        y: 210,
+        label: "LLM Inference & SSE Proxy",
+        category: "AI Service",
+        status: "Active",
+        protocol: "SSE / Streaming",
+        description: "Proxies prompt + grounded context to LLM foundation models and streams tokens back to the client.",
+        tech: ["OpenAI / Claude API", "FastAPI SSE", "Token Buffering"],
+        connections: [],
+        details: "Streams initial tokens in under 220ms while validating source citations in real-time."
+      }
+    ]
+  },
+  {
+    id: "distributed-cache-proxy",
+    projectId: "distributed-cache-proxy",
+    name: "KryptonCache: Consistent-Hashing Distributed Memory Proxy",
+    description: "High-performance reverse proxy routing sharded key-value traffic with virtual node ring and zero cache avalanche.",
+    subsystems: ["Client Layer", "Routing & Hashing", "Cache Cluster", "Storage Fallback"],
+    nodes: [
+      {
+        id: "krypton-client",
+        x: 60,
+        y: 190,
+        label: "Client Applications",
+        category: "Client / Frontend",
+        status: "Active",
+        protocol: "TCP / RESP",
+        description: "Backend microservices querying cache data using standard Redis clients without cluster-awareness overhead.",
+        tech: ["Go Client", "Node.js", "Python redis-py"],
+        connections: ["proxy-ingress"],
+        details: "Communicates via pipelined RESP3 protocol with connection pooling."
+      },
+      {
+        id: "proxy-ingress",
+        x: 220,
+        y: 190,
+        label: "Krypton Proxy Gateway",
+        category: "API Gateway",
+        status: "Active",
+        protocol: "RESP3 / gRPC",
+        description: "Epoll-based non-blocking Go gateway decoding incoming requests and mapping key hashes.",
+        tech: ["Go", "epoll / netpoll", "Zero-alloc parser"],
+        connections: ["hash-ring", "circuit-breaker"],
+        details: "Handles 150k concurrent requests per core with zero GC heap allocations on hot paths."
+      },
+      {
+        id: "etcd-registry",
+        x: 220,
+        y: 350,
+        label: "etcd Topology Registry",
+        category: "Backend Service",
+        status: "Active",
+        protocol: "Raft / gRPC",
+        description: "Distributed consensus store maintaining active cache shard heartbeats and topology configuration.",
+        tech: ["etcd v3", "Raft Consensus", "Watch API"],
+        connections: ["hash-ring"],
+        details: "Notifies proxies of node failure in under 250ms via persistent gRPC watchers."
+      },
+      {
+        id: "hash-ring",
+        x: 410,
+        y: 190,
+        label: "Virtual Node Hash Ring",
+        category: "Backend Service",
+        status: "Active",
+        protocol: "Memory Hashing",
+        description: "Ketama-style consistent hashing ring maintaining 100 virtual nodes per physical shard.",
+        tech: ["Ketama Hashing", "Murmur3", "100 VNodes"],
+        connections: ["shard-alpha", "shard-beta", "shard-gamma"],
+        details: "Limits key redistribution to less than 1/N when shards are added or removed dynamically."
+      },
+      {
+        id: "shard-alpha",
+        x: 640,
+        y: 80,
+        label: "Cache Shard #01",
+        category: "Cache",
+        status: "Active",
+        protocol: "RESP3",
+        description: "In-memory partition storing keys in hash range [0x0000 - 0x5555] with active async replication.",
+        tech: ["Redis 7.2", "AOF everysec", "Master-Replica"],
+        connections: ["circuit-breaker"],
+        details: "Sub-millisecond read latency with automatic replica promotion on master failure."
+      },
+      {
+        id: "shard-beta",
+        x: 640,
+        y: 200,
+        label: "Cache Shard #02",
+        category: "Cache",
+        status: "Active",
+        protocol: "RESP3",
+        description: "In-memory partition storing keys in hash range [0x5556 - 0xAAAA] with active async replication.",
+        tech: ["Redis 7.2", "AOF everysec", "Master-Replica"],
+        connections: ["circuit-breaker"],
+        details: "Operates with 99.99% read availability under heavy synthetic load tests."
+      },
+      {
+        id: "shard-gamma",
+        x: 640,
+        y: 320,
+        label: "Cache Shard #03",
+        category: "Cache",
+        status: "Active",
+        protocol: "RESP3",
+        description: "In-memory partition storing keys in hash range [0xAAAB - 0xFFFF] with active async replication.",
+        tech: ["Redis 7.2", "AOF everysec", "Master-Replica"],
+        connections: ["circuit-breaker"],
+        details: "Balanced memory utilization within ±2.4% across all physical nodes."
+      },
+      {
+        id: "circuit-breaker",
+        x: 840,
+        y: 150,
+        label: "Circuit Breaker & Fallback",
+        category: "External Integration",
+        status: "Active",
+        protocol: "Internal",
+        description: "Monitors shard error rates and trips circuit when timeouts exceed threshold, preventing avalanche.",
+        tech: ["Go CircuitBreaker", "XFetch Algorithm"],
+        connections: ["primary-db"],
+        details: "Uses probabilistic early expiration (XFetch) to eliminate thundering herd cache stampedes."
+      },
+      {
+        id: "primary-db",
+        x: 840,
+        y: 320,
+        label: "Primary Database Cluster",
+        category: "Database",
+        status: "Active",
+        protocol: "PostgreSQL Wire",
+        description: "Underlying system of record protected by the proxy from unthrottled cache-miss bursts.",
+        tech: ["PostgreSQL 16", "Read Replicas", "PgBouncer"],
+        connections: [],
+        details: "Protected from connection pool exhaustion during sudden node crash failover cycles."
+      }
+    ]
+  },
+  {
+    id: "devops-telemetry-hub",
+    projectId: "devops-telemetry-hub",
+    name: "AegisMetrics: Cloud Telemetry & Alerting Daemon",
+    description: "Low-overhead Linux host and container metric collection daemon powered by eBPF probes and OTLP streaming.",
+    subsystems: ["Host Probes", "Ingest Engine", "Exposition", "Alerting & UI"],
+    nodes: [
+      {
+        id: "kernel-ebpf",
+        x: 60,
+        y: 120,
+        label: "Linux Kernel eBPF Probes",
+        category: "Backend Service",
+        status: "Active",
+        protocol: "BPF Syscall",
+        description: "Custom eBPF tracepoint probes hooked into socket lifecycles, TCP retransmissions, and syscall latencies.",
+        tech: ["eBPF", "kprobes", "tracepoints", "CO-RE"],
+        connections: ["kernel-ringbuf"],
+        details: "Zero userspace context-switch overhead, executing in-kernel verification safely."
+      },
+      {
+        id: "cgroup-v2",
+        x: 60,
+        y: 280,
+        label: "cgroups v2 & Procfs Monitor",
+        category: "Backend Service",
+        status: "Active",
+        protocol: "VFS / sysfs",
+        description: "Reads container memory limits, CPU throttle statistics, and PSI (Pressure Stall Information).",
+        tech: ["cgroups v2", "/proc virtual fs", "sysfs"],
+        connections: ["kernel-ringbuf"],
+        details: "Samples container pressure stall metrics at 1-second intervals with less than 0.8% CPU usage."
+      },
+      {
+        id: "kernel-ringbuf",
+        x: 250,
+        y: 200,
+        label: "Zero-Alloc Kernel Ringbuffer",
+        category: "Message Queue",
+        status: "Active",
+        protocol: "mmap",
+        description: "Shared memory ring buffer transferring high-frequency kernel telemetry to userspace without syscall copies.",
+        tech: ["BPF Ringbuffer", "Perf Buffer", "mmap"],
+        connections: ["aegis-daemon"],
+        details: "Absorbs up to 500,000 events/sec per host without kernel packet drops."
+      },
+      {
+        id: "aegis-daemon",
+        x: 450,
+        y: 200,
+        label: "Aegis Userspace Go Daemon",
+        category: "API Gateway",
+        status: "Active",
+        protocol: "Userspace Go",
+        description: "Single-binary compiled Go daemon aggregating metrics, evaluating anomaly thresholds, and encoding OTLP.",
+        tech: ["Go 1.22", "OTel Go SDK", "< 18MB RAM"],
+        connections: ["prom-endpoint", "otlp-grpc"],
+        details: "Static binary with zero external shared library dependencies, deployable across any Linux kernel 4.18+."
+      },
+      {
+        id: "prom-endpoint",
+        x: 660,
+        y: 110,
+        label: "Prometheus `/metrics` Scraper",
+        category: "External Integration",
+        status: "Active",
+        protocol: "HTTP/1.1",
+        description: "Exposes scrape targets formatted with standard OpenMetrics syntax for pulling by Prometheus server.",
+        tech: ["Prometheus Exposition", "OpenMetrics"],
+        connections: ["grafana-dashboards"],
+        details: "Exports over 200 custom host and socket health counters in sub-millisecond response time."
+      },
+      {
+        id: "otlp-grpc",
+        x: 660,
+        y: 290,
+        label: "OTLP gRPC Exporter",
+        category: "External Integration",
+        status: "Active",
+        protocol: "gRPC / Protobuf",
+        description: "Streams batched metric deltas and trace events to centralized OpenTelemetry collectors.",
+        tech: ["OpenTelemetry Protocol", "Protobuf over HTTP/2"],
+        connections: ["alertmanager-hub"],
+        details: "Implements exponential retry backoff and in-memory spooling during network disconnects."
+      },
+      {
+        id: "grafana-dashboards",
+        x: 870,
+        y: 110,
+        label: "Grafana Visualization",
+        category: "Client / Frontend",
+        status: "Active",
+        protocol: "HTTPS",
+        description: "Real-time production dashboards displaying CPU/Memory pressure, network socket saturation, and p99 latencies.",
+        tech: ["Grafana 10", "PromQL", "Custom Dashboards"],
+        connections: [],
+        details: "Configured with pre-built alerting panels and automated root-cause drilldowns."
+      },
+      {
+        id: "alertmanager-hub",
+        x: 870,
+        y: 290,
+        label: "Alertmanager & Slack Pager",
+        category: "External Integration",
+        status: "Active",
+        protocol: "Webhooks",
+        description: "Evaluates multi-cluster alert rules and routes actionable incidents to Slack, Opsgenie, and PagerDuty.",
+        tech: ["Alertmanager", "Slack Webhook", "PagerDuty API"],
+        connections: [],
+        details: "Deduplicates flapping alerts and groups incidents by Kubernetes namespace or node cluster."
       }
     ]
   }

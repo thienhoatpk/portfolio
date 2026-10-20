@@ -1550,10 +1550,6 @@ code, pre, kbd, .mono {
    Component 4 — Tech Stack Constellation
    -------------------------------------------------------------------------- */
 .constellation-wrapper {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-md);
-  padding: 24px;
   display: flex;
   flex-direction: column;
   gap: 20px;

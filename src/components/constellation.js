@@ -31,9 +31,18 @@ export function initConstellation() {
   let hoveredNode = null;
   let activeCategory = 'All';
 
+  function getActiveNodes(nodesList) {
+    const list = (nodesList || []).filter(n => n.is_active !== 0 && n.is_active !== '0' && n.is_active !== false);
+    const activeIds = new Set(list.map(n => n.id));
+    return list.map(n => ({
+      ...n,
+      links: (n.links || []).filter(targetId => activeIds.has(targetId))
+    }));
+  }
+
   // 1. Start immediately with synchronous config so there's zero freeze/delay
   let config = TECH_STACK_CONFIG;
-  let rawNodes = config.nodes || [];
+  let rawNodes = getActiveNodes(config.nodes);
   let categoryColors = config.categoryColors || {
     'Languages': '#00F0FF',
     'Backend Frameworks': '#A855F7',
@@ -47,13 +56,15 @@ export function initConstellation() {
 
   function applyConfig(newConfig) {
     config = newConfig;
-    rawNodes = config.nodes || [];
+    rawNodes = getActiveNodes(config.nodes);
     categoryColors = config.categoryColors || categoryColors;
 
     if (titleEl && config.title) titleEl.textContent = config.title;
     if (subtitleEl && config.subtitle) subtitleEl.textContent = config.subtitle;
 
-    const categories = config.categories || ['Languages', 'Backend Frameworks', 'Databases', 'Caching & Queues', 'Infrastructure', 'AI & Tools'];
+    const presentCats = new Set(rawNodes.map(n => n.category));
+    const allConfigCats = config.categories || ['Languages', 'Backend Frameworks', 'Databases', 'Caching & Queues', 'Infrastructure', 'AI & Tools'];
+    const categories = allConfigCats.filter(c => presentCats.has(c));
 
     if (catButtonsContainer) {
       catButtonsContainer.innerHTML = `
@@ -74,7 +85,7 @@ export function initConstellation() {
       });
     }
 
-    if (!selectedNode && rawNodes.length > 0) {
+    if ((!selectedNode || !rawNodes.some(n => n.id === selectedNode.id)) && rawNodes.length > 0) {
       selectedNode = rawNodes[0];
     }
 
@@ -232,32 +243,62 @@ export function initConstellation() {
 
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      // 1. Draw connecting relationship lines
-      ctx.lineWidth = 1;
+      const now = performance.now() * 0.001;
+
+      // 1. Draw connecting relationship lines with gentle organic curves and subtle pulses
+      const drawnLinks = new Set();
       nodes.forEach(source => {
         (source.links || []).forEach(targetId => {
           const target = nodes.find(n => n.id === targetId);
           if (!target) return;
 
-          const isHighlighted = (source.id === selectedNode?.id || target.id === selectedNode?.id);
+          const linkKey = [source.id, target.id].sort().join('--');
+          if (drawnLinks.has(linkKey)) return;
+          drawnLinks.add(linkKey);
+
+          const isHighlighted = (source.id === selectedNode?.id || target.id === selectedNode?.id || source.id === hoveredNode?.id || target.id === hoveredNode?.id);
+
+          const dx = target.x - source.x;
+          const dy = target.y - source.y;
+          const dist = Math.hypot(dx, dy) || 1;
+          const curveAmp = Math.min(dist * 0.12, 22);
+          const sign = (source.id < target.id) ? 1 : -1;
+          const cx = (source.x + target.x) / 2 + (-dy / dist) * curveAmp * sign;
+          const cy = (source.y + target.y) / 2 + (dx / dist) * curveAmp * sign;
 
           ctx.beginPath();
           ctx.moveTo(source.x, source.y);
-          ctx.lineTo(target.x, target.y);
+          ctx.quadraticCurveTo(cx, cy, target.x, target.y);
 
           if (isHighlighted) {
-            ctx.strokeStyle = 'rgba(232, 121, 249, 0.75)';
-            ctx.lineWidth = 2;
+            ctx.setLineDash([]);
+            const grad = ctx.createLinearGradient(source.x, source.y, target.x, target.y);
+            grad.addColorStop(0, source.color || '#00F0FF');
+            grad.addColorStop(1, target.color || '#E879F9');
+            ctx.strokeStyle = grad;
+            ctx.lineWidth = 1.6;
+            ctx.stroke();
+
+            // Animated glowing energy packet along the curve
+            const t = ((now * 0.8) + (source.baseDist || 0) * 0.02) % 1;
+            const px = (1 - t) * (1 - t) * source.x + 2 * (1 - t) * t * cx + t * t * target.x;
+            const py = (1 - t) * (1 - t) * source.y + 2 * (1 - t) * t * cy + t * t * target.y;
+
+            ctx.beginPath();
+            ctx.arc(px, py, 2, 0, Math.PI * 2);
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fill();
           } else {
-            ctx.strokeStyle = 'rgba(168, 85, 247, 0.22)';
-            ctx.lineWidth = 1;
+            ctx.setLineDash([3, 5]);
+            ctx.strokeStyle = 'rgba(168, 85, 247, 0.16)';
+            ctx.lineWidth = 0.85;
+            ctx.stroke();
           }
-          ctx.stroke();
         });
       });
+      ctx.setLineDash([]); // Reset line dash for nodes
 
       // 2. Draw nodes with SVG icons and fallbacks
-      const now = performance.now() * 0.001;
       nodes.forEach(node => {
         const isSelected = (node.id === selectedNode?.id);
         const isHovered = (node.id === hoveredNode?.id);
@@ -279,7 +320,7 @@ export function initConstellation() {
         if (isSelected || isHovered) {
           ctx.beginPath();
           ctx.arc(node.x, node.y, radius * 1.8, 0, Math.PI * 2);
-          ctx.fillStyle = isSelected ? 'rgba(232, 121, 249, 0.3)' : 'rgba(0, 240, 255, 0.25)';
+          ctx.fillStyle = isSelected ? 'rgba(232, 121, 249, 0.25)' : 'rgba(0, 240, 255, 0.2)';
           ctx.fill();
         }
 
@@ -289,9 +330,9 @@ export function initConstellation() {
         ctx.fillStyle = '#0B091D';
         ctx.fill();
 
-        // Neon border
-        ctx.strokeStyle = isSelected ? '#E879F9' : (isHovered ? '#00F0FF' : node.color);
-        ctx.lineWidth = isSelected ? 2.5 : 1.5;
+        // Neon border - refined thin and sharp
+        ctx.strokeStyle = isSelected ? '#E879F9' : (isHovered ? '#00F0FF' : (node.color || 'rgba(0, 240, 255, 0.6)'));
+        ctx.lineWidth = isSelected ? 1.5 : (isHovered ? 1.2 : 0.85);
         ctx.stroke();
 
         // Draw SVG Brand Icon

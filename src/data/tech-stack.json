@@ -23,176 +23,270 @@
       "name": "Go (Golang)",
       "category": "Languages",
       "icon": "go",
+      "is_active": 1,
       "role": "Primary backend language for microservices, concurrency, low-latency APIs",
-      "links": ["grpc", "kafka", "docker", "postgres", "redis"]
+      "links": [
+        "grpc",
+        "kafka",
+        "docker",
+        "postgres",
+        "redis"
+      ]
     },
     {
       "id": "ts",
       "name": "TypeScript",
       "category": "Languages",
       "icon": "ts",
+      "is_active": 1,
       "role": "Type-safe frontend logic, full-stack tooling, Node/Deno runtimes",
-      "links": ["vite", "nodejs", "react"]
+      "links": [
+        "vite",
+        "nodejs",
+        "react"
+      ]
     },
     {
       "id": "python",
       "name": "Python",
       "category": "Languages",
       "icon": "python",
+      "is_active": 1,
       "role": "Data scripting, ML embeddings, semantic search pipelines, FastAPI",
-      "links": ["qdrant", "fastapi"]
+      "links": [
+        "qdrant",
+        "fastapi"
+      ]
     },
     {
       "id": "sql",
       "name": "SQL",
       "category": "Languages",
       "icon": "sql",
+      "is_active": 1,
       "role": "Complex relational queries, indexing strategies, window functions",
-      "links": ["postgres", "timescale"]
+      "links": [
+        "postgres",
+        "timescale"
+      ]
     },
     {
       "id": "grpc",
       "name": "gRPC & Protobuf",
       "category": "Backend Frameworks",
       "icon": "grpc",
+      "is_active": 1,
       "role": "High-performance inter-service RPC with binary serialization",
-      "links": ["go", "microservices"]
+      "links": [
+        "go",
+        "microservices"
+      ]
     },
     {
       "id": "fastapi",
       "name": "FastAPI",
       "category": "Backend Frameworks",
       "icon": "fastapi",
+      "is_active": 1,
       "role": "Asynchronous Python web service framework for AI/RAG APIs",
-      "links": ["python", "qdrant"]
+      "links": [
+        "python",
+        "qdrant"
+      ]
     },
     {
       "id": "nodejs",
       "name": "Node.js",
       "category": "Backend Frameworks",
       "icon": "nodejs",
+      "is_active": 1,
       "role": "Event-driven runtime for API gateways and microservices",
-      "links": ["ts"]
+      "links": [
+        "ts"
+      ]
     },
     {
       "id": "microservices",
       "name": "Microservices Architecture",
       "category": "Backend Frameworks",
       "icon": "microservices",
+      "is_active": 1,
       "role": "Domain-driven decomposition, API contracts, service meshes",
-      "links": ["go", "docker", "k8s"]
+      "links": [
+        "go",
+        "docker",
+        "k8s"
+      ]
     },
     {
       "id": "postgres",
       "name": "PostgreSQL",
       "category": "Databases",
       "icon": "postgres",
+      "is_active": 1,
       "role": "ACID transactions, relational modeling, JSONB, pgvector",
-      "links": ["sql", "go", "timescale"]
+      "links": [
+        "sql",
+        "go",
+        "timescale"
+      ]
     },
     {
       "id": "timescale",
       "name": "TimescaleDB",
       "category": "Databases",
       "icon": "timescale",
+      "is_active": 1,
       "role": "Hypertable partitioned time-series storage & columnar compression",
-      "links": ["postgres", "kafka"]
+      "links": [
+        "postgres",
+        "kafka"
+      ]
     },
     {
       "id": "qdrant",
       "name": "Qdrant Vector DB",
       "category": "Databases",
       "icon": "qdrant",
+      "is_active": 1,
       "role": "Approximate Nearest Neighbor (HNSW) vector search for embeddings",
-      "links": ["python", "ai-rag"]
+      "links": [
+        "python",
+        "ai-rag"
+      ]
     },
     {
       "id": "redis",
       "name": "Redis",
       "category": "Caching & Queues",
       "icon": "redis",
+      "is_active": 1,
       "role": "In-memory caching, pub/sub, distributed locks, rate limiting",
-      "links": ["go", "postgres"]
+      "links": [
+        "go",
+        "postgres"
+      ]
     },
     {
       "id": "kafka",
       "name": "Apache Kafka",
       "category": "Caching & Queues",
       "icon": "kafka",
+      "is_active": 1,
       "role": "Distributed partitioned streaming log for high-volume event ingestion",
-      "links": ["go", "timescale"]
+      "links": [
+        "go",
+        "timescale"
+      ]
     },
     {
       "id": "rabbitmq",
       "name": "RabbitMQ",
       "category": "Caching & Queues",
       "icon": "rabbitmq",
+      "is_active": 1,
       "role": "AMQP task queues with complex routing and acknowledgment models",
-      "links": ["go", "python"]
+      "links": [
+        "go",
+        "python"
+      ]
     },
     {
       "id": "docker",
       "name": "Docker & OCI",
       "category": "Infrastructure",
       "icon": "docker",
+      "is_active": 1,
       "role": "Multi-stage reproducible container builds, minimal scratch images",
-      "links": ["k8s", "go", "linux"]
+      "links": [
+        "k8s",
+        "go",
+        "linux"
+      ]
     },
     {
       "id": "k8s",
       "name": "Kubernetes",
       "category": "Infrastructure",
       "icon": "k8s",
+      "is_active": 1,
       "role": "Pod orchestration, horizontal pod autoscaling, ingress control",
-      "links": ["docker", "prometheus"]
+      "links": [
+        "docker",
+        "prometheus"
+      ]
     },
     {
       "id": "linux",
       "name": "Linux & Shell",
       "category": "Infrastructure",
       "icon": "linux",
+      "is_active": 1,
       "role": "Kernel tuning, systemd, networking namespaces, eBPF inspection",
-      "links": ["docker", "go"]
+      "links": [
+        "docker",
+        "go"
+      ]
     },
     {
       "id": "prometheus",
       "name": "Prometheus",
       "category": "Infrastructure",
       "icon": "prometheus",
+      "is_active": 1,
       "role": "Time-series metrics collection, multi-dimensional PromQL alerting & scraping",
-      "links": ["k8s", "grafana", "go"]
+      "links": [
+        "k8s",
+        "grafana",
+        "go"
+      ]
     },
     {
       "id": "grafana",
       "name": "Grafana",
       "category": "Infrastructure",
       "icon": "grafana",
+      "is_active": 1,
       "role": "Unified observability dashboards, real-time telemetry visualization & SLO tracking",
-      "links": ["prometheus", "timescale"]
+      "links": [
+        "prometheus",
+        "timescale"
+      ]
     },
     {
       "id": "ai-rag",
       "name": "RAG & LLM Orchestration",
       "category": "AI & Tools",
       "icon": "ai-rag",
+      "is_active": 1,
       "role": "Vector chunking, reciprocal rank fusion, context augmentation",
-      "links": ["python", "qdrant"]
+      "links": [
+        "python",
+        "qdrant"
+      ]
     },
     {
       "id": "git",
       "name": "Git & CI/CD",
       "category": "AI & Tools",
       "icon": "git",
+      "is_active": 1,
       "role": "Trunk-based development, GitHub Actions, automated testing pipelines",
-      "links": ["docker", "go"]
+      "links": [
+        "docker",
+        "go"
+      ]
     },
     {
       "id": "vite",
       "name": "Vite & Vanilla Web",
       "category": "AI & Tools",
       "icon": "vite",
+      "is_active": 1,
       "role": "Lightning-fast frontend asset bundling and modern ES modules",
-      "links": ["ts"]
+      "links": [
+        "ts"
+      ]
     }
   ]
 }

@@ -89,12 +89,30 @@ export function initConstellation() {
     renderSidebar();
   }
 
+  function syncCanvasSize() {
+    const rect = canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    const targetW = Math.max(1, Math.round(rect.width * dpr));
+    const targetH = Math.max(1, Math.round(rect.height * dpr));
+
+    if (canvas.width !== targetW || canvas.height !== targetH) {
+      if (targetW > 1 && targetH > 1) {
+        canvas.width = targetW;
+        canvas.height = targetH;
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.scale(dpr, dpr);
+        return true;
+      }
+    }
+    return false;
+  }
+
   function initPositions() {
-    const width = canvas.clientWidth || 700;
-    const height = canvas.clientHeight || 540;
-    canvas.width = width * window.devicePixelRatio;
-    canvas.height = height * window.devicePixelRatio;
-    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    syncCanvasSize();
+
+    const rect = canvas.getBoundingClientRect();
+    const width = rect.width || canvas.clientWidth || 700;
+    const height = rect.height || canvas.clientHeight || 540;
 
     const centerX = width / 2;
     const centerY = height / 2;
@@ -107,13 +125,17 @@ export function initConstellation() {
       const angle = i * 2.39996; // Golden ratio spiral distribution
       const dist = 54 + Math.sqrt(i + 1) * (radiusStep / Math.sqrt(rawNodes.length || 1));
       const iconKey = n.icon || n.id;
+      
+      const defaultX = centerX + Math.cos(angle) * dist;
+      const defaultY = centerY + Math.sin(angle) * dist;
+
       return {
         ...n,
-        x: existing ? existing.x : (centerX + Math.cos(angle) * dist),
-        y: existing ? existing.y : (centerY + Math.sin(angle) * dist),
-        baseX: existing ? existing.baseX : (centerX + Math.cos(angle) * dist),
-        baseY: existing ? existing.baseY : (centerY + Math.sin(angle) * dist),
-        isDragged: false,
+        x: (existing && existing.isDragged) ? existing.x : defaultX,
+        y: (existing && existing.isDragged) ? existing.y : defaultY,
+        baseX: defaultX,
+        baseY: defaultY,
+        isDragged: existing ? existing.isDragged : false,
         baseDist: dist,
         baseAngle: angle,
         color: categoryColors[n.category] || '#00F0FF',
@@ -242,8 +264,13 @@ export function initConstellation() {
     animationFrameId = requestAnimationFrame(draw);
 
     try {
-      const width = canvas.clientWidth;
-      const height = canvas.clientHeight;
+      if (syncCanvasSize()) {
+        initPositions();
+      }
+
+      const rect = canvas.getBoundingClientRect();
+      const width = rect.width || canvas.clientWidth || 700;
+      const height = rect.height || canvas.clientHeight || 540;
       ctx.clearRect(0, 0, width, height);
 
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -462,8 +489,9 @@ export function initConstellation() {
         isDragging = true;
       }
       if (isDragging) {
-        const width = canvas.clientWidth || 700;
-        const height = canvas.clientHeight || 480;
+        const rect = canvas.getBoundingClientRect();
+        const width = rect.width || canvas.clientWidth || 700;
+        const height = rect.height || canvas.clientHeight || 540;
         const targetX = x + dragOffsetX;
         const targetY = y + dragOffsetY;
         draggedNode.x = Math.max(35, Math.min(width - 35, targetX));
@@ -544,6 +572,13 @@ export function initConstellation() {
   window.addEventListener('resize', () => {
     initPositions();
   });
+
+  if (window.ResizeObserver && canvasBox) {
+    const resizeObserver = new ResizeObserver(() => {
+      initPositions();
+    });
+    resizeObserver.observe(canvasBox);
+  }
 
   // Initialize immediately
   applyConfig(TECH_STACK_CONFIG);

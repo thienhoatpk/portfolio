@@ -6,6 +6,7 @@
 
 import './style.css';
 
+import { initParticleWave } from './components/particleWave.js';
 import { initSpotlight } from './components/spotlight.js';
 import { initNav } from './components/nav.js';
 import { initTerminal } from './components/terminal.js';
@@ -18,6 +19,9 @@ import { initBlog } from './components/blog.js';
 import { initGitHub } from './components/github.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Initialize Animated 3D Cosmic Particle Wave Canvas
+  initParticleWave();
+
   // Initialize Global Navigation & UI Handlers
   initNav();
 

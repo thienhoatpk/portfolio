@@ -7,7 +7,7 @@ import { CONFIG } from '../data/portfolioData.js';
 
 export function initNav() {
   const header = document.querySelector('.site-header');
-  const navLinks = document.querySelectorAll('.nav-link');
+  const navLinks = document.querySelectorAll('.nav-link, .capsule-link');
   const toggleBtn = document.getElementById('navToggleBtn');
   const mobileDrawer = document.getElementById('mobileDrawer');
   const sections = document.querySelectorAll('section[id]');
@@ -18,17 +18,17 @@ export function initNav() {
 
     // Header border glow on scroll
     if (scrollY > 50) {
-      header.style.borderColor = 'rgba(0, 229, 255, 0.25)';
-      header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.5)';
+      header.style.borderColor = 'rgba(232, 121, 249, 0.35)';
+      header.style.boxShadow = '0 4px 25px rgba(0, 0, 0, 0.7), 0 0 15px rgba(168, 85, 247, 0.2)';
     } else {
-      header.style.borderColor = 'var(--border-default)';
+      header.style.borderColor = 'rgba(168, 85, 247, 0.15)';
       header.style.boxShadow = 'none';
     }
 
     // Determine active section
     sections.forEach(current => {
       const sectionHeight = current.offsetHeight;
-      const sectionTop = current.offsetTop - 120;
+      const sectionTop = current.offsetTop - 140;
       const sectionId = current.getAttribute('id');
 
       if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
@@ -38,6 +38,20 @@ export function initNav() {
       }
     });
   }, { passive: true });
+
+  // Click on capsule links
+  document.querySelectorAll('.capsule-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const targetId = link.getAttribute('href')?.replace('#', '');
+      const targetEl = document.getElementById(targetId);
+      if (targetEl) {
+        e.preventDefault();
+        targetEl.scrollIntoView({ behavior: 'smooth' });
+        navLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+      }
+    });
+  });
 
   // Mobile menu toggle
   if (toggleBtn && mobileDrawer) {

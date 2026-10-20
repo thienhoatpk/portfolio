@@ -111,12 +111,12 @@ export function initProjects() {
       </article>
     `).join('');
 
-    // Bind Case Study buttons
-    container.querySelectorAll('.open-cs-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
+    // Bind Case Study buttons across both top hero showcase and projects grid
+    document.querySelectorAll('.open-cs-btn').forEach(btn => {
+      btn.onclick = () => {
         const id = btn.getAttribute('data-id');
         openCaseStudy(id, btn);
-      });
+      };
     });
   }
 

@@ -10,9 +10,9 @@
  */
 
 import { TECH_STACK_CONFIG, PROJECTS } from '../data/portfolioData.js';
-import { getTechIconSvg, getTechIconCanvasImage } from '../data/techIcons.js';
+import { getTechIconSvg, getTechIconCanvasImage, getTechMonogram } from '../data/techIcons.js';
 
-export async function initConstellation() {
+export function initConstellation() {
   const canvas = document.getElementById('constellationCanvas');
   const detailPanel = document.getElementById('constellationDetail');
   const gridContainer = document.getElementById('constellationGridView');
@@ -24,23 +24,17 @@ export async function initConstellation() {
 
   if (!canvas || !detailPanel) return;
 
-  // 1. Load config dynamically from JSON file (/config/tech-stack.json)
+  const ctx = canvas.getContext('2d');
+  let animationFrameId = null;
+  let isCanvasActive = true;
+  let isGridVisible = false;
+  let hoveredNode = null;
+  let activeCategory = 'All';
+
+  // 1. Start immediately with synchronous config so there's zero freeze/delay
   let config = TECH_STACK_CONFIG;
-  try {
-    const res = await fetch('/config/tech-stack.json');
-    if (res.ok) {
-      config = await res.json();
-    }
-  } catch (err) {
-    console.warn('Could not fetch /config/tech-stack.json, using bundled config', err);
-  }
-
-  // Update title & subtitle if provided in JSON
-  if (titleEl && config.title) titleEl.textContent = config.title;
-  if (subtitleEl && config.subtitle) subtitleEl.textContent = config.subtitle;
-
-  const rawNodes = config.nodes || [];
-  const categoryColors = config.categoryColors || {
+  let rawNodes = config.nodes || [];
+  let categoryColors = config.categoryColors || {
     'Languages': '#00F0FF',
     'Backend Frameworks': '#A855F7',
     'Databases': '#EC4899',
@@ -48,29 +42,46 @@ export async function initConstellation() {
     'Infrastructure': '#F59E0B',
     'AI & Tools': '#38BDF8'
   };
-
-  const categories = config.categories || ['Languages', 'Backend Frameworks', 'Databases', 'Caching & Queues', 'Infrastructure', 'AI & Tools'];
-
-  // Dynamically render category filter buttons from JSON
-  if (catButtonsContainer) {
-    catButtonsContainer.innerHTML = `
-      <button class="filter-btn constellation-cat-btn active" data-cat="All">All Categories</button>
-      ${categories.map(cat => `
-        <button class="filter-btn constellation-cat-btn" data-cat="${cat}">${cat}</button>
-      `).join('')}
-    `;
-  }
-
-  const ctx = canvas.getContext('2d');
-  let animationFrameId = null;
-  let isCanvasActive = true;
-  let isGridVisible = false;
   let selectedNode = rawNodes[0] || null;
-  let hoveredNode = null;
-  let activeCategory = 'All';
-
-  // Node simulation coordinates
   let nodes = [];
+
+  function applyConfig(newConfig) {
+    config = newConfig;
+    rawNodes = config.nodes || [];
+    categoryColors = config.categoryColors || categoryColors;
+
+    if (titleEl && config.title) titleEl.textContent = config.title;
+    if (subtitleEl && config.subtitle) subtitleEl.textContent = config.subtitle;
+
+    const categories = config.categories || ['Languages', 'Backend Frameworks', 'Databases', 'Caching & Queues', 'Infrastructure', 'AI & Tools'];
+
+    if (catButtonsContainer) {
+      catButtonsContainer.innerHTML = `
+        <button class="filter-btn constellation-cat-btn active" data-cat="All">All Categories</button>
+        ${categories.map(cat => `
+          <button class="filter-btn constellation-cat-btn" data-cat="${cat}">${cat}</button>
+        `).join('')}
+      `;
+
+      catButtonsContainer.querySelectorAll('.constellation-cat-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          activeCategory = btn.getAttribute('data-cat');
+          catButtonsContainer.querySelectorAll('.constellation-cat-btn').forEach(b => {
+            b.classList.toggle('active', b.getAttribute('data-cat') === activeCategory);
+          });
+          if (isGridVisible) renderAccessibleGrid();
+        });
+      });
+    }
+
+    if (!selectedNode && rawNodes.length > 0) {
+      selectedNode = rawNodes[0];
+    }
+
+    initPositions();
+    renderSidebar();
+    if (isGridVisible) renderAccessibleGrid();
+  }
 
   function initPositions() {
     const width = canvas.clientWidth || 700;
@@ -84,19 +95,20 @@ export async function initConstellation() {
     const radiusStep = Math.min(width, height) * 0.38;
 
     nodes = rawNodes.map((n, i) => {
-      // Golden ratio spiral distribution for elegant cosmic layout
-      const angle = i * 2.39996; // ~137.5 degrees
-      const dist = 45 + Math.sqrt(i + 1) * (radiusStep / Math.sqrt(rawNodes.length || 1));
+      const angle = i * 2.39996; // Golden ratio spiral distribution
+      const dist = 48 + Math.sqrt(i + 1) * (radiusStep / Math.sqrt(rawNodes.length || 1));
+      const iconKey = n.icon || n.id;
       return {
         ...n,
         x: centerX + Math.cos(angle) * dist,
         y: centerY + Math.sin(angle) * dist,
-        vx: (Math.random() - 0.5) * 0.2,
-        vy: (Math.random() - 0.5) * 0.2,
+        vx: (Math.random() - 0.5) * 0.15,
+        vy: (Math.random() - 0.5) * 0.15,
         baseDist: dist,
         baseAngle: angle,
         color: categoryColors[n.category] || '#00F0FF',
-        iconImg: getTechIconCanvasImage(n.icon || n.id)
+        monogram: getTechMonogram(iconKey),
+        iconImg: getTechIconCanvasImage(iconKey)
       };
     });
   }
@@ -105,7 +117,6 @@ export async function initConstellation() {
     if (!selectedNode) return;
     const color = categoryColors[selectedNode.category] || 'var(--accent-cyan)';
 
-    // Find related projects using this tech
     const relatedProjects = PROJECTS.filter(p => 
       p.tags.some(t => t.toLowerCase().includes(selectedNode.name.toLowerCase().split(' ')[0]))
     );
@@ -156,7 +167,6 @@ export async function initConstellation() {
       </div>
     `;
 
-    // Allow jumping to connected node
     detailPanel.querySelectorAll('[data-jump]').forEach(btn => {
       btn.addEventListener('click', () => {
         const jumpId = btn.getAttribute('data-jump');
@@ -207,92 +217,115 @@ export async function initConstellation() {
   }
 
   function draw() {
-    if (!isCanvasActive || isGridVisible) return;
+    if (!isCanvasActive || isGridVisible) {
+      animationFrameId = requestAnimationFrame(draw);
+      return;
+    }
 
-    const width = canvas.clientWidth;
-    const height = canvas.clientHeight;
-    ctx.clearRect(0, 0, width, height);
-
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    // 1. Draw connecting relationship edges
-    ctx.lineWidth = 1;
-    nodes.forEach(source => {
-      (source.links || []).forEach(targetId => {
-        const target = nodes.find(n => n.id === targetId);
-        if (!target) return;
-
-        const isHighlighted = (source.id === selectedNode?.id || target.id === selectedNode?.id);
-
-        ctx.beginPath();
-        ctx.moveTo(source.x, source.y);
-        ctx.lineTo(target.x, target.y);
-
-        if (isHighlighted) {
-          ctx.strokeStyle = 'rgba(232, 121, 249, 0.75)';
-          ctx.lineWidth = 2;
-        } else {
-          ctx.strokeStyle = 'rgba(168, 85, 247, 0.22)';
-          ctx.lineWidth = 1;
-        }
-        ctx.stroke();
-      });
-    });
-
-    // 2. Draw nodes with icons
-    const now = performance.now() * 0.001;
-    nodes.forEach(node => {
-      const isSelected = (node.id === selectedNode?.id);
-      const isHovered = (node.id === hoveredNode?.id);
-      const isFilteredOut = (activeCategory !== 'All' && node.category !== activeCategory);
-
-      // Subtle float animation if motion permitted
-      if (!prefersReducedMotion) {
-        node.x += Math.sin(now + node.baseAngle) * 0.15;
-        node.y += Math.cos(now + node.baseAngle) * 0.15;
-      }
-
-      const radius = isSelected ? 18 : (isHovered ? 16 : 14);
-      const iconSize = isSelected ? 20 : (isHovered ? 18 : 16);
-      const alpha = isFilteredOut ? 0.25 : 1.0;
-
-      ctx.save();
-      ctx.globalAlpha = alpha;
-
-      // Outer glow for selected/hovered
-      if (isSelected || isHovered) {
-        ctx.beginPath();
-        ctx.arc(node.x, node.y, radius * 1.8, 0, Math.PI * 2);
-        ctx.fillStyle = isSelected ? 'rgba(232, 121, 249, 0.3)' : 'rgba(0, 240, 255, 0.25)';
-        ctx.fill();
-      }
-
-      // Main circular icon badge container
-      ctx.beginPath();
-      ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
-      ctx.fillStyle = '#0B091D';
-      ctx.fill();
-
-      // Border with category neon color
-      ctx.strokeStyle = isSelected ? '#E879F9' : (isHovered ? '#00F0FF' : node.color);
-      ctx.lineWidth = isSelected ? 2.5 : 1.5;
-      ctx.stroke();
-
-      // Draw SVG Icon
-      if (node.iconImg && node.iconImg.complete) {
-        ctx.drawImage(node.iconImg, node.x - iconSize / 2, node.y - iconSize / 2, iconSize, iconSize);
-      }
-
-      // Text label below node
-      ctx.textAlign = 'center';
-      ctx.fillStyle = isSelected ? '#FFFFFF' : (isHovered ? '#00F0FF' : '#CBD5E1');
-      ctx.font = isSelected ? '700 11px "JetBrains Mono", monospace' : '500 10px "JetBrains Mono", monospace';
-      ctx.fillText(node.name, node.x, node.y + radius + 13);
-
-      ctx.restore();
-    });
-
+    // Always schedule next frame first so animation NEVER dies
     animationFrameId = requestAnimationFrame(draw);
+
+    try {
+      const width = canvas.clientWidth;
+      const height = canvas.clientHeight;
+      ctx.clearRect(0, 0, width, height);
+
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // 1. Draw connecting relationship lines
+      ctx.lineWidth = 1;
+      nodes.forEach(source => {
+        (source.links || []).forEach(targetId => {
+          const target = nodes.find(n => n.id === targetId);
+          if (!target) return;
+
+          const isHighlighted = (source.id === selectedNode?.id || target.id === selectedNode?.id);
+
+          ctx.beginPath();
+          ctx.moveTo(source.x, source.y);
+          ctx.lineTo(target.x, target.y);
+
+          if (isHighlighted) {
+            ctx.strokeStyle = 'rgba(232, 121, 249, 0.75)';
+            ctx.lineWidth = 2;
+          } else {
+            ctx.strokeStyle = 'rgba(168, 85, 247, 0.22)';
+            ctx.lineWidth = 1;
+          }
+          ctx.stroke();
+        });
+      });
+
+      // 2. Draw nodes with SVG icons and fallbacks
+      const now = performance.now() * 0.001;
+      nodes.forEach(node => {
+        const isSelected = (node.id === selectedNode?.id);
+        const isHovered = (node.id === hoveredNode?.id);
+        const isFilteredOut = (activeCategory !== 'All' && node.category !== activeCategory);
+
+        if (!prefersReducedMotion) {
+          node.x += Math.sin(now + node.baseAngle) * 0.15;
+          node.y += Math.cos(now + node.baseAngle) * 0.15;
+        }
+
+        const radius = isSelected ? 18 : (isHovered ? 16 : 14);
+        const iconSize = isSelected ? 20 : (isHovered ? 18 : 15);
+        const alpha = isFilteredOut ? 0.25 : 1.0;
+
+        ctx.save();
+        ctx.globalAlpha = alpha;
+
+        // Outer glow
+        if (isSelected || isHovered) {
+          ctx.beginPath();
+          ctx.arc(node.x, node.y, radius * 1.8, 0, Math.PI * 2);
+          ctx.fillStyle = isSelected ? 'rgba(232, 121, 249, 0.3)' : 'rgba(0, 240, 255, 0.25)';
+          ctx.fill();
+        }
+
+        // Circular badge background
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
+        ctx.fillStyle = '#0B091D';
+        ctx.fill();
+
+        // Neon border
+        ctx.strokeStyle = isSelected ? '#E879F9' : (isHovered ? '#00F0FF' : node.color);
+        ctx.lineWidth = isSelected ? 2.5 : 1.5;
+        ctx.stroke();
+
+        // Draw SVG Brand Icon
+        let iconDrawn = false;
+        if (node.iconImg && node.iconImg.complete && node.iconImg.naturalWidth > 0) {
+          try {
+            ctx.drawImage(node.iconImg, node.x - iconSize / 2, node.y - iconSize / 2, iconSize, iconSize);
+            iconDrawn = true;
+          } catch (e) {
+            iconDrawn = false;
+          }
+        }
+
+        // Monogram fallback if image is still loading or decoding
+        if (!iconDrawn) {
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillStyle = node.color;
+          ctx.font = '700 9px "JetBrains Mono", monospace';
+          ctx.fillText(node.monogram || '•', node.x, node.y);
+        }
+
+        // Text label below node
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'alphabetic';
+        ctx.fillStyle = isSelected ? '#FFFFFF' : (isHovered ? '#00F0FF' : '#CBD5E1');
+        ctx.font = isSelected ? '700 11px "JetBrains Mono", monospace' : '500 10px "JetBrains Mono", monospace';
+        ctx.fillText(node.name, node.x, node.y + radius + 13);
+
+        ctx.restore();
+      });
+    } catch (renderError) {
+      console.error('Error rendering constellation frame:', renderError);
+    }
   }
 
   // Pointer interactions on canvas
@@ -339,32 +372,14 @@ export async function initConstellation() {
         canvasBox.style.display = 'block';
         gridContainer.classList.remove('active');
         initPositions();
-        draw();
       }
     };
-  }
-
-  // Category filter chips
-  if (catButtonsContainer) {
-    catButtonsContainer.querySelectorAll('.constellation-cat-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        activeCategory = btn.getAttribute('data-cat');
-        catButtonsContainer.querySelectorAll('.constellation-cat-btn').forEach(b => {
-          b.classList.toggle('active', b.getAttribute('data-cat') === activeCategory);
-        });
-        if (isGridVisible) renderAccessibleGrid();
-      });
-    });
   }
 
   // IntersectionObserver to pause rendering when off-screen
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       isCanvasActive = entry.isIntersecting;
-      if (isCanvasActive && !isGridVisible) {
-        cancelAnimationFrame(animationFrameId);
-        draw();
-      }
     });
   }, { threshold: 0.1 });
 
@@ -376,7 +391,19 @@ export async function initConstellation() {
     }
   });
 
-  initPositions();
-  renderSidebar();
+  // Initialize immediately
+  applyConfig(TECH_STACK_CONFIG);
   draw();
+
+  // Asynchronously check for dynamic JSON updates at runtime
+  fetch('/config/tech-stack.json')
+    .then(r => r.ok ? r.json() : null)
+    .then(remoteConfig => {
+      if (remoteConfig) {
+        applyConfig(remoteConfig);
+      }
+    })
+    .catch(err => {
+      // Offline or local fallback is already running
+    });
 }

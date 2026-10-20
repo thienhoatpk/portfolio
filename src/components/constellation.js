@@ -4,10 +4,13 @@
  * connecting relationship filaments, category filters, interactive detail drawer,
  * and an accessible Grid View toggle.
  * 
+ * Shows crisp SVG brand icons for each tech stack node on the Canvas,
+ * in the sidebar detail drawer, and in the structured grid view.
  * Loaded directly from JSON configuration (/config/tech-stack.json).
  */
 
 import { TECH_STACK_CONFIG, PROJECTS } from '../data/portfolioData.js';
+import { getTechIconSvg, getTechIconCanvasImage } from '../data/techIcons.js';
 
 export async function initConstellation() {
   const canvas = document.getElementById('constellationCanvas');
@@ -83,7 +86,7 @@ export async function initConstellation() {
     nodes = rawNodes.map((n, i) => {
       // Golden ratio spiral distribution for elegant cosmic layout
       const angle = i * 2.39996; // ~137.5 degrees
-      const dist = 40 + Math.sqrt(i + 1) * (radiusStep / Math.sqrt(rawNodes.length || 1));
+      const dist = 45 + Math.sqrt(i + 1) * (radiusStep / Math.sqrt(rawNodes.length || 1));
       return {
         ...n,
         x: centerX + Math.cos(angle) * dist,
@@ -92,7 +95,8 @@ export async function initConstellation() {
         vy: (Math.random() - 0.5) * 0.2,
         baseDist: dist,
         baseAngle: angle,
-        color: categoryColors[n.category] || '#00F0FF'
+        color: categoryColors[n.category] || '#00F0FF',
+        iconImg: getTechIconCanvasImage(n.icon || n.id)
       };
     });
   }
@@ -107,11 +111,16 @@ export async function initConstellation() {
     );
 
     detailPanel.innerHTML = `
-      <div>
-        <span class="badge" style="border-color:${color}; color:${color};">
-          ${selectedNode.category}
-        </span>
-        <h3 class="constellation-node-title">${selectedNode.name}</h3>
+      <div class="constellation-sidebar-header">
+        <div class="constellation-sidebar-badge" style="border-color:${color};">
+          ${getTechIconSvg(selectedNode.icon || selectedNode.id)}
+        </div>
+        <div>
+          <span class="badge" style="border-color:${color}; color:${color};">
+            ${selectedNode.category}
+          </span>
+          <h3 class="constellation-node-title">${selectedNode.name}</h3>
+        </div>
       </div>
 
       <div class="arch-meta-list">
@@ -125,7 +134,12 @@ export async function initConstellation() {
           <div class="arch-tech-pills">
             ${(selectedNode.links || []).map(linkId => {
               const target = rawNodes.find(n => n.id === linkId);
-              return target ? `<span class="badge badge-purple" style="cursor:pointer;" data-jump="${target.id}">⇄ ${target.name}</span>` : '';
+              return target ? `
+                <span class="badge badge-purple badge-jump-link" data-jump="${target.id}">
+                  ${getTechIconSvg(target.icon || target.id)}
+                  <span>${target.name}</span>
+                </span>
+              ` : '';
             }).join('')}
           </div>
         </div>
@@ -163,8 +177,15 @@ export async function initConstellation() {
         const color = categoryColors[n.category] || '#00F0FF';
         return `
           <div class="tech-grid-card" data-id="${n.id}" tabindex="0">
-            <span class="badge" style="border-color:${color}; color:${color}; width:fit-content;">${n.category}</span>
-            <strong style="color:var(--text-primary); font-size:1rem;">${n.name}</strong>
+            <div class="tech-card-icon-header">
+              <div class="tech-node-icon-box" style="border-color:${color};">
+                ${getTechIconSvg(n.icon || n.id)}
+              </div>
+              <div>
+                <span class="badge" style="border-color:${color}; color:${color}; font-size:0.6875rem;">${n.category}</span>
+                <strong style="color:var(--text-primary); font-size:0.9375rem; display:block; margin-top:2px;">${n.name}</strong>
+              </div>
+            </div>
             <p style="color:var(--text-secondary); font-size:0.8125rem; line-height:1.5;">${n.role}</p>
             <div style="font-family:var(--font-mono); font-size:0.6875rem; color:var(--text-muted); margin-top:4px;">
               Links: ${(n.links || []).join(', ')}
@@ -194,7 +215,7 @@ export async function initConstellation() {
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Draw connecting edges first
+    // 1. Draw connecting relationship edges
     ctx.lineWidth = 1;
     nodes.forEach(source => {
       (source.links || []).forEach(targetId => {
@@ -208,17 +229,17 @@ export async function initConstellation() {
         ctx.lineTo(target.x, target.y);
 
         if (isHighlighted) {
-          ctx.strokeStyle = 'rgba(232, 121, 249, 0.7)';
+          ctx.strokeStyle = 'rgba(232, 121, 249, 0.75)';
           ctx.lineWidth = 2;
         } else {
-          ctx.strokeStyle = 'rgba(168, 85, 247, 0.25)';
+          ctx.strokeStyle = 'rgba(168, 85, 247, 0.22)';
           ctx.lineWidth = 1;
         }
         ctx.stroke();
       });
     });
 
-    // Draw nodes
+    // 2. Draw nodes with icons
     const now = performance.now() * 0.001;
     nodes.forEach(node => {
       const isSelected = (node.id === selectedNode?.id);
@@ -231,34 +252,44 @@ export async function initConstellation() {
         node.y += Math.cos(now + node.baseAngle) * 0.15;
       }
 
-      const radius = isSelected ? 8 : (isHovered ? 7 : 5);
-      const alpha = isFilteredOut ? 0.2 : 1.0;
+      const radius = isSelected ? 18 : (isHovered ? 16 : 14);
+      const iconSize = isSelected ? 20 : (isHovered ? 18 : 16);
+      const alpha = isFilteredOut ? 0.25 : 1.0;
 
-      // Outer glow for selected
+      ctx.save();
+      ctx.globalAlpha = alpha;
+
+      // Outer glow for selected/hovered
       if (isSelected || isHovered) {
         ctx.beginPath();
-        ctx.arc(node.x, node.y, radius * 2.5, 0, Math.PI * 2);
-        ctx.fillStyle = isSelected ? 'rgba(232, 121, 249, 0.25)' : 'rgba(0, 240, 255, 0.25)';
+        ctx.arc(node.x, node.y, radius * 1.8, 0, Math.PI * 2);
+        ctx.fillStyle = isSelected ? 'rgba(232, 121, 249, 0.3)' : 'rgba(0, 240, 255, 0.25)';
         ctx.fill();
       }
 
-      // Main node circle
+      // Main circular icon badge container
       ctx.beginPath();
       ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
-      ctx.fillStyle = node.color;
-      ctx.globalAlpha = alpha;
+      ctx.fillStyle = '#0B091D';
       ctx.fill();
 
-      // Border
-      ctx.strokeStyle = isSelected ? '#FFFFFF' : '#080B12';
-      ctx.lineWidth = 2;
+      // Border with category neon color
+      ctx.strokeStyle = isSelected ? '#E879F9' : (isHovered ? '#00F0FF' : node.color);
+      ctx.lineWidth = isSelected ? 2.5 : 1.5;
       ctx.stroke();
 
-      // Text label
-      ctx.fillStyle = isSelected ? '#E879F9' : (isHovered ? '#FFFFFF' : '#A5B4FC');
+      // Draw SVG Icon
+      if (node.iconImg && node.iconImg.complete) {
+        ctx.drawImage(node.iconImg, node.x - iconSize / 2, node.y - iconSize / 2, iconSize, iconSize);
+      }
+
+      // Text label below node
+      ctx.textAlign = 'center';
+      ctx.fillStyle = isSelected ? '#FFFFFF' : (isHovered ? '#00F0FF' : '#CBD5E1');
       ctx.font = isSelected ? '700 11px "JetBrains Mono", monospace' : '500 10px "JetBrains Mono", monospace';
-      ctx.fillText(node.name, node.x + radius + 6, node.y + 4);
-      ctx.globalAlpha = 1.0;
+      ctx.fillText(node.name, node.x, node.y + radius + 13);
+
+      ctx.restore();
     });
 
     animationFrameId = requestAnimationFrame(draw);
@@ -272,7 +303,7 @@ export async function initConstellation() {
 
     hoveredNode = nodes.find(n => {
       const dist = Math.hypot(n.x - x, n.y - y);
-      return dist <= 20;
+      return dist <= 24;
     }) || null;
 
     canvas.style.cursor = hoveredNode ? 'pointer' : 'default';
@@ -285,7 +316,7 @@ export async function initConstellation() {
 
     const clicked = nodes.find(n => {
       const dist = Math.hypot(n.x - x, n.y - y);
-      return dist <= 22;
+      return dist <= 24;
     });
 
     if (clicked) {

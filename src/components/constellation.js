@@ -176,9 +176,9 @@ export function initConstellation() {
 
         <div class="arch-meta-block">
           <div class="arch-meta-header">
-            <svg class="arch-meta-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-            <span class="arch-meta-label">INTERCONNECTED TOPOLOGY</span>
-            <span class="arch-meta-pill-tag">⇄ 2-WAY FLOW</span>
+            <svg class="arch-meta-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            <span class="arch-meta-label">TOPOLOGY &amp; FLOW</span>
+            <span class="arch-meta-pill-tag">⇄ 2-WAY</span>
           </div>
           <div class="arch-tech-grid">
             ${(selectedNode.links || []).length > 0 ? (selectedNode.links || []).map(linkId => {
@@ -187,13 +187,10 @@ export function initConstellation() {
               const targetColor = categoryColors[target.category] || '#00F0FF';
               return `
                 <button type="button" class="tech-jump-card" data-jump="${target.id}" style="--target-color: ${targetColor};">
-                  <div class="tech-jump-icon">
+                  <span class="tech-jump-icon">
                     ${getTechIconSvg(target.icon || target.id)}
-                  </div>
-                  <div class="tech-jump-info">
-                    <span class="tech-jump-name">${target.name}</span>
-                    <span class="tech-jump-cat">${target.category}</span>
-                  </div>
+                  </span>
+                  <span class="tech-jump-name">${target.name}</span>
                   <span class="tech-jump-arrow">⇄</span>
                 </button>
               `;

@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NTH | Senior Backend &amp; Cloud Systems Engineer</title>
+    <meta name="description" content="Portfolio of NTH — Senior Backend and Cloud Systems Engineer specialized in distributed systems, Go, Kafka event streaming, and resilient microservices architecture." />
+    
+    <!-- Open Graph Metadata -->
+    <meta property="og:title" content="NTH | Senior Backend &amp; Cloud Systems Engineer" />
+    <meta property="og:description" content="Architecting high-throughput distributed systems, resilient cloud infrastructure, and low-latency microservices." />
+    <meta property="og:type" content="website" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23080B12'/><circle cx='50' cy='50' r='28' fill='%2300E5FF'/><circle cx='50' cy='50' r='14' fill='%238B5CF6'/></svg>" />
+  </head>
+  <body>
+    <!-- 1. Sticky Navigation -->
+    <header class="site-header" role="banner">
+      <div class="container nav-container">
+        <a href="#hero" class="brand-logo" aria-label="NTH Home">
+          <span class="brand-dot" aria-hidden="true"></span>
+          <span class="brand-name">NTH</span>
+          <span class="brand-ext">://SYS</span>
+        </a>
+
+        <nav role="navigation" aria-label="Main Navigation">
+          <ul class="nav-menu">
+            <li><a href="#about" class="nav-link">About</a></li>
+            <li><a href="#skills" class="nav-link">Constellation</a></li>
+            <li><a href="#projects" class="nav-link">Projects</a></li>
+            <li><a href="#architecture" class="nav-link">Architecture</a></li>
+            <li><a href="#timeline" class="nav-link">Timeline</a></li>
+            <li><a href="#blog" class="nav-link">Deep Dives</a></li>
+            <li><a href="#github" class="nav-link">GitHub</a></li>
+            <li><a href="#terminal" class="nav-link">Terminal</a></li>
+            <li><a href="#contact" class="nav-link">Contact</a></li>
+          </ul>
+        </nav>
+
+        <div class="nav-actions">
+          <button class="cmd-trigger" id="headerCmdTrigger" aria-label="Open Command Palette (Cmd+K)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <span>Search</span>
+            <kbd class="cmd-kbd">⌘K</kbd>
+          </button>
+
+          <button class="nav-toggle-btn" id="navToggleBtn" aria-label="Toggle Navigation Menu" aria-expanded="false">
+            ☰
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-drawer" id="mobileDrawer" role="dialog" aria-modal="true" aria-label="Mobile Navigation">
+      <a href="#about" class="nav-link">About &amp; Overview</a>
+      <a href="#skills" class="nav-link">Tech Constellation</a>
+      <a href="#projects" class="nav-link">Featured Projects</a>
+      <a href="#architecture" class="nav-link">System Architecture</a>
+      <a href="#timeline" class="nav-link">Engineering Timeline</a>
+      <a href="#blog" class="nav-link">Technical Deep Dives</a>
+      <a href="#github" class="nav-link">GitHub Explorer</a>
+      <a href="#terminal" class="nav-link">Interactive Terminal</a>
+      <a href="#contact" class="nav-link">Contact Communications</a>
+      <button class="cmd-trigger" style="margin-top: 16px; width: 100%; justify-content: center;">
+        <span>Open Command Palette (⌘K)</span>
+      </button>
+    </div>
+
+    <main id="mainContent">
+      <!-- 2. Hero Section -->
+      <section id="hero" class="hero-section">
+        <div class="container">
+          <div class="hero-status-strip">
+            <span class="hud-pill hud-pill-live">
+              <span class="status-indicator" aria-hidden="true"></span>
+              SYS.STATUS: ONLINE
+            </span>
+            <span class="hud-pill">
+              REGION: VIETNAM [ASIA-EAST]
+            </span>
+            <span class="hud-pill">
+              STACK: GO // DISTRIBUTED // CLOUD
+            </span>
+            <span class="hud-pill">
+              LATENCY: &lt; 14MS P99
+            </span>
+          </div>
+
+          <h1 class="hero-title">
+            Engineering Resilient <br />
+            <span class="gradient-text">Distributed Systems</span> &amp; Cloud Infra
+          </h1>
+
+          <p class="hero-subtitle">
+            I'm <span class="name-highlight">NTH</span> — Senior Backend &amp; Cloud Systems Engineer. 
+            I design high-throughput event ingestion pipelines, resilient caching proxies, and cloud-native microservices built for extreme reliability and low latency.
+          </p>
+
+          <div class="hero-ctas">
+            <a href="#projects" class="btn btn-primary">
+              <span>Inspect Projects</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </a>
+            <a href="#architecture" class="btn btn-purple">
+              <span>Explore Architecture Topology</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
+            </a>
+            <a href="#terminal" class="btn btn-secondary">
+              <span>Open Terminal</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+            </a>
+          </div>
+
+          <!-- Hero Engineering Metrics -->
+          <div class="hero-metrics-grid">
+            <div class="metric-item">
+              <span class="metric-value">50k+</span>
+              <span class="metric-label">Events/sec Ingest Capacity</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-value">&lt; 2.5ms</span>
+              <span class="metric-label">P99 Microservice Latency</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-value">99.99%</span>
+              <span class="metric-label">Reliability &amp; Failover Mindset</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-value">Zero-Alloc</span>
+              <span class="metric-label">Hot-Path Go Memory Profiling</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. About Section -->
+      <section id="about" class="section">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-tag">01 // Engineering Philosophy</span>
+            <h2 class="section-title">Built for Concurrency, Scalability &amp; Observability</h2>
+            <p class="section-subtitle">
+              Writing code is straightforward; building systems that survive network partitions, database locks, and sudden traffic floods requires disciplined architectural foresight.
+            </p>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+            <div class="spotlight-card" style="padding: 28px;">
+              <div style="color: var(--accent-cyan); font-family: var(--font-mono); font-size: 0.8125rem; margin-bottom: 8px;">01 // PROTOCOL-FIRST</div>
+              <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 12px; color: var(--text-primary);">Contract-Driven Microservices</h3>
+              <p style="color: var(--text-secondary); font-size: 0.9375rem; line-height: 1.6;">
+                Strict protobuf schemas, gRPC streaming, and backward-compatible versioning. Decoupling domains through event logs prevents cascading outages and spaghetti dependencies.
+              </p>
+            </div>
+
+            <div class="spotlight-card" style="padding: 28px;">
+              <div style="color: var(--accent-purple); font-family: var(--font-mono); font-size: 0.8125rem; margin-bottom: 8px;">02 // PERFORMANCE TUNING</div>
+              <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 12px; color: var(--text-primary);">Zero-Allocation Memory Profiling</h3>
+              <p style="color: var(--text-secondary); font-size: 0.9375rem; line-height: 1.6;">
+                Using <code>sync.Pool</code>, ring buffers, and pprof runtime analysis to mitigate garbage collection pauses on high-throughput streaming pipelines.
+              </p>
+            </div>
+
+            <div class="spotlight-card" style="padding: 28px;">
+              <div style="color: #10B981; font-family: var(--font-mono); font-size: 0.8125rem; margin-bottom: 8px;">03 // RESILIENT TELEMETRY</div>
+              <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 12px; color: var(--text-primary);">Deep Observability &amp; SLIs</h3>
+              <p style="color: var(--text-secondary); font-size: 0.9375rem; line-height: 1.6;">
+                Continuous metric instrumentation with Prometheus, OpenTelemetry tracing, and structured logging. If a metric cannot be measured, it cannot be reliably scaled.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Component 4 — Tech Stack Constellation -->
+      <section id="skills" class="section">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-tag">02 // Constellation View</span>
+            <h2 class="section-title">Interactive Tech Stack &amp; Relationships</h2>
+            <p class="section-subtitle">
+              Explore interconnected backend technologies, databases, and infrastructure tools. Click any node to inspect architectural roles and dependencies.
+            </p>
+          </div>
+
+          <div class="constellation-wrapper">
+            <div class="constellation-header-row">
+              <div class="constellation-cats">
+                <button class="filter-btn constellation-cat-btn active" data-cat="All">All Categories</button>
+                <button class="filter-btn constellation-cat-btn" data-cat="Languages">Languages</button>
+                <button class="filter-btn constellation-cat-btn" data-cat="Backend Frameworks">Backend &amp; Systems</button>
+                <button class="filter-btn constellation-cat-btn" data-cat="Databases">Databases &amp; Storage</button>
+                <button class="filter-btn constellation-cat-btn" data-cat="Caching & Queues">Caching &amp; Queues</button>
+                <button class="filter-btn constellation-cat-btn" data-cat="Infrastructure">Infrastructure</button>
+                <button class="filter-btn constellation-cat-btn" data-cat="AI & Tools">AI &amp; Tooling</button>
+              </div>
+
+              <button class="btn btn-secondary btn-sm" id="toggleConstellationView">
+                Structured Grid
+              </button>
+            </div>
+
+            <div class="constellation-view-area">
+              <div class="constellation-canvas-box">
+                <canvas id="constellationCanvas"></canvas>
+              </div>
+
+              <!-- Accessible Grid View toggle target -->
+              <div class="constellation-grid-view" id="constellationGridView" role="region" aria-label="Structured Technologies Grid"></div>
+
+              <div class="constellation-detail-panel" id="constellationDetail" role="region" aria-label="Technology Details">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. Component 3 — Project Showcase & Case Studies -->
+      <section id="projects" class="section">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-tag">03 // Engineering Showcase</span>
+            <h2 class="section-title">Selected Projects &amp; Case Studies</h2>
+            <p class="section-subtitle">
+              Deep architectural breakdowns of real-world backend services, distributed stream pipelines, and low-latency storage layers.
+            </p>
+          </div>
+
+          <div class="projects-toolbar">
+            <div class="category-pills">
+              <button class="cat-pill active" data-cat="All">All Disciplines</button>
+              <button class="cat-pill" data-cat="Distributed Systems">Distributed Systems</button>
+              <button class="cat-pill" data-cat="Cloud & AI">Cloud &amp; AI</button>
+              <button class="cat-pill" data-cat="Full Stack">Full Stack &amp; Tools</button>
+            </div>
+
+            <div class="search-input-wrap">
+              <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" id="projectSearchInput" class="search-input" placeholder="Search systems, tags..." aria-label="Search projects by title or technology" />
+            </div>
+          </div>
+
+          <div class="projects-grid" id="projectsContainer">
+            <!-- Dynamically populated with cards -->
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Component 2 — System Architecture Visualizer -->
+      <section id="architecture" class="section">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-tag">04 // Architecture Topology</span>
+            <h2 class="section-title">System Architecture Visualizer</h2>
+            <p class="section-subtitle">
+              Interactive topology of ApexPulse: a resilient, high-volume event ingestion and real-time processing engine. Click any node to inspect data flow, latency, and failure mitigation strategies.
+            </p>
+          </div>
+
+          <div id="archVisualizer" class="arch-container">
+            <!-- Dynamically populated SVG diagram & detail drawer -->
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. Component 5 — Engineering Timeline -->
+      <section id="timeline" class="section">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-tag">05 // Track Record</span>
+            <h2 class="section-title">Engineering Career &amp; Milestones</h2>
+            <p class="section-subtitle">
+              Chronological timeline of verified professional roles, technical achievements, and systems engineering experience.
+            </p>
+          </div>
+
+          <div class="timeline-filters">
+            <button class="cat-pill timeline-filter-btn active" data-type="All">All Milestones</button>
+            <button class="cat-pill timeline-filter-btn" data-type="Work Experience">Work Experience</button>
+            <button class="cat-pill timeline-filter-btn" data-type="Significant Projects">Significant Projects</button>
+            <button class="cat-pill timeline-filter-btn" data-type="Education">Education</button>
+          </div>
+
+          <div id="timelineContainer">
+            <!-- Dynamically populated with timeline milestones -->
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. Component 8 — Technical Blog -->
+      <section id="blog" class="section">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-tag">06 // Technical Deep Dives</span>
+            <h2 class="section-title">Architecture Articles &amp; Writeups</h2>
+            <p class="section-subtitle">
+              In-depth articles detailing low-level performance profiling, distributed hashing algorithms, and RAG retrieval architectures.
+            </p>
+          </div>
+
+          <div class="blog-toolbar">
+            <div class="category-pills">
+              <button class="cat-pill blog-cat-btn active" data-cat="All">All Topics</button>
+              <button class="cat-pill blog-cat-btn" data-cat="Go & Backend">Go &amp; Backend</button>
+              <button class="cat-pill blog-cat-btn" data-cat="Distributed Systems">Distributed Systems</button>
+              <button class="cat-pill blog-cat-btn" data-cat="AI & Search">AI &amp; Search</button>
+            </div>
+
+            <div class="search-input-wrap">
+              <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" id="blogSearchInput" class="search-input" placeholder="Search articles..." aria-label="Search articles by title or keyword" />
+            </div>
+          </div>
+
+          <div class="blog-grid" id="blogContainer">
+            <!-- Dynamically populated with articles -->
+          </div>
+        </div>
+      </section>
+
+      <!-- 9. Component 9 — GitHub Activity & Repository Explorer -->
+      <section id="github" class="section">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-tag">07 // Open Source Integration</span>
+            <h2 class="section-title">GitHub Activity &amp; Public Repositories</h2>
+            <p class="section-subtitle">
+              Live sync with public GitHub API for verified repository updates, primary programming languages, stars, and commit metrics.
+            </p>
+          </div>
+
+          <div id="githubContainer">
+            <!-- Dynamically populated with live GitHub profile and repos -->
+          </div>
+        </div>
+      </section>
+
+      <!-- 10. Component 1 — Interactive Terminal -->
+      <section id="terminal" class="section">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-tag">08 // Interactive CLI</span>
+            <h2 class="section-title">Engineering Terminal Session</h2>
+            <p class="section-subtitle">
+              Query portfolio data directly using Unix-inspired commands. Supports command history (↑/↓), command auto-routing, and quick action chips.
+            </p>
+          </div>
+
+          <div class="terminal-wrapper" role="region" aria-label="Interactive Workspace Terminal">
+            <div class="terminal-header">
+              <div class="terminal-dots" aria-hidden="true">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+              </div>
+              <div class="terminal-title">bash — nth@engine: ~ (zsh)</div>
+              <div class="terminal-actions">
+                <button class="terminal-btn" id="termClearBtn" aria-label="Clear Terminal Buffer">Clear</button>
+              </div>
+            </div>
+
+            <div class="terminal-body" id="terminalBody" role="log" aria-live="polite">
+              <!-- Dynamically populated with terminal log -->
+            </div>
+
+            <div class="terminal-input-row" style="padding: 12px 20px; background: rgba(8, 11, 18, 0.95); border-top: 1px solid var(--border-default);">
+              <span class="terminal-prompt" aria-hidden="true">nth@engine:~$</span>
+              <input type="text" id="terminalInput" class="terminal-input" placeholder="Type a command (e.g. help, projects, skills, whoami)..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="Terminal command input" />
+            </div>
+
+            <div class="terminal-quick-chips" aria-label="Quick Command Suggestions">
+              <button class="quick-chip" data-cmd="help">help</button>
+              <button class="quick-chip" data-cmd="whoami">whoami</button>
+              <button class="quick-chip" data-cmd="projects">projects</button>
+              <button class="quick-chip" data-cmd="skills">skills</button>
+              <button class="quick-chip" data-cmd="arch">arch</button>
+              <button class="quick-chip" data-cmd="blog">blog</button>
+              <button class="quick-chip" data-cmd="github">github</button>
+              <button class="quick-chip" data-cmd="contact">contact</button>
+              <button class="quick-chip" data-cmd="clear">clear</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11. Contact Section -->
+      <section id="contact" class="section">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-tag">09 // Communication Dispatch</span>
+            <h2 class="section-title">Initialize Transmission</h2>
+            <p class="section-subtitle">
+              Have an engineering challenge, distributed systems inquiry, or architectural consulting project? Let's connect.
+            </p>
+          </div>
+
+          <div class="contact-layout">
+            <div class="spotlight-card contact-info-card">
+              <h3 style="font-size: 1.375rem; font-weight: 700; color: var(--text-primary);">Direct Channels</h3>
+              <p class="contact-desc">
+                Fastest response via direct email or LinkedIn. Open to discussions on backend performance engineering, high-throughput microservices, and database scaling.
+              </p>
+
+              <div class="contact-channels">
+                <a href="mailto:hoa@gmail.com" class="channel-btn">
+                  <span>✉ Email: hoa@gmail.com</span>
+                  <span style="color:var(--accent-cyan);">Send ↗</span>
+                </a>
+                <button type="button" class="channel-btn" id="copyEmailBtn">
+                  <span>📋 Copy Email Address</span>
+                  <span style="color:var(--accent-cyan);">Copy</span>
+                </button>
+                <a href="https://github.com/thienhoa" target="_blank" rel="noopener noreferrer" class="channel-btn">
+                  <span>🐙 GitHub: @thienhoa</span>
+                  <span style="color:var(--accent-cyan);">Visit ↗</span>
+                </a>
+                <a href="https://gitlab.com/thienhoa" target="_blank" rel="noopener noreferrer" class="channel-btn">
+                  <span>🦊 GitLab: @thienhoa</span>
+                  <span style="color:var(--accent-cyan);">Visit ↗</span>
+                </a>
+              </div>
+            </div>
+
+            <div class="contact-terminal-box">
+              <div style="font-family: var(--font-mono); font-size: 0.8125rem; color: var(--accent-cyan); margin-bottom: 8px;">
+                // SECURE TRANSMISSION FORM
+              </div>
+              <form id="contactForm" style="display: flex; flex-direction: column; gap: 16px;">
+                <div class="field-group">
+                  <label for="contactName" class="field-label">Sender Identifier / Name</label>
+                  <input type="text" id="contactName" class="field-input" placeholder="e.g. Alex Mercer" required />
+                </div>
+
+                <div class="field-group">
+                  <label for="contactEmail" class="field-label">Return Address / Email</label>
+                  <input type="email" id="contactEmail" class="field-input" placeholder="e.g. alex@enterprise.io" required />
+                </div>
+
+                <div class="field-group">
+                  <label for="contactSubject" class="field-label">System Topic / Scope</label>
+                  <input type="text" id="contactSubject" class="field-input" placeholder="e.g. Distributed Ingestion Architecture Consulting" required />
+                </div>
+
+                <div class="field-group">
+                  <label for="contactMessage" class="field-label">Payload / Message Details</label>
+                  <textarea id="contactMessage" class="field-textarea" rows="4" placeholder="Brief outline of the system requirements or inquiry..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="margin-top: 8px;">
+                  <span>Dispatch Transmission</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer" role="contentinfo">
+      <div class="container footer-inner">
+        <div>
+          <span style="font-family: var(--font-mono); color: var(--accent-cyan); font-weight: 700;">NTH://SYS</span> — Dark Gaming Neon Architecture Portfolio
+        </div>
+        <div style="display: flex; gap: 16px; font-family: var(--font-mono);">
+          <span>STATUS: ALL SYSTEMS NOMINAL</span>
+          <span>BUILD: 2026.10</span>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Case Study Modal Dialog -->
+    <div class="modal-backdrop" id="caseStudyModal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="csModalTitle">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2 class="modal-title" id="csModalTitle">System Case Study</h2>
+          <button class="modal-close-btn" id="csModalClose" aria-label="Close Case Study Dialog">✕</button>
+        </div>
+        <div class="modal-body" id="csModalBody">
+          <!-- Dynamically populated with 9-section case study -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Blog Reader Modal Dialog -->
+    <div class="modal-backdrop" id="blogReaderModal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="blogReaderTitle">
+      <div class="modal-card blog-reader-card">
+        <div class="modal-header">
+          <div>
+            <h2 class="modal-title" id="blogReaderTitle">Technical Article</h2>
+            <div id="blogReaderDate" style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-cyan); margin-top: 4px;"></div>
+          </div>
+          <button class="modal-close-btn" id="blogReaderClose" aria-label="Close Article Reader Dialog">✕</button>
+        </div>
+        <div class="modal-body" id="blogReaderContent" style="max-height: 75vh; overflow-y: auto;">
+          <!-- Dynamically populated with formatted markdown article -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Component 7 — Command Palette Modal (Ctrl+K / Cmd+K) -->
+    <div class="modal-backdrop" id="commandPaletteModal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Global Command Palette">
+      <div class="modal-card palette-modal">
+        <div class="palette-search-box">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="paletteInput" class="palette-input" placeholder="Type a section name or command (e.g. terminal, projects, email)..." autocomplete="off" />
+          <kbd class="cmd-kbd">ESC to close</kbd>
+        </div>
+
+        <div class="palette-results" id="paletteResults" role="listbox">
+          <!-- Dynamically populated with matching items -->
+        </div>
+
+        <div class="palette-footer">
+          <div>Navigation: <span style="color:var(--accent-cyan);">↑ ↓</span> to select • <span style="color:var(--accent-cyan);">↵</span> to execute</div>
+          <div><kbd class="cmd-kbd">⌘K</kbd> toggles anytime</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Module Entry Script -->
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

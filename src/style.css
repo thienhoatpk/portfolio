@@ -1571,15 +1571,16 @@ code, pre, kbd, .mono {
 
 .constellation-view-area {
   display: grid;
-  grid-template-columns: 1fr 320px;
+  grid-template-columns: 1fr 340px;
   gap: 24px;
+  align-items: stretch;
 }
 
 .constellation-canvas-box {
   background: #04070D;
   border: 1px solid var(--border-default);
-  border-radius: var(--radius-md);
-  height: 480px;
+  border-radius: var(--radius-lg);
+  height: 540px;
   position: relative;
   overflow: hidden;
 }
@@ -1599,11 +1600,27 @@ code, pre, kbd, .mono {
   flex-direction: column;
   gap: 16px;
   position: relative;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(20px);
-  min-height: 480px;
+  height: 540px;
+  box-sizing: border-box;
   justify-content: space-between;
+}
+
+.constellation-detail-panel::-webkit-scrollbar {
+  width: 4px;
+}
+.constellation-detail-panel::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+.constellation-detail-panel::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.35);
+  border-radius: 4px;
+}
+.constellation-detail-panel::-webkit-scrollbar-thumb:hover {
+  background: rgba(168, 85, 247, 0.6);
 }
 
 .constellation-detail-panel::before {
@@ -1898,55 +1915,6 @@ code, pre, kbd, .mono {
   animation: badgePulse 2.5s infinite ease-in-out;
 }
 
-/* Accessible Grid View alternative */
-.constellation-grid-view {
-  display: none;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 16px;
-}
-.constellation-grid-view.active {
-  display: grid;
-}
-
-.tech-grid-card {
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-sm);
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  transition: all var(--transition-fast);
-}
-.tech-grid-card:hover {
-  border-color: var(--accent-magenta);
-  box-shadow: 0 0 16px var(--glow-magenta);
-  transform: translateY(-2px);
-}
-
-.tech-card-icon-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.tech-node-icon-box {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  background: rgba(26, 21, 56, 0.7);
-  border: 1px solid rgba(168, 85, 247, 0.35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 6px;
-  flex-shrink: 0;
-  box-shadow: 0 0 12px rgba(168, 85, 247, 0.3);
-}
-.tech-node-icon-box svg {
-  width: 100%;
-  height: 100%;
-}
 
 .badge-jump-link {
   display: inline-flex;
@@ -2577,6 +2545,13 @@ code, pre, kbd, .mono {
   }
   .constellation-view-area {
     grid-template-columns: 1fr;
+  }
+  .constellation-canvas-box {
+    height: 480px;
+  }
+  .constellation-detail-panel {
+    height: auto;
+    min-height: auto;
   }
   .projects-grid {
     grid-template-columns: 1fr;

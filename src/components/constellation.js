@@ -15,8 +15,6 @@ import { getTechIconSvg, getTechIconCanvasImage, getTechMonogram } from '../data
 export function initConstellation() {
   const canvas = document.getElementById('constellationCanvas');
   const detailPanel = document.getElementById('constellationDetail');
-  const gridContainer = document.getElementById('constellationGridView');
-  const toggleViewBtn = document.getElementById('toggleConstellationView');
   const canvasBox = document.querySelector('.constellation-canvas-box');
   const catButtonsContainer = document.querySelector('.constellation-cats');
   const titleEl = document.getElementById('constellationTitle');
@@ -27,7 +25,6 @@ export function initConstellation() {
   const ctx = canvas.getContext('2d');
   let animationFrameId = null;
   let isCanvasActive = true;
-  let isGridVisible = false;
   let hoveredNode = null;
   let activeCategory = 'All';
 
@@ -80,7 +77,6 @@ export function initConstellation() {
           catButtonsContainer.querySelectorAll('.constellation-cat-btn').forEach(b => {
             b.classList.toggle('active', b.getAttribute('data-cat') === activeCategory);
           });
-          if (isGridVisible) renderAccessibleGrid();
         });
       });
     }
@@ -91,12 +87,11 @@ export function initConstellation() {
 
     initPositions();
     renderSidebar();
-    if (isGridVisible) renderAccessibleGrid();
   }
 
   function initPositions() {
     const width = canvas.clientWidth || 700;
-    const height = canvas.clientHeight || 480;
+    const height = canvas.clientHeight || 540;
     canvas.width = width * window.devicePixelRatio;
     canvas.height = height * window.devicePixelRatio;
     ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
@@ -237,45 +232,8 @@ export function initConstellation() {
     });
   }
 
-  function renderAccessibleGrid() {
-    if (!gridContainer) return;
-    gridContainer.innerHTML = rawNodes
-      .filter(n => activeCategory === 'All' || n.category === activeCategory)
-      .map(n => {
-        const color = categoryColors[n.category] || '#00F0FF';
-        return `
-          <div class="tech-grid-card" data-id="${n.id}" tabindex="0">
-            <div class="tech-card-icon-header">
-              <div class="tech-node-icon-box" style="border-color:${color};">
-                ${getTechIconSvg(n.icon || n.id)}
-              </div>
-              <div>
-                <span class="badge" style="border-color:${color}; color:${color}; font-size:0.6875rem;">${n.category}</span>
-                <strong style="color:var(--text-primary); font-size:0.9375rem; display:block; margin-top:2px;">${n.name}</strong>
-              </div>
-            </div>
-            <p style="color:var(--text-secondary); font-size:0.8125rem; line-height:1.5;">${n.role}</p>
-            <div style="font-family:var(--font-mono); font-size:0.6875rem; color:var(--text-muted); margin-top:4px;">
-              Links: ${(n.links || []).join(', ')}
-            </div>
-          </div>
-        `;
-      }).join('');
-
-    gridContainer.querySelectorAll('.tech-grid-card').forEach(card => {
-      card.addEventListener('click', () => {
-        const id = card.getAttribute('data-id');
-        const node = rawNodes.find(n => n.id === id);
-        if (node) {
-          selectedNode = node;
-          renderSidebar();
-        }
-      });
-    });
-  }
-
   function draw() {
-    if (!isCanvasActive || isGridVisible) {
+    if (!isCanvasActive) {
       animationFrameId = requestAnimationFrame(draw);
       return;
     }
@@ -574,24 +532,6 @@ export function initConstellation() {
     handlePointerUp();
   });
 
-  // Toggle View button
-  if (toggleViewBtn) {
-    toggleViewBtn.onclick = () => {
-      isGridVisible = !isGridVisible;
-      if (isGridVisible) {
-        toggleViewBtn.textContent = 'Orbital View';
-        canvasBox.style.display = 'none';
-        gridContainer.classList.add('active');
-        renderAccessibleGrid();
-      } else {
-        toggleViewBtn.textContent = 'Structured Grid';
-        canvasBox.style.display = 'block';
-        gridContainer.classList.remove('active');
-        initPositions();
-      }
-    };
-  }
-
   // IntersectionObserver to pause rendering when off-screen
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -602,9 +542,7 @@ export function initConstellation() {
   observer.observe(canvas);
 
   window.addEventListener('resize', () => {
-    if (!isGridVisible) {
-      initPositions();
-    }
+    initPositions();
   });
 
   // Initialize immediately

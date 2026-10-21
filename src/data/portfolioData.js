@@ -629,98 +629,108 @@ import techStackConfig from './tech-stack.json';
 export const CONSTELLATION_NODES = techStackConfig.nodes;
 export const TECH_STACK_CONFIG = techStackConfig;
 
-export const TIMELINE_MILESTONES = [
+export const WORK_EXPERIENCES = [
   {
-    id: "m-current",
-    telemetry: "NODE // 01",
-    period: "2024 — Present",
-    title: "Senior Backend & Infrastructure Engineer",
-    organization: "Distributed Systems & Cloud Engineering",
-    type: "Work Experience",
-    badge: "Current Role",
-    status: "LIVE",
-    icon: "server",
-    summary: "Leading backend architecture for scalable cloud-native microservices, telemetry platforms, and database tuning. Focused on sub-5ms API response latencies and high-availability topologies.",
-    kpis: [
-      { val: "-40%", label: "P99 Latency" },
-      { val: "10K+ msg/s", label: "Kafka Ingestion" },
-      { val: "99.99%", label: "Service SLA" }
+    id: "exp-bship",
+    company: "BShip",
+    role: "Backend Engineer",
+    period: "06/2024 — Hiện tại",
+    dateStart: "06/2024",
+    dateEnd: "Hiện tại",
+    isCurrent: true,
+    location: "Hồ Chí Minh, Việt Nam",
+    description: "Phát triển và tối ưu các microservice, xây dựng hệ thống phân tán, xử lý dữ liệu lớn và cải thiện hiệu năng.",
+    detailOverview: "Làm việc tại BShip – nền tảng công nghệ logistics và vận tải, góp phần xây dựng các giải pháp giúp kết nối tài xế, khách hàng và doanh nghiệp.",
+    achievements: [
+      "Thiết kế và phát triển các microservices quan trọng.",
+      "Tối ưu hiệu năng hệ thống, giảm 40% thời gian phản hồi.",
+      "Triển khai hạ tầng với Docker, Kubernetes."
     ],
-    highlights: [
-      "Engineered high-throughput event processing pipelines with Go and Apache Kafka.",
-      "Optimized relational database query plans, reducing P99 query latency by over 40%.",
-      "Standardized container deployment manifests and automated CI/CD pipeline health checks."
-    ],
-    technologies: ["Go", "Kafka", "PostgreSQL", "Docker", "Prometheus", "Redis"]
+    technologies: ["Go", "Gin", "GORM", "MySQL", "Redis", "Docker", "K8s", "AWS"],
+    thumbnail: "/images/bship_thumb.jpg",
+    logoType: "bship",
+    color: "#00e5ff",
+    projectId: "p1"
   },
   {
-    id: "m-rag-milestone",
-    telemetry: "NODE // 02",
-    title: "Architected Enterprise Semantic Search & Vector Pipeline",
-    organization: "Technical Milestone // RAG & Distributed Search",
-    period: "2023 — 2024",
-    type: "Significant Projects",
-    badge: "Key Achievement",
-    status: "PRODUCTION",
-    icon: "cpu",
-    summary: "Designed and implemented a hybrid semantic retrieval engine combining Qdrant HNSW vector search with PostgreSQL full-text search, supporting multi-tenant document isolation.",
-    kpis: [
-      { val: "< 45ms", label: "Vector Search" },
-      { val: "10M+", label: "Embeddings" },
-      { val: "72%", label: "Cache Hit Rate" }
+    id: "exp-saovang",
+    company: "Saovang Group",
+    role: "Backend Developer",
+    period: "03/2023 — 05/2024",
+    dateStart: "03/2023",
+    dateEnd: "05/2024",
+    isCurrent: false,
+    location: "Hà Nội, Việt Nam",
+    description: "Tham gia phát triển các tính năng cho hệ thống quản lý, website và các dự án nội bộ của công ty.",
+    detailOverview: "Tham gia xây dựng các hệ thống quản lý ERP nội bộ, API thanh toán và đồng bộ dữ liệu cho các cổng thông tin doanh nghiệp.",
+    achievements: [
+      "Xây dựng và bảo trì hệ sinh thái quản lý dữ liệu tập trung.",
+      "Tối ưu hóa các truy vấn SQL phức tạp, giảm tải hệ thống cơ sở dữ liệu.",
+      "Thiết kế RESTful APIs phục vụ ứng dụng mobile và web."
     ],
-    highlights: [
-      "Integrated Redis caching for semantic query embeddings, saving significant API overhead.",
-      "Implemented asynchronous document chunking workers with backpressure management."
-    ],
-    technologies: ["Python", "FastAPI", "Qdrant", "Redis", "Docker"]
+    technologies: ["Laravel", "PHP", "MySQL", "Redis", "Docker"],
+    thumbnail: "/images/saovang_thumb.jpg",
+    logoType: "star",
+    color: "#a855f7",
+    projectId: "p2"
   },
   {
-    id: "m-swe",
-    telemetry: "NODE // 03",
-    title: "Backend Software Engineer",
-    organization: "Cloud & Web Applications",
-    period: "2021 — 2023",
-    type: "Work Experience",
-    badge: "Full-Time",
-    status: "VERIFIED",
-    icon: "code",
-    summary: "Built secure RESTful and gRPC microservices, implemented caching hierarchies, and designed database schemas for customer-facing web services.",
-    kpis: [
-      { val: "12+", label: "Go Services" },
-      { val: "sub-5ms", label: "Core API Response" },
-      { val: "k6 Tests", label: "Stress Validated" }
+    id: "exp-freelance",
+    company: "Freelance",
+    role: "Fullstack Developer",
+    period: "08/2021 — 02/2023",
+    dateStart: "08/2021",
+    dateEnd: "02/2023",
+    isCurrent: false,
+    location: "Remote",
+    description: "Phát triển website, API và các công cụ hỗ trợ doanh nghiệp vừa và nhỏ.",
+    detailOverview: "Hợp tác với các đối tác trong và ngoài nước để phát triển ứng dụng web hiện đại, hệ thống thương mại điện tử và tích hợp thanh toán tự động.",
+    achievements: [
+      "Phát triển hơn 8 website thương mại điện tử và landing page tối ưu chuyển đổi.",
+      "Tích hợp các cổng thanh toán Stripe, VNPay, MoMo bảo mật cao.",
+      "Triển khai hạ tầng serverless trên AWS và Vercel."
     ],
-    highlights: [
-      "Engineered token-based authentication and granular permission middleware.",
-      "Refactored monolith endpoints into independent Go microservices.",
-      "Conducted load testing with k6 to identify memory bottlenecks."
-    ],
-    technologies: ["Go", "Node.js", "MySQL", "Redis", "Docker", "Git"]
+    technologies: ["React", "Next.js", "Node.js", "PostgreSQL", "AWS"],
+    thumbnail: "/images/freelance_thumb.jpg",
+    logoType: "users",
+    color: "#3b82f6",
+    projectId: "p3"
   },
   {
-    id: "m-edu",
-    telemetry: "NODE // 04",
-    title: "Bachelor of Science in Computer Science / Software Engineering",
-    organization: "University Education // Honors Distinction",
-    period: "2017 — 2021",
-    type: "Education",
-    badge: "Honors Degree",
-    status: "ACCREDITED",
-    icon: "academic",
-    summary: "Core foundations in algorithms, data structures, operating systems, networking protocols, database systems, and distributed computing theory.",
-    kpis: [
-      { val: "Honors", label: "Graduation Distinction" },
-      { val: "CS / SWE", label: "Major Concentration" },
-      { val: "Paxos", label: "Distributed Thesis" }
+    id: "exp-internship",
+    company: "Internship",
+    role: "Backend Intern",
+    period: "06/2021 — 08/2021",
+    dateStart: "06/2021",
+    dateEnd: "08/2021",
+    isCurrent: false,
+    location: "Hồ Chí Minh, Việt Nam",
+    description: "Học hỏi và tham gia phát triển một số module nhỏ trong dự án thực tế.",
+    detailOverview: "Tiếp cận quy trình phát triển phần mềm chuẩn Agile/Scrum, viết unit tests và hỗ trợ xây dựng các micro-endpoints nghiệp vụ.",
+    achievements: [
+      "Hoàn thành xuất sắc khóa thực tập và được đánh giá cao về tư duy giải thuật.",
+      "Đóng góp code cho module xác thực và phân quyền người dùng.",
+      "Thành thạo quy trình Git flow và CI/CD cơ bản."
     ],
-    highlights: [
-      "Graduated with honors in Software Engineering and Systems Design.",
-      "Capstone project: Decentralized fault-tolerant key-value store using Paxos consensus."
-    ],
-    technologies: ["C / C++", "Java", "SQL", "Networking (TCP/IP)", "Operating Systems"]
+    technologies: ["Go", "MySQL", "Git"],
+    thumbnail: "/images/internship_thumb.jpg",
+    logoType: "archive",
+    color: "#64748b",
+    projectId: "p4"
   }
 ];
+
+export const CAREER_STATS = {
+  years: "3+",
+  yearsDetail: "3y6m",
+  companies: 4,
+  projects: 4,
+  technologies: "12+",
+  quote: "Không chỉ viết code, mình đang xây dựng những điều có ý nghĩa.",
+  author: "Hòa Nguyễn Thiện"
+};
+
+export const TIMELINE_MILESTONES = WORK_EXPERIENCES;
 
 export const BLOG_ARTICLES = [
   {

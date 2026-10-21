@@ -632,12 +632,20 @@ export const TECH_STACK_CONFIG = techStackConfig;
 export const TIMELINE_MILESTONES = [
   {
     id: "m-current",
+    telemetry: "NODE // 01",
     period: "2024 — Present",
     title: "Senior Backend & Infrastructure Engineer",
     organization: "Distributed Systems & Cloud Engineering",
     type: "Work Experience",
     badge: "Current Role",
+    status: "LIVE",
+    icon: "server",
     summary: "Leading backend architecture for scalable cloud-native microservices, telemetry platforms, and database tuning. Focused on sub-5ms API response latencies and high-availability topologies.",
+    kpis: [
+      { val: "-40%", label: "P99 Latency" },
+      { val: "10K+ msg/s", label: "Kafka Ingestion" },
+      { val: "99.99%", label: "Service SLA" }
+    ],
     highlights: [
       "Engineered high-throughput event processing pipelines with Go and Apache Kafka.",
       "Optimized relational database query plans, reducing P99 query latency by over 40%.",
@@ -647,12 +655,20 @@ export const TIMELINE_MILESTONES = [
   },
   {
     id: "m-rag-milestone",
+    telemetry: "NODE // 02",
     title: "Architected Enterprise Semantic Search & Vector Pipeline",
-    organization: "Technical Milestone",
+    organization: "Technical Milestone // RAG & Distributed Search",
     period: "2023 — 2024",
     type: "Significant Projects",
     badge: "Key Achievement",
+    status: "PRODUCTION",
+    icon: "cpu",
     summary: "Designed and implemented a hybrid semantic retrieval engine combining Qdrant HNSW vector search with PostgreSQL full-text search, supporting multi-tenant document isolation.",
+    kpis: [
+      { val: "< 45ms", label: "Vector Search" },
+      { val: "10M+", label: "Embeddings" },
+      { val: "72%", label: "Cache Hit Rate" }
+    ],
     highlights: [
       "Integrated Redis caching for semantic query embeddings, saving significant API overhead.",
       "Implemented asynchronous document chunking workers with backpressure management."
@@ -661,12 +677,20 @@ export const TIMELINE_MILESTONES = [
   },
   {
     id: "m-swe",
+    telemetry: "NODE // 03",
     title: "Backend Software Engineer",
     organization: "Cloud & Web Applications",
     period: "2021 — 2023",
     type: "Work Experience",
     badge: "Full-Time",
+    status: "VERIFIED",
+    icon: "code",
     summary: "Built secure RESTful and gRPC microservices, implemented caching hierarchies, and designed database schemas for customer-facing web services.",
+    kpis: [
+      { val: "12+", label: "Go Services" },
+      { val: "sub-5ms", label: "Core API Response" },
+      { val: "k6 Tests", label: "Stress Validated" }
+    ],
     highlights: [
       "Engineered token-based authentication and granular permission middleware.",
       "Refactored monolith endpoints into independent Go microservices.",
@@ -676,12 +700,20 @@ export const TIMELINE_MILESTONES = [
   },
   {
     id: "m-edu",
+    telemetry: "NODE // 04",
     title: "Bachelor of Science in Computer Science / Software Engineering",
-    organization: "University Education",
+    organization: "University Education // Honors Distinction",
     period: "2017 — 2021",
     type: "Education",
-    badge: "Degree",
+    badge: "Honors Degree",
+    status: "ACCREDITED",
+    icon: "academic",
     summary: "Core foundations in algorithms, data structures, operating systems, networking protocols, database systems, and distributed computing theory.",
+    kpis: [
+      { val: "Honors", label: "Graduation Distinction" },
+      { val: "CS / SWE", label: "Major Concentration" },
+      { val: "Paxos", label: "Distributed Thesis" }
+    ],
     highlights: [
       "Graduated with honors in Software Engineering and Systems Design.",
       "Capstone project: Decentralized fault-tolerant key-value store using Paxos consensus."

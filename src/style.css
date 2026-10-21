@@ -2707,6 +2707,8 @@ code, pre, kbd, .mono {
 
 /* Right Column Sidebar */
 .career-sidebar-col {
+  position: sticky;
+  top: 96px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -2940,112 +2942,13 @@ code, pre, kbd, .mono {
   transform: translateY(-1px);
 }
 
-/* Career Stats Card */
-.career-stats-card {
-  padding: 22px 24px;
-  border-radius: 14px;
-  background: rgba(14, 22, 42, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-}
-
-.career-stats-heading {
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: #FFFFFF;
-  margin: 0 0 18px 0;
-}
-
-.career-stats-rings-row {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  margin-bottom: 22px;
-  text-align: center;
-}
-
-.stat-ring-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-}
-
-.stat-circle {
-  width: 58px;
-  height: 58px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(10, 16, 32, 0.8);
-  transition: transform 0.2s;
-}
-
-.stat-circle:hover {
-  transform: scale(1.05);
-}
-
-.stat-ring-cyan {
-  border: 2.5px solid #00e5ff;
-  box-shadow: 0 0 12px rgba(0, 229, 255, 0.35);
-}
-
-.stat-ring-blue {
-  border: 2.5px solid #3b82f6;
-  box-shadow: 0 0 12px rgba(59, 130, 246, 0.35);
-}
-
-.stat-ring-teal {
-  border: 2.5px solid #14b8a6;
-  box-shadow: 0 0 12px rgba(20, 184, 166, 0.35);
-}
-
-.stat-ring-purple {
-  border: 2.5px solid #a855f7;
-  box-shadow: 0 0 12px rgba(168, 85, 247, 0.35);
-}
-
-.stat-num {
-  font-family: var(--font-mono);
-  font-size: 0.95rem;
-  font-weight: 800;
-  color: #FFFFFF;
-}
-
-.stat-sub {
-  font-size: 0.6875rem;
-  color: #94a3b8;
-  line-height: 1.2;
-  text-align: center;
-}
-
-.career-quote-box {
-  padding-top: 14px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  text-align: right;
-}
-
-.career-quote-text {
-  font-size: 0.85rem;
-  font-style: italic;
-  color: #94a3b8;
-  line-height: 1.5;
-  margin: 0 0 6px 0;
-  text-align: left;
-}
-
-.career-quote-author {
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: #cbd5e1;
-}
-
 /* Responsive Breakpoints */
 @media (max-width: 1024px) {
   .career-layout-grid {
     grid-template-columns: 1fr;
+  }
+  .career-sidebar-col {
+    position: static;
   }
 }
 
@@ -3071,10 +2974,6 @@ code, pre, kbd, .mono {
   }
   .career-card-thumb {
     height: 140px;
-  }
-  .career-stats-rings-row {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
   }
 }
 

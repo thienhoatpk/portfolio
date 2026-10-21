@@ -267,46 +267,6 @@ export function initTimeline() {
               View project details <span>→</span>
             </button>
           </div>
-
-          <!-- Career Stats Card -->
-          <div class="career-stats-card spotlight-card">
-            <h4 class="career-stats-heading">Career Stats</h4>
-
-            <div class="career-stats-rings-row">
-              <div class="stat-ring-item">
-                <div class="stat-circle stat-ring-cyan">
-                  <span class="stat-num">${CAREER_STATS.yearsDetail}</span>
-                </div>
-                <span class="stat-sub">Total Experience</span>
-              </div>
-
-              <div class="stat-ring-item">
-                <div class="stat-circle stat-ring-blue">
-                  <span class="stat-num">${CAREER_STATS.companies}</span>
-                </div>
-                <span class="stat-sub">Companies</span>
-              </div>
-
-              <div class="stat-ring-item">
-                <div class="stat-circle stat-ring-teal">
-                  <span class="stat-num">${CAREER_STATS.projects}</span>
-                </div>
-                <span class="stat-sub">Projects</span>
-              </div>
-
-              <div class="stat-ring-item">
-                <div class="stat-circle stat-ring-purple">
-                  <span class="stat-num">${CAREER_STATS.technologies}</span>
-                </div>
-                <span class="stat-sub">Technologies</span>
-              </div>
-            </div>
-
-            <div class="career-quote-box">
-              <p class="career-quote-text">“ ${CAREER_STATS.quote} ”</p>
-              <div class="career-quote-author">${CAREER_STATS.author}</div>
-            </div>
-          </div>
         </div>
       </div>
     `;

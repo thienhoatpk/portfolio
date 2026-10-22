@@ -2478,7 +2478,9 @@ code, pre, kbd, .mono {
   cursor: grabbing;
 }
 
-/* SVG Ellipse Orbit Background */
+/* ==========================================================================
+   3D Orbital Track & Futuristic Cyber Ring Visuals
+   ========================================================================== */
 .orbital-track-canvas-wrap,
 .orbital-canvas-bg {
   position: absolute;
@@ -2489,51 +2491,165 @@ code, pre, kbd, .mono {
   z-index: 1;
 }
 
+.orbital-particle-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.orbital-particle-canvas.bg-canvas {
+  z-index: 2;
+}
+
+.orbital-particle-canvas.fg-canvas {
+  z-index: 50;
+}
+
 .orbital-ellipse-svg {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   overflow: visible;
+  pointer-events: none;
+  z-index: 1;
 }
 
-.orbit-inner-guide {
-  fill: none;
-  stroke: rgba(168, 85, 247, 0.22);
-  stroke-width: 1.2;
-  stroke-dasharray: 4 8;
+/* ==========================================================================
+   VẦNG QUANG QUỸ ĐẠO: Ethereal Luminous Celestial Halo (Soft Volumetric Aura)
+   ========================================================================== */
+.orbit-nebula-halo {
+  transform-origin: 0 0;
+  animation: nebula-aura-breathe 8s ease-in-out infinite alternate;
 }
 
-.orbit-ambient-ring {
-  fill: none;
-  stroke: rgba(0, 229, 255, 0.15);
-  stroke-width: 1.5;
+@keyframes nebula-aura-breathe {
+  0% { transform: scale(0.96); opacity: 0.22; }
+  100% { transform: scale(1.04); opacity: 0.44; }
 }
 
-.orbit-core-ring {
-  fill: none;
-  stroke-width: 2.5;
-  stroke-dasharray: 8 4;
+/* Multi-Layered Diffuse Glow Halo: No sharp strokes, pure radiance */
+.orbit-halo-outer {
+  opacity: 0.25;
+  filter: url(#haloDeepBlur);
+  animation: halo-outer-pulse 6s ease-in-out infinite alternate;
 }
 
-.orbit-energy-beam {
+@keyframes halo-outer-pulse {
+  0% { opacity: 0.2; stroke-width: 64; }
+  100% { opacity: 0.35; stroke-width: 76; }
+}
+
+.orbit-halo-middle {
+  opacity: 0.6;
+  filter: url(#haloMidBlur);
+}
+
+.orbit-halo-inner {
+  opacity: 0.88;
+  filter: url(#haloSoftBlur);
+}
+
+.orbit-halo-core {
+  opacity: 0.65;
+  filter: url(#haloSoftBlur);
+}
+
+/* Fluid Glowing Light Waves Gliding inside the Halo (Feathered Comets of Light) */
+.orbit-light-wave-cw {
   fill: none;
   stroke: #ffffff;
-  stroke-width: 3.5;
-  stroke-dasharray: 80 400;
+  stroke-width: 6;
+  stroke-dasharray: 180 1100;
   stroke-linecap: round;
-  filter: drop-shadow(0 0 10px #00e5ff);
-  animation: orbital-beam-dash 6s linear infinite;
+  filter: url(#haloPulseBlur) drop-shadow(0 0 16px #00f0ff);
+  animation: light-wave-cw-anim 5.5s ease-in-out infinite;
 }
 
-@keyframes orbital-beam-dash {
-  to {
-    stroke-dashoffset: -480;
-  }
+@keyframes light-wave-cw-anim {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -1280; }
 }
 
-.orbit-grid-axis {
-  stroke: rgba(0, 229, 255, 0.08);
-  stroke-width: 1;
-  stroke-dasharray: 4 6;
+.orbit-light-wave-ccw {
+  fill: none;
+  stroke: #c084fc;
+  stroke-width: 5;
+  stroke-dasharray: 140 1140;
+  stroke-linecap: round;
+  filter: url(#haloPulseBlur) drop-shadow(0 0 18px #d946ef);
+  animation: light-wave-ccw-anim 8s ease-in-out infinite;
+}
+
+@keyframes light-wave-ccw-anim {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: 1280; }
+}
+
+/* Soft Center Singularity Core (Zero Wireframes) */
+.singularity-ambient-pulse {
+  animation: singularity-breathe 4s ease-in-out infinite alternate;
+}
+
+.singularity-core-pulse {
+  animation: singularity-breathe 2.4s ease-in-out infinite alternate;
+}
+
+@keyframes singularity-breathe {
+  0% { transform: scale(0.92); opacity: 0.4; }
+  100% { transform: scale(1.1); opacity: 0.75; }
+}
+
+/* Waypoint Light Orbs */
+.node-glow-halo {
+  animation: node-halo-pulse 3s ease-in-out infinite alternate;
+}
+
+@keyframes node-halo-pulse {
+  0% { transform: scale(0.9); opacity: 0.35; }
+  100% { transform: scale(1.25); opacity: 0.75; }
+}
+
+/* Card Flip Hint Tip Badge */
+.orbital-card-flip-tip {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-end;
+  gap: 5px;
+  padding: 5px 12px;
+  margin-top: 10px;
+  border-radius: 999px;
+  background: rgba(0, 229, 255, 0.1);
+  border: 1px solid rgba(0, 229, 255, 0.35);
+  color: #00e5ff;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  pointer-events: none;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.orbital-card-rig:hover .orbital-card-flip-tip {
+  background: rgba(0, 229, 255, 0.22);
+  border-color: #00e5ff;
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.4);
+}
+
+.orbital-card-flip-tip.flip-tip-back {
+  background: rgba(168, 85, 247, 0.15);
+  border-color: rgba(168, 85, 247, 0.4);
+  color: #c084fc;
+}
+
+.orbital-card-rig:hover .orbital-card-flip-tip.flip-tip-back {
+  background: rgba(168, 85, 247, 0.28);
+  border-color: #c084fc;
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.5);
 }
 
 /* 3D Origin World Container */

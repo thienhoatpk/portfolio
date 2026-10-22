@@ -2465,7 +2465,8 @@ code, pre, kbd, .mono {
   align-items: center;
   justify-content: center;
   user-select: none;
-  touch-action: pan-y;
+  touch-action: none;
+  overscroll-behavior: contain;
   cursor: grab;
   border-radius: 24px;
   background: radial-gradient(ellipse 70% 55% at 50% 50%, rgba(0, 229, 255, 0.04) 0%, rgba(5, 9, 18, 0.6) 75%, transparent 100%);
@@ -2623,8 +2624,8 @@ code, pre, kbd, .mono {
 
 .card-edge-left,
 .card-edge-right {
-  top: 0px;
-  bottom: 0px;
+  top: 14px;
+  bottom: 14px;
   width: 96px;
   background: 
     repeating-linear-gradient(
@@ -2736,8 +2737,8 @@ code, pre, kbd, .mono {
 }
 
 .card-edge-top {
-  left: 0px;
-  right: 0px;
+  left: 14px;
+  right: 14px;
   top: -48px;
   height: 96px;
   transform: rotateX(90deg);
@@ -2766,14 +2767,16 @@ code, pre, kbd, .mono {
     0 0 40px rgba(0, 229, 255, 0.95),
     inset 0 0 25px rgba(255, 255, 255, 0.6);
   display: flex;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  padding: 0 24px;
   overflow: hidden;
 }
 
 .card-edge-bottom {
-  left: 0px;
-  right: 0px;
+  left: 14px;
+  right: 14px;
   bottom: -48px;
   height: 96px;
   transform: rotateX(-90deg);
@@ -2807,6 +2810,51 @@ code, pre, kbd, .mono {
   justify-content: space-between;
   padding: 0 24px;
   overflow: hidden;
+}
+
+/* 3D Beveled Corner Slabs (45° Cyber Chamfer seamlessly wrapping rounded corners) */
+.card-edge-corner {
+  position: absolute;
+  width: 20px;
+  height: 96px;
+  left: -10px;
+  top: -48px;
+  background: linear-gradient(
+    180deg, 
+    #00e5ff 0%, 
+    #0f2542 12%, 
+    #183c68 32%, 
+    #00e5ff 50%, 
+    #ffffff 52%,
+    #00e5ff 54%, 
+    #183c68 68%, 
+    #0f2542 88%, 
+    #00e5ff 100%
+  );
+  border-top: 3.5px solid #00e5ff;
+  border-bottom: 3.5px solid #00e5ff;
+  box-shadow: 0 0 25px rgba(0, 229, 255, 0.7);
+  pointer-events: none;
+  z-index: 2;
+  backface-visibility: visible !important;
+  -webkit-backface-visibility: visible !important;
+  transform-style: preserve-3d;
+}
+
+.card-edge-corner.corner-tl {
+  transform: translate3d(7px, 7px, 0px) rotateZ(-45deg) rotateX(90deg);
+}
+
+.card-edge-corner.corner-tr {
+  transform: translate3d(333px, 7px, 0px) rotateZ(45deg) rotateX(90deg);
+}
+
+.card-edge-corner.corner-bl {
+  transform: translate3d(7px, 393px, 0px) rotateZ(-135deg) rotateX(90deg);
+}
+
+.card-edge-corner.corner-br {
+  transform: translate3d(333px, 393px, 0px) rotateZ(135deg) rotateX(90deg);
 }
 
 .edge-ribs-h {
@@ -2859,8 +2907,7 @@ code, pre, kbd, .mono {
   box-shadow: 
     0 0 0 2px rgba(0, 229, 255, 0.65),
     inset 0 0 0 1.5px rgba(255, 255, 255, 0.35),
-    0 16px 36px rgba(0, 0, 0, 0.85),
-    0 0 20px rgba(0, 229, 255, 0.25);
+    0 0 20px rgba(0, 229, 255, 0.35);
   transition: border-color 0.35s ease, box-shadow 0.35s ease;
 }
 
@@ -2928,8 +2975,7 @@ code, pre, kbd, .mono {
     0 0 0 2.5px rgba(0, 229, 255, 0.9),
     inset 0 0 0 1.5px rgba(255, 255, 255, 0.5),
     inset 0 0 25px rgba(0, 229, 255, 0.25),
-    0 22px 48px rgba(0, 0, 0, 0.9),
-    0 0 35px rgba(0, 229, 255, 0.6);
+    0 0 35px rgba(0, 229, 255, 0.75);
 }
 
 .orbital-card-rig.is-front-active .card-face-front::before {
@@ -2940,7 +2986,8 @@ code, pre, kbd, .mono {
 .orbital-card-rig.is-front-active .card-edge-left,
 .orbital-card-rig.is-front-active .card-edge-right,
 .orbital-card-rig.is-front-active .card-edge-top,
-.orbital-card-rig.is-front-active .card-edge-bottom {
+.orbital-card-rig.is-front-active .card-edge-bottom,
+.orbital-card-rig.is-front-active .card-edge-corner {
   border-color: #00e5ff;
   border-width: 4px;
   box-shadow: 
@@ -3135,6 +3182,8 @@ code, pre, kbd, .mono {
   flex-shrink: 0;
   position: relative;
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.7), 0 0 14px rgba(0, 229, 255, 0.2);
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .orbital-thumb-img {
@@ -3143,6 +3192,10 @@ code, pre, kbd, .mono {
   object-fit: cover;
   display: block;
   transition: transform 0.4s ease;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
 }
 
 .orbital-card-rig.is-front-active:hover .orbital-thumb-img {

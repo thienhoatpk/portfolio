@@ -412,7 +412,13 @@ export function initTimeline() {
                     </div>
                   </div>
                   <div class="card-edge-slab card-edge-top">
-                    <div class="edge-top-specular"></div>
+                    <div class="edge-ribs-h"></div>
+                    <div class="edge-tech-tag-h">AVIONICS // SENSOR-ARRAY 0${index + 1}</div>
+                    <div class="edge-led-cluster-h">
+                      <span class="edge-led"></span>
+                      <span class="edge-led"></span>
+                      <span class="edge-led"></span>
+                    </div>
                   </div>
                   <div class="card-edge-slab card-edge-bottom">
                     <div class="edge-ribs-h"></div>
@@ -423,6 +429,12 @@ export function initTimeline() {
                       <span class="edge-led"></span>
                     </div>
                   </div>
+
+                  <!-- 3D Beveled Corner Slabs (Closes rounded corners smoothly in 3D) -->
+                  <div class="card-edge-slab card-edge-corner corner-tl"></div>
+                  <div class="card-edge-slab card-edge-corner corner-tr"></div>
+                  <div class="card-edge-slab card-edge-corner corner-bl"></div>
+                  <div class="card-edge-slab card-edge-corner corner-br"></div>
 
                   <!-- FRONT FACE: Rich Interactive Career Details -->
                   <div class="card-face card-face-front">
@@ -450,7 +462,7 @@ export function initTimeline() {
 
                     <!-- Media Thumbnail -->
                     <div class="orbital-thumb-box">
-                      <img src="${exp.thumbnail}" alt="${exp.company}" class="orbital-thumb-img" loading="lazy" />
+                      <img src="${exp.thumbnail}" alt="${exp.company}" class="orbital-thumb-img" draggable="false" loading="lazy" />
                     </div>
 
                     <!-- Description -->
@@ -464,12 +476,7 @@ export function initTimeline() {
                       }).join('')}
                     </div>
 
-                    <!-- Action Link -->
-                    <div class="orbital-card-footer">
-                      <button class="orbital-detail-btn" data-project="${exp.projectId || 'p1'}">
-                        Xem chi tiết kiến trúc <span>→</span>
-                      </button>
-                    </div>
+
                   </div>
 
                   <!-- BACK FACE: Cyber HUD Telemetry Chassis (No mirrored text!) -->
@@ -551,7 +558,7 @@ export function initTimeline() {
           </button>
           <div class="orbital-drag-tip">
             <span class="drag-hand-icon">⇄</span>
-            <span>Kéo chuột / Vuốt để xoay quỹ đạo 3D</span>
+            <span>Kéo / Cuộn chuột để xoay quỹ đạo 3D</span>
           </div>
         </div>
       </div>
@@ -861,7 +868,12 @@ export function initTimeline() {
   // Mouse drag events on stage
   stage.addEventListener('mousedown', (e) => {
     if (e.target.closest('button')) return;
+    e.preventDefault();
     handlePointerDown(e.clientX);
+  });
+
+  stage.addEventListener('dragstart', (e) => {
+    e.preventDefault();
   });
 
   window.addEventListener('mousemove', (e) => {
@@ -893,8 +905,9 @@ export function initTimeline() {
       const cy = cachedCardRect.top + cachedCardRect.height / 2;
       const xRel = Math.max(-1, Math.min(1, (e.clientX - cx) / (cachedCardRect.width / 2)));
       const yRel = Math.max(-1, Math.min(1, (e.clientY - cy) / (cachedCardRect.height / 2)));
-      cardTiltTargetY[i] = xRel * 16;
-      cardTiltTargetX[i] = -yRel * 12;
+      // Seesaw press: The hovered side sinks down into the screen, opposite side rises up revealing full 3D slab thickness
+      cardTiltTargetY[i] = xRel * 26;
+      cardTiltTargetX[i] = -yRel * 22;
     });
   });
 
@@ -952,22 +965,48 @@ export function initTimeline() {
     });
   }
 
-  // Pause auto cruise when hovering stage
-  stage.addEventListener('mouseenter', () => {
-    if (autoRotate) autoRotateSpeed = 0.0005;
-  });
-  stage.addEventListener('mouseleave', () => {
-    if (autoRotate) autoRotateSpeed = 0.0025;
-  });
+  // Mouse Wheel / Trackpad Scroll inside stage: 1 gesture = exactly 1 card smooth transition without page scroll or skipping
+  let isWheelLocked = false;
+  let wheelEndTimer = null;
+  let wheelAccumulator = 0;
 
-  // Architecture Drawer Trigger
-  container.querySelectorAll('.orbital-detail-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const projId = btn.getAttribute('data-project') || 'p1';
-      openArchitectureDrawer(projId);
-    });
-  });
+  stage.addEventListener('wheel', (e) => {
+    // 1. Unconditionally stop page scroll while hovering inside 3D stage
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!isSectionVisible) return;
+
+    // 2. Refresh silence timer on every incoming event.
+    // As long as trackpad inertia or continuous spinning is sending events, the timer is postponed.
+    // When events cease for 260ms (user lifted finger and inertia ended), lock is released!
+    clearTimeout(wheelEndTimer);
+    wheelEndTimer = setTimeout(() => {
+      isWheelLocked = false;
+      wheelAccumulator = 0;
+    }, 260);
+
+    // 3. If currently locked (already switched 1 card for this active gesture), swallow inertia
+    if (isWheelLocked) {
+      return;
+    }
+
+    // 4. Determine dominant delta direction (vertical wheel or horizontal trackpad swipe)
+    const dominantDelta = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+    wheelAccumulator += dominantDelta;
+
+    // 5. Require an intentional gesture threshold (18px) to prevent accidental micro-twitches
+    const THRESHOLD = 18;
+    if (Math.abs(wheelAccumulator) >= THRESHOLD) {
+      isWheelLocked = true; // Lock immediately so the rest of this gesture's inertia is swallowed
+      if (wheelAccumulator > 0) {
+        snapToIndex(activeIndex + 1);
+      } else {
+        snapToIndex(activeIndex - 1);
+      }
+      wheelAccumulator = 0;
+    }
+  }, { passive: false });
 
   // Keyboard navigation (Left / Right arrow keys)
   window.addEventListener('keydown', (e) => {
@@ -981,6 +1020,7 @@ export function initTimeline() {
 
   return () => {
     if (animationFrameId) cancelAnimationFrame(animationFrameId);
+    if (wheelEndTimer) clearTimeout(wheelEndTimer);
     visibilityObserver.disconnect();
     window.removeEventListener('resize', updateOrbitDimensions);
   };

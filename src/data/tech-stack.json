@@ -19,346 +19,324 @@
   },
   "nodes": [
     {
-      "id": "go",
+      "id": 1,
+      "slug": "go",
       "name": "Go (Golang)",
       "category": "Languages",
       "icon": "go",
       "is_active": 1,
       "role": "Primary backend language for microservices, concurrency, low-latency APIs",
-      "links": [
-        "grpc",
-        "kafka",
-        "docker",
-        "postgres",
-        "redis"
-      ]
+      "links": [5, 13, 15, 9, 12, 28, 29]
     },
     {
-      "id": "ts",
+      "id": 2,
+      "slug": "ts",
       "name": "TypeScript",
       "category": "Languages",
       "icon": "ts",
       "is_active": 1,
       "role": "Type-safe frontend logic, full-stack tooling, Node/Deno runtimes",
-      "links": [
-        "vite",
-        "nodejs",
-        "react"
-      ]
+      "links": [22, 7, 31]
     },
     {
-      "id": "python",
+      "id": 3,
+      "slug": "python",
       "name": "Python",
       "category": "Languages",
       "icon": "python",
       "is_active": 1,
       "role": "Data scripting, ML embeddings, semantic search pipelines, FastAPI",
-      "links": [
-        "qdrant",
-        "fastapi"
-      ]
+      "links": [11, 6]
     },
     {
-      "id": "sql",
+      "id": 4,
+      "slug": "sql",
       "name": "SQL",
       "category": "Languages",
       "icon": "sql",
       "is_active": 1,
       "role": "Complex relational queries, indexing strategies, window functions",
-      "links": [
-        "postgres",
-        "timescale",
-        "mysql"
-      ]
+      "links": [9, 10, 24]
     },
     {
-      "id": "grpc",
+      "id": 5,
+      "slug": "grpc",
       "name": "gRPC & Protobuf",
       "category": "Backend Frameworks",
       "icon": "grpc",
       "is_active": 1,
       "role": "High-performance inter-service RPC with binary serialization",
-      "links": [
-        "go",
-        "microservices"
-      ]
+      "links": [1, 8]
     },
     {
-      "id": "fastapi",
+      "id": 6,
+      "slug": "fastapi",
       "name": "FastAPI",
       "category": "Backend Frameworks",
       "icon": "fastapi",
       "is_active": 1,
       "role": "Asynchronous Python web service framework for AI/RAG APIs",
-      "links": [
-        "python",
-        "qdrant"
-      ]
+      "links": [3, 11]
     },
     {
-      "id": "nodejs",
+      "id": 7,
+      "slug": "nodejs",
       "name": "Node.js",
       "category": "Backend Frameworks",
       "icon": "nodejs",
       "is_active": 1,
-      "role": "Event-driven runtime for API gateways and microservices",
-      "links": [
-        "ts",
-        "mongodb"
-      ]
+      "role": "Event-driven runtime for API gateways, tooling, full-stack microservices",
+      "links": [2, 8, 25]
     },
     {
-      "id": "microservices",
-      "name": "Microservices Architecture",
+      "id": 8,
+      "slug": "microservices",
+      "name": "Microservices",
       "category": "Backend Frameworks",
       "icon": "microservices",
       "is_active": 1,
-      "role": "Domain-driven decomposition, API contracts, service meshes",
-      "links": [
-        "go",
-        "docker",
-        "k8s"
-      ]
+      "role": "Decoupled domain-driven services, circuit breaking, event sourcing",
+      "links": [1, 5, 13, 16]
     },
     {
-      "id": "postgres",
+      "id": 9,
+      "slug": "postgres",
       "name": "PostgreSQL",
       "category": "Databases",
       "icon": "postgres",
       "is_active": 1,
-      "role": "ACID transactions, relational modeling, JSONB, pgvector",
-      "links": [
-        "sql",
-        "go",
-        "timescale"
-      ]
+      "role": "Primary ACID relational DB, JSONB document store, complex indexing",
+      "links": [1, 4, 10, 15]
     },
     {
-      "id": "timescale",
+      "id": 10,
+      "slug": "timescale",
       "name": "TimescaleDB",
       "category": "Databases",
       "icon": "timescale",
-      "is_active": 0,
-      "role": "Hypertable partitioned time-series storage & columnar compression",
-      "links": [
-        "postgres",
-        "kafka"
-      ]
+      "is_active": 1,
+      "role": "Time-series hypertables, continuous aggregations for IoT & telemetry",
+      "links": [9, 4]
     },
     {
-      "id": "qdrant",
+      "id": 11,
+      "slug": "qdrant",
       "name": "Qdrant Vector DB",
       "category": "Databases",
       "icon": "qdrant",
       "is_active": 1,
-      "role": "Approximate Nearest Neighbor (HNSW) vector search for embeddings",
-      "links": [
-        "python",
-        "ai-rag"
-      ]
+      "role": "High-dimensional vector search, HNSW indexing for RAG semantic search",
+      "links": [3, 6, 20]
     },
     {
-      "id": "redis",
+      "id": 12,
+      "slug": "redis",
       "name": "Redis",
       "category": "Caching & Queues",
       "icon": "redis",
       "is_active": 1,
-      "role": "In-memory caching, pub/sub, distributed locks, rate limiting",
-      "links": [
-        "go",
-        "postgres"
-      ]
+      "role": "In-memory caching, distributed locks, Pub/Sub, session state store",
+      "links": [1, 9, 24, 15]
     },
     {
-      "id": "kafka",
+      "id": 13,
+      "slug": "kafka",
       "name": "Apache Kafka",
       "category": "Caching & Queues",
       "icon": "kafka",
       "is_active": 1,
-      "role": "Distributed partitioned streaming log for high-volume event ingestion",
-      "links": [
-        "go",
-        "timescale"
-      ]
+      "role": "Distributed event streaming platform, log retention, event replay",
+      "links": [1, 8, 14]
     },
     {
-      "id": "rabbitmq",
+      "id": 14,
+      "slug": "rabbitmq",
       "name": "RabbitMQ",
       "category": "Caching & Queues",
       "icon": "rabbitmq",
       "is_active": 1,
-      "role": "AMQP task queues with complex routing and acknowledgment models",
-      "links": [
-        "go",
-        "python"
-      ]
+      "role": "AMQP message broker for task offloading and asynchronous worker queues",
+      "links": [13, 8]
     },
     {
-      "id": "docker",
-      "name": "Docker & OCI",
+      "id": 15,
+      "slug": "docker",
+      "name": "Docker",
       "category": "Infrastructure",
       "icon": "docker",
       "is_active": 1,
-      "role": "Multi-stage reproducible container builds, minimal scratch images",
-      "links": [
-        "k8s",
-        "go",
-        "linux",
-        "aws"
-      ]
+      "role": "Containerization, multi-stage builds, predictable local and cloud runtime",
+      "links": [16, 17, 1, 9]
     },
     {
-      "id": "k8s",
+      "id": 16,
+      "slug": "k8s",
       "name": "Kubernetes",
       "category": "Infrastructure",
       "icon": "k8s",
       "is_active": 1,
-      "role": "Pod orchestration, horizontal pod autoscaling, ingress control",
-      "links": [
-        "docker",
-        "prometheus",
-        "aws",
-        "cloudflare"
-      ]
+      "role": "Container orchestration, rolling deployments, ingress routing, auto-scaling",
+      "links": [15, 17, 18, 27]
     },
     {
-      "id": "linux",
-      "name": "Linux & Shell",
+      "id": 17,
+      "slug": "linux",
+      "name": "Linux",
       "category": "Infrastructure",
       "icon": "linux",
       "is_active": 1,
-      "role": "Kernel tuning, systemd, networking namespaces, eBPF inspection",
-      "links": [
-        "docker",
-        "go"
-      ]
+      "role": "Production server OS, bash scripting, network tuning, process management",
+      "links": [15, 16, 18]
     },
     {
-      "id": "prometheus",
+      "id": 18,
+      "slug": "prometheus",
       "name": "Prometheus",
       "category": "Infrastructure",
       "icon": "prometheus",
       "is_active": 1,
-      "role": "Time-series metrics collection, multi-dimensional PromQL alerting & scraping",
-      "links": [
-        "k8s",
-        "grafana",
-        "go"
-      ]
+      "role": "Time-series metric collection, alert rules, pull-based telemetry scraper",
+      "links": [19, 16, 1]
     },
     {
-      "id": "grafana",
+      "id": 19,
+      "slug": "grafana",
       "name": "Grafana",
       "category": "Infrastructure",
       "icon": "grafana",
       "is_active": 1,
-      "role": "Unified observability dashboards, real-time telemetry visualization & SLO tracking",
-      "links": [
-        "prometheus",
-        "timescale"
-      ]
+      "role": "Telemetry dashboards, SLA monitoring, multi-source metric visualization",
+      "links": [18, 10]
     },
     {
-      "id": "ai-rag",
-      "name": "RAG & LLM Orchestration",
+      "id": 20,
+      "slug": "ai-rag",
+      "name": "RAG Systems",
       "category": "AI & Tools",
       "icon": "ai-rag",
       "is_active": 1,
-      "role": "Vector chunking, reciprocal rank fusion, context augmentation",
-      "links": [
-        "python",
-        "qdrant"
-      ]
+      "role": "Retrieval-augmented generation pipelines, document chunking, hybrid search",
+      "links": [11, 3]
     },
     {
-      "id": "git",
-      "name": "Git & CI/CD",
+      "id": 21,
+      "slug": "git",
+      "name": "Git",
       "category": "AI & Tools",
       "icon": "git",
       "is_active": 1,
-      "role": "Trunk-based development, GitHub Actions, automated testing pipelines",
-      "links": [
-        "docker",
-        "go"
-      ]
+      "role": "Version control, GitOps workflows, branch protection, CI/CD automation",
+      "links": [15, 22]
     },
     {
-      "id": "vite",
-      "name": "Vite & Vanilla Web",
+      "id": 22,
+      "slug": "vite",
+      "name": "Vite",
       "category": "AI & Tools",
       "icon": "vite",
       "is_active": 1,
-      "role": "Lightning-fast frontend asset bundling and modern ES modules",
-      "links": [
-        "ts"
-      ]
+      "role": "Next-generation frontend tooling, lightning-fast HMR and optimized builds",
+      "links": [2, 21, 31]
     },
     {
-      "id": "php",
+      "id": 23,
+      "slug": "php",
       "name": "PHP",
       "category": "Languages",
       "icon": "php",
       "is_active": 1,
       "role": "Server-side web scripting, modern PHP 8.x, Composer ecosystem & RESTful APIs",
-      "links": [
-        "mysql",
-        "docker",
-        "linux"
-      ]
+      "links": [24, 15, 17, 30]
     },
     {
-      "id": "mysql",
+      "id": 24,
+      "slug": "mysql",
       "name": "MySQL",
       "category": "Databases",
       "icon": "mysql",
       "is_active": 1,
       "role": "Relational database management, ACID transactions, InnoDB engine & replication",
-      "links": [
-        "sql",
-        "php",
-        "go",
-        "docker"
-      ]
+      "links": [4, 23, 1, 15, 29]
     },
     {
-      "id": "mongodb",
+      "id": 25,
+      "slug": "mongodb",
       "name": "MongoDB",
       "category": "Databases",
       "icon": "mongodb",
       "is_active": 1,
       "role": "Document-oriented NoSQL storage, flexible BSON schemas & aggregation pipelines",
-      "links": [
-        "nodejs",
-        "docker",
-        "redis"
-      ]
+      "links": [7, 15, 12]
     },
     {
-      "id": "cloudflare",
+      "id": 26,
+      "slug": "cloudflare",
       "name": "Cloudflare",
       "category": "Infrastructure",
       "icon": "cloudflare",
       "is_active": 1,
       "role": "Global edge CDN, DDoS mitigation, DNS routing, WAF & Serverless Workers",
-      "links": [
-        "aws",
-        "k8s",
-        "docker"
-      ]
+      "links": [27, 16, 15]
     },
     {
-      "id": "aws",
+      "id": 27,
+      "slug": "aws",
       "name": "AWS Cloud",
       "category": "Infrastructure",
       "icon": "aws",
       "is_active": 1,
       "role": "Cloud infrastructure, S3 object storage, ECS/EKS clusters, RDS & IAM security",
-      "links": [
-        "docker",
-        "k8s",
-        "cloudflare",
-        "linux"
-      ]
+      "links": [15, 16, 26, 17]
+    },
+    {
+      "id": 28,
+      "slug": "gin",
+      "name": "Gin",
+      "category": "Backend Frameworks",
+      "icon": "gin",
+      "is_active": 1,
+      "role": "High-performance HTTP web framework written in Go with fast routing & middleware",
+      "links": [1, 29, 12]
+    },
+    {
+      "id": 29,
+      "slug": "gorm",
+      "name": "GORM",
+      "category": "Backend Frameworks",
+      "icon": "gorm",
+      "is_active": 1,
+      "role": "Developer-friendly ORM library for Golang with auto migrations & association mode",
+      "links": [1, 24, 9]
+    },
+    {
+      "id": 30,
+      "slug": "laravel",
+      "name": "Laravel",
+      "category": "Backend Frameworks",
+      "icon": "laravel",
+      "is_active": 1,
+      "role": "Full-stack PHP web framework with expressive syntax, Eloquent ORM & queues",
+      "links": [23, 24, 12]
+    },
+    {
+      "id": 31,
+      "slug": "react",
+      "name": "React",
+      "category": "Languages",
+      "icon": "react",
+      "is_active": 1,
+      "role": "Component-based declarative UI library for modern dynamic web applications",
+      "links": [2, 32, 22]
+    },
+    {
+      "id": 32,
+      "slug": "nextjs",
+      "name": "Next.js",
+      "category": "Backend Frameworks",
+      "icon": "nextjs",
+      "is_active": 1,
+      "role": "Full-stack React framework with SSR, ISR, Server Actions & edge deployment",
+      "links": [31, 2, 7]
     }
   ]
 }

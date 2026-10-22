@@ -101,8 +101,8 @@ export const TECH_MONOGRAMS = {
  * Get SVG string for a given tech key or default fallback
  */
 export function getTechIconSvg(iconKey) {
-  if (!iconKey) return TECH_ICONS.sql;
-  const key = iconKey.toLowerCase().trim();
+  if (!iconKey && iconKey !== 0) return TECH_ICONS.sql;
+  const key = String(iconKey).toLowerCase().trim();
   return TECH_ICONS[key] || TECH_ICONS.sql;
 }
 
@@ -110,8 +110,8 @@ export function getTechIconSvg(iconKey) {
  * Get 2-4 letter monogram fallback
  */
 export function getTechMonogram(iconKey) {
-  if (!iconKey) return "SYS";
-  const key = iconKey.toLowerCase().trim();
+  if (!iconKey && iconKey !== 0) return "SYS";
+  const key = String(iconKey).toLowerCase().trim();
   return TECH_MONOGRAMS[key] || key.slice(0, 3).toUpperCase();
 }
 
@@ -121,8 +121,8 @@ export function getTechMonogram(iconKey) {
 const canvasImageCache = new Map();
 
 export function getTechIconCanvasImage(iconKey) {
-  if (!iconKey) iconKey = "sql";
-  const key = iconKey.toLowerCase().trim();
+  if (!iconKey && iconKey !== 0) iconKey = "sql";
+  const key = String(iconKey).toLowerCase().trim();
 
   if (canvasImageCache.has(key)) {
     return canvasImageCache.get(key);

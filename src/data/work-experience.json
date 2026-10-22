@@ -1,0 +1,90 @@
+[
+  {
+    "id": 1,
+    "company": "BShip",
+    "role": "Backend Engineer",
+    "period": "06/2024 — Hiện tại",
+    "date_start": "06/2024",
+    "date_end": "Hiện tại",
+    "is_current": true,
+    "location": "Hồ Chí Minh, Việt Nam",
+    "description": "Phát triển và tối ưu các microservice, xây dựng hệ thống phân tán, xử lý dữ liệu lớn và cải thiện hiệu năng.",
+    "detail_overview": "Làm việc tại BShip – nền tảng công nghệ logistics và vận tải, góp phần xây dựng các giải pháp giúp kết nối tài xế, khách hàng và doanh nghiệp.",
+    "achievements": [
+      "Thiết kế và phát triển các microservices quan trọng.",
+      "Tối ưu hiệu năng hệ thống, giảm 40% thời gian phản hồi.",
+      "Triển khai hạ tầng với Docker, Kubernetes."
+    ],
+    "tech_stack_ids": [1, 28, 29, 24, 12, 15, 16, 27],
+    "thumbnail": "/images/bship_thumb.jpg",
+    "logo_type": "bship",
+    "color": "#00e5ff",
+    "project_id": "p1"
+  },
+  {
+    "id": 2,
+    "company": "Saovang Group",
+    "role": "Backend Developer",
+    "period": "03/2023 — 05/2024",
+    "date_start": "03/2023",
+    "date_end": "05/2024",
+    "is_current": false,
+    "location": "Hà Nội, Việt Nam",
+    "description": "Tham gia phát triển các tính năng cho hệ thống quản lý, website và các dự án nội bộ của công ty.",
+    "detail_overview": "Tham gia xây dựng các hệ thống quản lý ERP nội bộ, API thanh toán và đồng bộ dữ liệu cho các cổng thông tin doanh nghiệp.",
+    "achievements": [
+      "Xây dựng và bảo trì hệ sinh thái quản lý dữ liệu tập trung.",
+      "Tối ưu hóa các truy vấn SQL phức tạp, giảm tải hệ thống cơ sở dữ liệu.",
+      "Thiết kế RESTful APIs phục vụ ứng dụng mobile và web."
+    ],
+    "tech_stack_ids": [30, 23, 24, 12, 15],
+    "thumbnail": "/images/saovang_thumb.jpg",
+    "logo_type": "star",
+    "color": "#a855f7",
+    "project_id": "p2"
+  },
+  {
+    "id": 3,
+    "company": "Freelance",
+    "role": "Freelance Projects",
+    "period": "08/2021 — 02/2023",
+    "date_start": "08/2021",
+    "date_end": "02/2023",
+    "is_current": false,
+    "location": "Remote",
+    "description": "Phát triển website, API và các công cụ hỗ trợ doanh nghiệp vừa và nhỏ.",
+    "detail_overview": "Hợp tác với các đối tác trong và ngoài nước để phát triển ứng dụng web hiện đại, hệ thống thương mại điện tử và tích hợp thanh toán tự động.",
+    "achievements": [
+      "Phát triển hơn 8 website thương mại điện tử và landing page tối ưu chuyển đổi.",
+      "Tích hợp các cổng thanh toán Stripe, VNPay, MoMo bảo mật cao.",
+      "Triển khai hạ tầng serverless trên AWS và Vercel."
+    ],
+    "tech_stack_ids": [31, 32, 7, 9, 27],
+    "thumbnail": "/images/freelance_thumb.jpg",
+    "logo_type": "users",
+    "color": "#3b82f6",
+    "project_id": "p3"
+  },
+  {
+    "id": 4,
+    "company": "Internship",
+    "role": "Tech Academy",
+    "period": "06/2021 — 08/2021",
+    "date_start": "06/2021",
+    "date_end": "08/2021",
+    "is_current": false,
+    "location": "Hồ Chí Minh, Việt Nam",
+    "description": "Học hỏi và tham gia phát triển một số module nhỏ trong dự án thực tế.",
+    "detail_overview": "Tiếp cận quy trình phát triển phần mềm chuẩn Agile/Scrum, viết unit tests và hỗ trợ xây dựng các micro-endpoints nghiệp vụ.",
+    "achievements": [
+      "Hoàn thành xuất sắc khóa thực tập và được đánh giá cao về tư duy giải thuật.",
+      "Đóng góp code cho module xác thực và phân quyền người dùng.",
+      "Thành thạo quy trình Git flow và CI/CD cơ bản."
+    ],
+    "tech_stack_ids": [1, 24, 21],
+    "thumbnail": "/images/internship_thumb.jpg",
+    "logo_type": "academy",
+    "color": "#00f0ff",
+    "project_id": "p4"
+  }
+]

@@ -153,7 +153,7 @@ export function initConstellation() {
       p.tags.some(t => {
         const tLower = t.toLowerCase();
         const nameLower = selectedNode.name.toLowerCase();
-        const idLower = selectedNode.id.toLowerCase();
+        const idLower = (selectedNode.slug || String(selectedNode.id)).toLowerCase();
         return tLower.includes(idLower) || nameLower.includes(tLower) || tLower.includes(nameLower.split(' ')[0]);
       })
     );
@@ -199,7 +199,7 @@ export function initConstellation() {
           </div>
           <div class="arch-tech-grid">
             ${(selectedNode.links || []).length > 0 ? (selectedNode.links || []).map(linkId => {
-              const target = rawNodes.find(n => n.id === linkId);
+              const target = rawNodes.find(n => n.id === linkId || String(n.id) === String(linkId) || n.slug === linkId);
               if (!target) return '';
               const targetColor = categoryColors[target.category] || '#00F0FF';
               return `
@@ -245,7 +245,7 @@ export function initConstellation() {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
         const jumpId = btn.getAttribute('data-jump');
-        const next = rawNodes.find(n => n.id === jumpId);
+        const next = rawNodes.find(n => String(n.id) === String(jumpId) || n.slug === jumpId);
         if (next) {
           selectedNode = next;
           renderSidebar();
@@ -281,7 +281,7 @@ export function initConstellation() {
       const drawnLinks = new Set();
       nodes.forEach(source => {
         (source.links || []).forEach(targetId => {
-          const target = nodes.find(n => n.id === targetId);
+          const target = nodes.find(n => n.id === targetId || String(n.id) === String(targetId));
           if (!target) return;
 
           const linkKey = [source.id, target.id].sort().join('--');

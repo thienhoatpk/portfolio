@@ -625,100 +625,59 @@ export const ARCHITECTURE_SYSTEMS = [
 ];
 
 import techStackConfig from './tech-stack.json';
+import workExperienceRaw from './work-experience.json';
 
 export const CONSTELLATION_NODES = techStackConfig.nodes;
 export const TECH_STACK_CONFIG = techStackConfig;
 
-export const WORK_EXPERIENCES = [
-  {
-    id: "exp-bship",
-    company: "BShip",
-    role: "Backend Engineer",
-    period: "06/2024 — Hiện tại",
-    dateStart: "06/2024",
-    dateEnd: "Hiện tại",
-    isCurrent: true,
-    location: "Hồ Chí Minh, Việt Nam",
-    description: "Phát triển và tối ưu các microservice, xây dựng hệ thống phân tán, xử lý dữ liệu lớn và cải thiện hiệu năng.",
-    detailOverview: "Làm việc tại BShip – nền tảng công nghệ logistics và vận tải, góp phần xây dựng các giải pháp giúp kết nối tài xế, khách hàng và doanh nghiệp.",
-    achievements: [
-      "Thiết kế và phát triển các microservices quan trọng.",
-      "Tối ưu hiệu năng hệ thống, giảm 40% thời gian phản hồi.",
-      "Triển khai hạ tầng với Docker, Kubernetes."
-    ],
-    technologies: ["Go", "Gin", "GORM", "MySQL", "Redis", "Docker", "K8s", "AWS"],
-    thumbnail: "/images/bship_thumb.jpg",
-    logoType: "bship",
-    color: "#00e5ff",
-    projectId: "p1"
-  },
-  {
-    id: "exp-saovang",
-    company: "Saovang Group",
-    role: "Backend Developer",
-    period: "03/2023 — 05/2024",
-    dateStart: "03/2023",
-    dateEnd: "05/2024",
-    isCurrent: false,
-    location: "Hà Nội, Việt Nam",
-    description: "Tham gia phát triển các tính năng cho hệ thống quản lý, website và các dự án nội bộ của công ty.",
-    detailOverview: "Tham gia xây dựng các hệ thống quản lý ERP nội bộ, API thanh toán và đồng bộ dữ liệu cho các cổng thông tin doanh nghiệp.",
-    achievements: [
-      "Xây dựng và bảo trì hệ sinh thái quản lý dữ liệu tập trung.",
-      "Tối ưu hóa các truy vấn SQL phức tạp, giảm tải hệ thống cơ sở dữ liệu.",
-      "Thiết kế RESTful APIs phục vụ ứng dụng mobile và web."
-    ],
-    technologies: ["Laravel", "PHP", "MySQL", "Redis", "Docker"],
-    thumbnail: "/images/saovang_thumb.jpg",
-    logoType: "star",
-    color: "#a855f7",
-    projectId: "p2"
-  },
-  {
-    id: "exp-freelance",
-    company: "Freelance",
-    role: "Fullstack Developer",
-    period: "08/2021 — 02/2023",
-    dateStart: "08/2021",
-    dateEnd: "02/2023",
-    isCurrent: false,
-    location: "Remote",
-    description: "Phát triển website, API và các công cụ hỗ trợ doanh nghiệp vừa và nhỏ.",
-    detailOverview: "Hợp tác với các đối tác trong và ngoài nước để phát triển ứng dụng web hiện đại, hệ thống thương mại điện tử và tích hợp thanh toán tự động.",
-    achievements: [
-      "Phát triển hơn 8 website thương mại điện tử và landing page tối ưu chuyển đổi.",
-      "Tích hợp các cổng thanh toán Stripe, VNPay, MoMo bảo mật cao.",
-      "Triển khai hạ tầng serverless trên AWS và Vercel."
-    ],
-    technologies: ["React", "Next.js", "Node.js", "PostgreSQL", "AWS"],
-    thumbnail: "/images/freelance_thumb.jpg",
-    logoType: "users",
-    color: "#3b82f6",
-    projectId: "p3"
-  },
-  {
-    id: "exp-internship",
-    company: "Internship",
-    role: "Backend Intern",
-    period: "06/2021 — 08/2021",
-    dateStart: "06/2021",
-    dateEnd: "08/2021",
-    isCurrent: false,
-    location: "Hồ Chí Minh, Việt Nam",
-    description: "Học hỏi và tham gia phát triển một số module nhỏ trong dự án thực tế.",
-    detailOverview: "Tiếp cận quy trình phát triển phần mềm chuẩn Agile/Scrum, viết unit tests và hỗ trợ xây dựng các micro-endpoints nghiệp vụ.",
-    achievements: [
-      "Hoàn thành xuất sắc khóa thực tập và được đánh giá cao về tư duy giải thuật.",
-      "Đóng góp code cho module xác thực và phân quyền người dùng.",
-      "Thành thạo quy trình Git flow và CI/CD cơ bản."
-    ],
-    technologies: ["Go", "MySQL", "Git"],
-    thumbnail: "/images/internship_thumb.jpg",
-    logoType: "archive",
-    color: "#64748b",
-    projectId: "p4"
-  }
-];
+// Relational Primary Key Index Map for Tech Stack: Map<id, TechNode>
+export const TECH_STACK_MAP = new Map();
+(techStackConfig.nodes || []).forEach(node => {
+  TECH_STACK_MAP.set(node.id, node);
+  if (node.slug) TECH_STACK_MAP.set(node.slug, node);
+});
+
+// Perform Relational Join (work_experience -> tech_stack using foreign keys tech_stack_ids)
+export const WORK_EXPERIENCES = workExperienceRaw.map(exp => {
+  const joinedTechs = (exp.tech_stack_ids || []).map(techId => {
+    const techRecord = TECH_STACK_MAP.get(techId);
+    return techRecord ? {
+      id: techRecord.id,
+      name: techRecord.name,
+      slug: techRecord.slug,
+      icon: techRecord.icon || techRecord.slug,
+      category: techRecord.category,
+      role: techRecord.role
+    } : {
+      id: techId,
+      name: `Tech #${techId}`,
+      slug: String(techId),
+      icon: 'default',
+      category: 'Tools',
+      role: ''
+    };
+  });
+
+  return {
+    id: exp.id,
+    company: exp.company,
+    role: exp.role,
+    period: exp.period,
+    dateStart: exp.date_start,
+    dateEnd: exp.date_end,
+    isCurrent: exp.is_current,
+    location: exp.location,
+    description: exp.description,
+    detailOverview: exp.detail_overview,
+    achievements: exp.achievements,
+    techStackIds: exp.tech_stack_ids,
+    technologies: joinedTechs,
+    thumbnail: exp.thumbnail,
+    logoType: exp.logo_type,
+    color: exp.color,
+    projectId: exp.project_id
+  };
+});
 
 export const CAREER_STATS = {
   years: "3+",

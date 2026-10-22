@@ -84,7 +84,29 @@
     "tech_stack_ids": [1, 24, 21],
     "thumbnail": "/images/internship_thumb.jpg",
     "logo_type": "academy",
-    "color": "#00f0ff",
+    "color": "#ec4899",
     "project_id": "p4"
+  },
+  {
+    "id": 5,
+    "company": "Career Development",
+    "role": "Senior Backend Engineer",
+    "period": "2026 — Tương lai",
+    "date_start": "2026",
+    "date_end": "Tương lai",
+    "is_current": false,
+    "location": "Hồ Chí Minh, Việt Nam",
+    "description": "Định hướng phát triển chuyên sâu về kiến trúc hệ thống phân tán, khả năng mở rộng, độ tin cậy và ứng dụng AI trong backend.",
+    "detail_overview": "Thiết kế kiến trúc phân tán quy mô lớn, tối ưu độ trễ microservices, tự động hóa hạ tầng và tích hợp AI/RAG thông minh vào hệ thống.",
+    "achievements": [
+      "Thiết kế kiến trúc hệ thống chịu tải cao, sẵn sàng phục vụ triệu người dùng.",
+      "Nâng cao chuyên môn về distributed systems, event-driven streaming và database scaling.",
+      "Nghiên cứu và ứng dụng AI/LLM orchestration, vector search và RAG vào kiến trúc backend."
+    ],
+    "tech_stack_ids": [1, 28, 29, 12, 15, 16, 27],
+    "thumbnail": "/images/senior_backend_thumb.jpg",
+    "logo_type": "ai",
+    "color": "#f59e0b",
+    "project_id": "p5"
   }
 ]

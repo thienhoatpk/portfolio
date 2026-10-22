@@ -682,7 +682,7 @@ export const WORK_EXPERIENCES = workExperienceRaw.map(exp => {
 export const CAREER_STATS = {
   years: "4+",
   yearsDetail: "4 years",
-  companies: 4,
+  companies: 5,
   projects: 6,
   technologies: "16+",
   quote: "Không chỉ viết code, mình đang xây dựng những điều có ý nghĩa.",

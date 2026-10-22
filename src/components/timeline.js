@@ -251,146 +251,6 @@ function getCompanyLogoSvg(logoType) {
   }
 }
 
-// Helper to generate ethereal glowing celestial orbital halo SVG (Vầng quang quỹ đạo 3D)
-function generateOrbitalTrackSvg() {
-  return `
-    <svg class="orbital-ellipse-svg" viewBox="-660 -320 1320 640" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-      <defs>
-        <!-- Multi-stop chromatic luminous aura gradient -->
-        <linearGradient id="orbitAuraGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.95" />
-          <stop offset="25%" stop-color="#3b82f6" stop-opacity="0.85" />
-          <stop offset="50%" stop-color="#a855f7" stop-opacity="0.95" />
-          <stop offset="75%" stop-color="#ec4899" stop-opacity="0.85" />
-          <stop offset="100%" stop-color="#00f0ff" stop-opacity="0.95" />
-        </linearGradient>
-
-        <linearGradient id="orbitDeepGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stop-color="#00e5ff" stop-opacity="0.4" />
-          <stop offset="30%" stop-color="#8b5cf6" stop-opacity="0.35" />
-          <stop offset="70%" stop-color="#ec4899" stop-opacity="0.3" />
-          <stop offset="100%" stop-color="#00e5ff" stop-opacity="0.4" />
-        </linearGradient>
-
-        <!-- Ambient Cosmic Nebula Radial Glow -->
-        <radialGradient id="nebulaRadiant" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#00e5ff" stop-opacity="0.18" />
-          <stop offset="35%" stop-color="#8b5cf6" stop-opacity="0.1" />
-          <stop offset="70%" stop-color="#ec4899" stop-opacity="0.04" />
-          <stop offset="100%" stop-color="#020617" stop-opacity="0" />
-        </radialGradient>
-
-        <!-- Center Gravitational Singularity Gradients -->
-        <radialGradient id="singularityAuraGrad" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
-          <stop offset="20%" stop-color="#00f0ff" stop-opacity="0.8" />
-          <stop offset="50%" stop-color="#a855f7" stop-opacity="0.35" />
-          <stop offset="80%" stop-color="#ec4899" stop-opacity="0.1" />
-          <stop offset="100%" stop-color="#020617" stop-opacity="0" />
-        </radialGradient>
-
-        <radialGradient id="singularityCoreGrad" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
-          <stop offset="40%" stop-color="#00e5ff" stop-opacity="0.9" />
-          <stop offset="85%" stop-color="#3b82f6" stop-opacity="0.4" />
-          <stop offset="100%" stop-color="#000000" stop-opacity="0" />
-        </radialGradient>
-
-        <!-- Node Glow Gradients -->
-        <radialGradient id="nodeGlowGrad0" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.95" />
-          <stop offset="45%" stop-color="#00e5ff" stop-opacity="0.4" />
-          <stop offset="100%" stop-color="#00e5ff" stop-opacity="0" />
-        </radialGradient>
-        <radialGradient id="nodeGlowGrad1" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#c084fc" stop-opacity="0.95" />
-          <stop offset="45%" stop-color="#a855f7" stop-opacity="0.4" />
-          <stop offset="100%" stop-color="#a855f7" stop-opacity="0" />
-        </radialGradient>
-        <radialGradient id="nodeGlowGrad2" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#f472b6" stop-opacity="0.95" />
-          <stop offset="45%" stop-color="#ec4899" stop-opacity="0.4" />
-          <stop offset="100%" stop-color="#ec4899" stop-opacity="0" />
-        </radialGradient>
-        <radialGradient id="nodeGlowGrad3" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#60a5fa" stop-opacity="0.95" />
-          <stop offset="45%" stop-color="#3b82f6" stop-opacity="0.4" />
-          <stop offset="100%" stop-color="#3b82f6" stop-opacity="0" />
-        </radialGradient>
-
-        <!-- Multi-tier Volumetric Halo Gaussian Blurs -->
-        <filter id="haloDeepBlur" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="34" />
-        </filter>
-        <filter id="haloMidBlur" x="-40%" y="-40%" width="180%" height="180%">
-          <feGaussianBlur stdDeviation="16" />
-        </filter>
-        <filter id="haloSoftBlur" x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="7" />
-        </filter>
-        <filter id="haloPulseBlur" x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="4" />
-        </filter>
-      </defs>
-
-      <!-- 1. Ambient Cosmic Space Nebula Aura (Soft breathing background wash) -->
-      <ellipse cx="0" cy="0" rx="600" ry="165" fill="url(#nebulaRadiant)" class="orbit-nebula-halo" />
-
-      <!-- 2. Pure Volumetric Luminous Halo Layers (VẦNG QUANG - No sharp outlines, zero tick lines!) -->
-      <!-- Layer A: Deep Outermost Atmospheric Corona Glow (stroke-width: 72, stdDev: 34) -->
-      <ellipse cx="0" cy="0" rx="545" ry="132" fill="none" stroke="url(#orbitDeepGrad)" stroke-width="72" class="orbit-halo-outer" />
-
-      <!-- Layer B: Middle Diffuse Radiant Halo (stroke-width: 32, stdDev: 16) -->
-      <ellipse cx="0" cy="0" rx="545" ry="132" fill="none" stroke="url(#orbitAuraGrad)" stroke-width="32" class="orbit-halo-middle" />
-
-      <!-- Layer C: Vibrant Ethereal Inner Corona (stroke-width: 12, stdDev: 7) -->
-      <ellipse cx="0" cy="0" rx="545" ry="132" fill="none" stroke="url(#orbitAuraGrad)" stroke-width="12" class="orbit-halo-inner" />
-
-      <!-- Layer D: Soft Radiant Light Filament (stroke-width: 2.5 - soft glowing core, not hard wire) -->
-      <ellipse cx="0" cy="0" rx="545" ry="132" fill="none" stroke="#ffffff" stroke-width="2.5" class="orbit-halo-core" />
-
-      <!-- 3. Gliding Luminous Light Waves (Feathered glowing comets circulating inside the halo) -->
-      <ellipse cx="0" cy="0" rx="545" ry="132" class="orbit-light-wave-cw" />
-      <ellipse cx="0" cy="0" rx="545" ry="132" class="orbit-light-wave-ccw" />
-
-      <!-- 4. Soft Celestial Waypoint Light Orbs (No mechanical boxes or brackets!) -->
-      <!-- Node 0: Front / Active Apex -->
-      <g class="orbit-node-glow node-0" transform="translate(0, 132)">
-        <circle cx="0" cy="0" r="32" fill="url(#nodeGlowGrad0)" class="node-glow-halo" />
-        <circle cx="0" cy="0" r="5" fill="#ffffff" filter="drop-shadow(0 0 10px #00f0ff)" />
-      </g>
-
-      <!-- Node 1: Right -->
-      <g class="orbit-node-glow node-1" transform="translate(545, 0)">
-        <circle cx="0" cy="0" r="26" fill="url(#nodeGlowGrad1)" class="node-glow-halo" />
-        <circle cx="0" cy="0" r="4.5" fill="#ffffff" filter="drop-shadow(0 0 8px #a855f7)" />
-      </g>
-
-      <!-- Node 2: Back / Deep Space -->
-      <g class="orbit-node-glow node-2" transform="translate(0, -132)">
-        <circle cx="0" cy="0" r="22" fill="url(#nodeGlowGrad2)" class="node-glow-halo" />
-        <circle cx="0" cy="0" r="3.5" fill="#ffffff" filter="drop-shadow(0 0 6px #ec4899)" />
-      </g>
-
-      <!-- Node 3: Left -->
-      <g class="orbit-node-glow node-3" transform="translate(-545, 0)">
-        <circle cx="0" cy="0" r="26" fill="url(#nodeGlowGrad3)" class="node-glow-halo" />
-        <circle cx="0" cy="0" r="4.5" fill="#ffffff" filter="drop-shadow(0 0 8px #3b82f6)" />
-      </g>
-
-      <!-- 5. Central Gravitational Singularity (Vầng quang tâm vũ trụ - Pure soft light, no wireframes or radar lines) -->
-      <g class="orbit-singularity-core" transform="translate(0, 0)">
-        <!-- Broad Ambient Breathing Corona -->
-        <circle cx="0" cy="0" r="130" fill="url(#singularityAuraGrad)" class="singularity-ambient-pulse" />
-        <!-- Radiant Inner Glow -->
-        <circle cx="0" cy="0" r="38" fill="url(#singularityCoreGrad)" class="singularity-core-pulse" />
-        <!-- Brilliant Starlight Center -->
-        <circle cx="0" cy="0" r="6" fill="#ffffff" filter="drop-shadow(0 0 12px #00f0ff)" />
-      </g>
-    </svg>
-  `;
-}
-
 // ============================================================================
 // 2. Component Initialization & Orbital Physics State
 // ============================================================================
@@ -495,11 +355,13 @@ export function initTimeline() {
       </div>
 
       <!-- 3D Orbital Theater Stage -->
-      <div class="orbital-stage-viewport" id="orbitalStage">
-        <!-- Background 3D Elliptical Circuit Track & Particle Ring -->
-        <div class="orbital-track-canvas-wrap">
-          <canvas id="orbitalParticleCanvasBg" class="orbital-particle-canvas bg-canvas"></canvas>
-          ${generateOrbitalTrackSvg()}
+      <div class="orbital-stage-viewport" id="orbitalStage" style="--spotlight-color: ${WORK_EXPERIENCES[0].color || '#00e5ff'}; --spotlight-rgb: 0, 229, 255;">
+        <!-- Volumetric Spotlight Cone from Bottom Projecting Upward (Behind Front Card) -->
+        <div class="orbital-spotlight-cone" id="orbitalSpotlightCone" aria-hidden="true">
+          <!-- Wide Flared Atmospheric Cone Beam -->
+          <div class="spotlight-cone-beam"></div>
+          <!-- Dense Center Core Beam -->
+          <div class="spotlight-cone-core"></div>
         </div>
 
         <!-- 3D World Transformation Container -->
@@ -508,14 +370,14 @@ export function initTimeline() {
             const accentColor = exp.color || '#00e5ff';
             return `
               <div class="orbital-card-rig" data-index="${index}" id="orbitalCard-${index}" style="--card-accent: ${accentColor};">
-                <!-- Projected 3D Orbital Plane Floor Shadow -->
+                <!-- Projected 3D Orbital Plane Floor Shadow (Neon Underglow) -->
                 <div class="orbital-card-shadow" id="orbitalShadow-${index}"></div>
 
                 <div class="orbital-card-chassis">
-                  <!-- 3D Slab Thickness Edges (Heavy 80px Oz Depth with Cyber Detailing) -->
+                  <!-- 3D Slab Thickness Edges (Heavy 80px Oz Depth with Neon Lightlines) -->
                   <div class="card-edge-slab card-edge-left">
-                    <div class="edge-ribs"></div>
-                    <div class="edge-tech-tag">CYBER-DECK // 0${index + 1}</div>
+                    <div class="edge-neon-line"></div>
+                    <div class="edge-tech-tag">NEON-DECK // 0${index + 1}</div>
                     <div class="edge-led-cluster">
                       <span class="edge-led"></span>
                       <span class="edge-led"></span>
@@ -523,7 +385,7 @@ export function initTimeline() {
                     </div>
                   </div>
                   <div class="card-edge-slab card-edge-right">
-                    <div class="edge-ribs"></div>
+                    <div class="edge-neon-line"></div>
                     <div class="edge-tech-tag">ORBITAL-SLAB // 0${index + 1}</div>
                     <div class="edge-led-cluster">
                       <span class="edge-led"></span>
@@ -532,7 +394,7 @@ export function initTimeline() {
                     </div>
                   </div>
                   <div class="card-edge-slab card-edge-top">
-                    <div class="edge-ribs-h"></div>
+                    <div class="edge-neon-line-h"></div>
                     <div class="edge-led-cluster-h">
                       <span class="edge-led"></span>
                       <span class="edge-led"></span>
@@ -540,7 +402,7 @@ export function initTimeline() {
                     </div>
                   </div>
                   <div class="card-edge-slab card-edge-bottom">
-                    <div class="edge-ribs-h"></div>
+                    <div class="edge-neon-line-h"></div>
                     <div class="edge-led-cluster-h">
                       <span class="edge-led"></span>
                       <span class="edge-led"></span>
@@ -548,18 +410,22 @@ export function initTimeline() {
                     </div>
                   </div>
 
-                  <!-- 3D Beveled Corner Slabs (Closes rounded corners smoothly in 3D) -->
+                  <!-- 3D Beveled Corner Slabs -->
                   <div class="card-edge-slab card-edge-corner corner-tl"></div>
                   <div class="card-edge-slab card-edge-corner corner-tr"></div>
                   <div class="card-edge-slab card-edge-corner corner-bl"></div>
                   <div class="card-edge-slab card-edge-corner corner-br"></div>
 
-                  <!-- FRONT FACE: Rich Interactive Career Details -->
+                  <!-- FRONT FACE: Rich Neon Career Card -->
                   <div class="card-face card-face-front">
-                    <div class="holo-corner corner-tl"></div>
-                    <div class="holo-corner corner-tr"></div>
-                    <div class="holo-corner corner-bl"></div>
-                    <div class="holo-corner corner-br"></div>
+                    <!-- Interactive 3D 360° Corner Rotation Grips -->
+                    <div class="card-corner-grip corner-tl" data-corner="tl" title="Nắm góc để xoay 360°"><span class="corner-bracket"></span><span class="corner-rotate-icon">⟲</span></div>
+                    <div class="card-corner-grip corner-tr" data-corner="tr" title="Nắm góc để xoay 360°"><span class="corner-bracket"></span><span class="corner-rotate-icon">⟳</span></div>
+                    <div class="card-corner-grip corner-bl" data-corner="bl" title="Nắm góc để xoay 360°"><span class="corner-bracket"></span><span class="corner-rotate-icon">⟲</span></div>
+                    <div class="card-corner-grip corner-br" data-corner="br" title="Nắm góc để xoay 360°"><span class="corner-bracket"></span><span class="corner-rotate-icon">⟳</span></div>
+                    
+                    <!-- Neon Circuit Bezel & Holographic Shine Layer -->
+                    <div class="neon-bezel-frame"></div>
                     <div class="holo-shine-layer"></div>
 
                     <!-- Top Bar -->
@@ -575,18 +441,19 @@ export function initTimeline() {
                           <span>${exp.dateStart} - ${exp.dateEnd}</span>
                         </div>
                       </div>
-                      ${exp.isCurrent ? '<span class="orbital-badge-current">HIỆN TẠI</span>' : ''}
+                      ${exp.isCurrent ? '<span class="orbital-badge-current"><span class="neon-beacon-dot"></span>HIỆN TẠI</span>' : ''}
                     </div>
 
-                    <!-- Media Thumbnail -->
+                    <!-- Media Thumbnail with Neon Frame -->
                     <div class="orbital-thumb-box">
+                      <div class="neon-thumb-overlay"></div>
                       <img src="${exp.thumbnail}" alt="${exp.company}" class="orbital-thumb-img" draggable="false" loading="lazy" />
                     </div>
 
                     <!-- Description -->
                     <p class="orbital-desc">${exp.description}</p>
 
-                    <!-- Tech Pills -->
+                    <!-- Tech Pills in Neon Styling -->
                     <div class="orbital-tech-pills">
                       ${exp.technologies.slice(0, 6).map(t => {
                         const name = typeof t === 'object' && t !== null ? t.name : t;
@@ -595,12 +462,19 @@ export function initTimeline() {
                     </div>
                   </div>
 
-                  <!-- BACK FACE: Cyber HUD Telemetry Chassis (No mirrored text!) -->
+                  <!-- BACK FACE: Cyber Neon Telemetry HUD Deck -->
                   <div class="card-face card-face-back">
+                    <!-- Interactive 3D 360° Corner Rotation Grips -->
+                    <div class="card-corner-grip corner-tl" data-corner="tl" title="Nắm góc để xoay 360°"><span class="corner-bracket"></span><span class="corner-rotate-icon">⟲</span></div>
+                    <div class="card-corner-grip corner-tr" data-corner="tr" title="Nắm góc để xoay 360°"><span class="corner-bracket"></span><span class="corner-rotate-icon">⟳</span></div>
+                    <div class="card-corner-grip corner-bl" data-corner="bl" title="Nắm góc để xoay 360°"><span class="corner-bracket"></span><span class="corner-rotate-icon">⟲</span></div>
+                    <div class="card-corner-grip corner-br" data-corner="br" title="Nắm góc để xoay 360°"><span class="corner-bracket"></span><span class="corner-rotate-icon">⟳</span></div>
+                    
+                    <div class="neon-bezel-frame"></div>
                     <div class="back-chassis-inner">
                       <div class="back-header">
                         <span class="back-status-dot"></span>
-                        <span>ORBITAL NODE CHASSIS // #${index + 1}</span>
+                        <span>ORBITAL NODE // #${index + 1}</span>
                       </div>
 
                       <div class="back-hex-core">
@@ -616,15 +490,15 @@ export function initTimeline() {
                         </div>
                         <div class="back-spec-item">
                           <span class="spec-label">STATUS:</span>
-                          <span class="spec-val">SYNCHRONIZED</span>
+                          <span class="spec-val">ACTIVE</span>
                         </div>
                         <div class="back-spec-item">
-                          <span class="spec-label">NORMAL:</span>
-                          <span class="spec-val">RADIAL ALIGNED</span>
+                          <span class="spec-label">ALIGN:</span>
+                          <span class="spec-val">360° TILT</span>
                         </div>
                         <div class="back-spec-item">
-                          <span class="spec-label">GEOMETRY:</span>
-                          <span class="spec-val">|N · R| = 1.0</span>
+                          <span class="spec-label">SIGNAL:</span>
+                          <span class="spec-val">100% LOCK</span>
                         </div>
                       </div>
 
@@ -638,9 +512,33 @@ export function initTimeline() {
             `;
           }).join('')}
         </div>
+ 
+        <!-- Front Volumetric Light Cone Overlay (Envelopes and Illuminates Center Card in Front) -->
+        <div class="orbital-spotlight-front-cone" id="orbitalSpotlightFront" aria-hidden="true">
+          <div class="spotlight-front-beam"></div>
+          <div class="spotlight-front-core"></div>
+          <div class="spotlight-floor-glow-pool"></div>
 
-        <!-- Foreground 3D Floating Particle Layer (Drifts in front of cards in true stereoscopic 3D) -->
-        <canvas id="orbitalParticleCanvasFg" class="orbital-particle-canvas fg-canvas"></canvas>
+          <!-- Luminous Floating Light Motes on the Beam Volume -->
+          <div class="spotlight-particles-field">
+            <span class="spotlight-mote m1"></span>
+            <span class="spotlight-mote m2"></span>
+            <span class="spotlight-mote m3"></span>
+            <span class="spotlight-mote m4"></span>
+            <span class="spotlight-mote m5"></span>
+            <span class="spotlight-mote m6"></span>
+            <span class="spotlight-mote m7"></span>
+            <span class="spotlight-mote m8"></span>
+            <span class="spotlight-mote m9"></span>
+            <span class="spotlight-mote m10"></span>
+            <span class="spotlight-mote m11"></span>
+            <span class="spotlight-mote m12"></span>
+            <span class="spotlight-mote m13"></span>
+            <span class="spotlight-mote m14"></span>
+            <span class="spotlight-mote m15"></span>
+            <span class="spotlight-mote m16"></span>
+          </div>
+        </div>
 
         <!-- Floating Nav Arrows & Indicator -->
         <button class="orbital-arrow-btn prev-arrow" id="orbitalPrevBtn" aria-label="Previous milestone">
@@ -686,11 +584,6 @@ export function initTimeline() {
 
   // Select DOM Elements
   const stage = document.getElementById('orbitalStage');
-  const bgCanvas = document.getElementById('orbitalParticleCanvasBg');
-  const fgCanvas = document.getElementById('orbitalParticleCanvasFg');
-  const bgCtx = bgCanvas ? bgCanvas.getContext('2d') : null;
-  const fgCtx = fgCanvas ? fgCanvas.getContext('2d') : null;
-  const waypoints = Array.from(container.querySelectorAll('.orbit-waypoint'));
   const cardRigs = Array.from(container.querySelectorAll('.orbital-card-rig'));
   const cardShadows = Array.from(container.querySelectorAll('.orbital-card-shadow'));
   const cardChassis = cardRigs.map(rig => rig.querySelector('.orbital-card-chassis'));
@@ -701,37 +594,6 @@ export function initTimeline() {
   const autoBtn = document.getElementById('orbitalAutoBtn');
   const autoStatus = document.getElementById('autoRotateStatus');
 
-  // Interactive 3D Canvas Particle Engine (Dual-Plane Stereoscopic Depth)
-  const PARTICLE_COUNT = 80;
-  const particles = [];
-  for (let p = 0; p < PARTICLE_COUNT; p++) {
-    particles.push({
-      theta: Math.random() * Math.PI * 2,
-      baseSpeed: 0.0016 + Math.random() * 0.0028,
-      size: 1.4 + Math.random() * 2.4,
-      radialOffset: (Math.random() - 0.5) * 26,
-      zOffset: (Math.random() - 0.5) * 20,
-      hue: Math.random() > 0.4 ? 'cyan' : (Math.random() > 0.5 ? 'magenta' : 'blue'),
-      alpha: 0.35 + Math.random() * 0.65
-    });
-  }
-
-  function resizeParticleCanvases() {
-    if (!stage) return;
-    const dpr = window.devicePixelRatio || 1;
-    const w = Math.round((stage.clientWidth || 1000) * dpr);
-    const h = Math.round((stage.clientHeight || 620) * dpr);
-    if (bgCanvas) {
-      bgCanvas.width = w;
-      bgCanvas.height = h;
-    }
-    if (fgCanvas) {
-      fgCanvas.width = w;
-      fgCanvas.height = h;
-    }
-  }
-  resizeParticleCanvases();
-  window.addEventListener('resize', resizeParticleCanvases);
 
   // Working 3D Vectors & Matrices
   const orbitCenter = new Vector3(0, 0, 0);
@@ -743,18 +605,18 @@ export function initTimeline() {
   const worldUp = new Vector3(0, 1, 0);
   const mat4 = new Matrix4();
 
-  // Responsive sizing for orbit dimensions
+  // Responsive sizing for orbit dimensions (80% scale of base size)
   function updateOrbitDimensions() {
     const width = stage ? stage.clientWidth : 1000;
     if (width < 640) {
-      Rx = Math.min(340, width * 0.48);
-      Rz = 190;
+      Rx = Math.min(272, width * 0.40);
+      Rz = 152;
     } else if (width < 960) {
-      Rx = Math.min(460, width * 0.48);
-      Rz = 240;
+      Rx = Math.min(368, width * 0.40);
+      Rz = 192;
     } else {
-      Rx = Math.min(560, width * 0.48);
-      Rz = 280;
+      Rx = Math.min(448, width * 0.40);
+      Rz = 224;
     }
   }
   updateOrbitDimensions();
@@ -781,9 +643,13 @@ export function initTimeline() {
     const deltaPerCard = (2 * Math.PI) / N;
     const desiredTheta = FRONT_ANGLE - activeIndex * deltaPerCard;
 
-    // Reset all card tilts when snapping
+    // Reset all card tilts & 360 corner rotations when snapping
     cardTiltTargetX.fill(0);
     cardTiltTargetY.fill(0);
+    targetCornerRotY.fill(0);
+    targetCornerRotX.fill(0);
+    cardCornerVelY.fill(0);
+    cardCornerVelX.fill(0);
 
     // Find nearest equivalent angle to minimize rotation travel (no unnecessary 360 spins)
     const twoPi = 2 * Math.PI;
@@ -794,14 +660,26 @@ export function initTimeline() {
     updateChips();
   }
 
+  function hexToRgb(hex) {
+    const clean = (hex || '#00e5ff').replace('#', '');
+    const bigint = parseInt(clean, 16);
+    const r = (bigint >> 16) & 255;
+    const g = (bigint >> 8) & 255;
+    const b = bigint & 255;
+    return `${r}, ${g}, ${b}`;
+  }
+
   function updateChips() {
     chipBtns.forEach((btn, idx) => {
       btn.classList.toggle('active', idx === activeIndex);
     });
-    waypoints.forEach((wp, idx) => {
-      wp.classList.toggle('is-active', idx === activeIndex);
-    });
+    if (stage && WORK_EXPERIENCES[activeIndex]) {
+      const activeColor = WORK_EXPERIENCES[activeIndex].color || '#00e5ff';
+      stage.style.setProperty('--spotlight-color', activeColor);
+      stage.style.setProperty('--spotlight-rgb', hexToRgb(activeColor));
+    }
   }
+  updateChips();
 
   // Per-card 3D hover tilt state (each card tilts independently)
   const cardTiltTargetX = new Float32Array(N);
@@ -812,6 +690,27 @@ export function initTimeline() {
   // Per-card 3D flip state (0 deg front <-> 180 deg back)
   const cardFlipped = new Array(N).fill(false);
   const cardFlipCurrentY = new Float32Array(N);
+
+  // Per-card 360-degree free 3D rotation (manipulated by grabbing corners)
+  const cardCornerRotY = new Float32Array(N);
+  const cardCornerRotX = new Float32Array(N);
+  const targetCornerRotY = new Float32Array(N);
+  const targetCornerRotX = new Float32Array(N);
+  const cardCornerVelY = new Float32Array(N);
+  const cardCornerVelX = new Float32Array(N);
+
+  let isCornerDragging = false;
+  let cornerDragCardIdx = -1;
+  let cornerDragStartX = 0;
+  let cornerDragStartY = 0;
+  let cornerDragBaseRotY = 0;
+  let cornerDragBaseRotX = 0;
+  let lastCornerDragX = 0;
+  let lastCornerDragY = 0;
+  let lastCornerDragTime = 0;
+  let cornerDragVelY = 0;
+  let cornerDragVelX = 0;
+  let totalCardDragDist = 0;
 
   // ============================================================================
   // 3. Main 60 FPS Mathematical Animation Loop (High Performance & Zero Alloc)
@@ -833,100 +732,46 @@ export function initTimeline() {
       targetTheta -= autoRotateSpeed;
     }
 
-    // 2. Spring Physics Interpolation for theta(t)
+    // 2. Spring Physics Interpolation for theta(t) (Snappy, critically damped)
     if (!isDragging) {
-      const springStiffness = 0.085;
-      const springDamping = 0.84;
-      const force = (targetTheta - currentTheta) * springStiffness;
-      velocity = (velocity + force) * springDamping;
-      currentTheta += velocity;
+      const diff = targetTheta - currentTheta;
+      if (Math.abs(diff) < 0.0004 && Math.abs(velocity) < 0.0002) {
+        currentTheta = targetTheta;
+        velocity = 0;
+      } else {
+        const springStiffness = 0.11;
+        const springDamping = 0.80;
+        const force = diff * springStiffness;
+        velocity = (velocity + force) * springDamping;
+        currentTheta += velocity;
+      }
     }
 
-    // 3. Smooth per-card hover tilt & flip interpolation
+    // 3. Smooth per-card hover tilt, flip, & 360° corner rotation interpolation
     for (let j = 0; j < N; j++) {
-      cardTiltCurrentX[j] += (cardTiltTargetX[j] - cardTiltCurrentX[j]) * 0.12;
-      cardTiltCurrentY[j] += (cardTiltTargetY[j] - cardTiltCurrentY[j]) * 0.12;
+      cardTiltCurrentX[j] += (cardTiltTargetX[j] - cardTiltCurrentX[j]) * 0.15;
+      cardTiltCurrentY[j] += (cardTiltTargetY[j] - cardTiltCurrentY[j]) * 0.15;
       const targetFlip = cardFlipped[j] ? 180 : 0;
-      cardFlipCurrentY[j] += (targetFlip - cardFlipCurrentY[j]) * 0.14;
-    }
+      cardFlipCurrentY[j] += (targetFlip - cardFlipCurrentY[j]) * 0.16;
 
-    // 3b. Render 3D Canvas Particles along orbit (Split into Back & Front planes for stereoscopic depth)
-    if (stage && (bgCtx || fgCtx)) {
-      const dpr = window.devicePixelRatio || 1;
-      const w = stage.clientWidth;
-      const h = stage.clientHeight;
-      const cx = w / 2;
-      const cy = h / 2;
-      const maxZ = Rz * cosAlpha;
-
-      if (bgCtx && bgCanvas) {
-        bgCtx.save();
-        bgCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        bgCtx.clearRect(0, 0, w, h);
-      }
-      if (fgCtx && fgCanvas) {
-        fgCtx.save();
-        fgCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        fgCtx.clearRect(0, 0, w, h);
-      }
-
-      for (let p = 0; p < PARTICLE_COUNT; p++) {
-        const pt = particles[p];
-        pt.theta += pt.baseSpeed + Math.abs(velocity) * 0.7;
-
-        const cosT = Math.cos(pt.theta);
-        const sinT = Math.sin(pt.theta);
-        const pRx = Rx + pt.radialOffset;
-        const pRz = Rz + pt.zOffset;
-
-        const x3d = pRx * cosT;
-        const y3d = -pRz * sinT * sinAlpha;
-        const z3d = pRz * sinT * cosAlpha;
-
-        const depthRatio = Math.max(0, Math.min(1, (z3d + maxZ) / (2 * maxZ)));
-        const scale = 0.7 + 0.45 * depthRatio;
-        const screenX = cx + x3d;
-        const screenY = cy + y3d;
-
-        const pSize = pt.size * scale;
-        const pAlpha = (0.2 + 0.8 * depthRatio) * pt.alpha;
-
-        // Choose target canvas context: Z > 0 flies in front of cards; Z <= 0 flies behind cards!
-        const ctx = (z3d > 0 && fgCtx) ? fgCtx : bgCtx;
-        if (!ctx) continue;
-
-        ctx.beginPath();
-        if (pt.hue === 'cyan') {
-          ctx.fillStyle = `rgba(0, 229, 255, ${pAlpha})`;
-          ctx.shadowColor = '#00e5ff';
-        } else if (pt.hue === 'magenta') {
-          ctx.fillStyle = `rgba(217, 70, 239, ${pAlpha})`;
-          ctx.shadowColor = '#d946ef';
+      if (isCornerDragging && j === cornerDragCardIdx) {
+        // Direct tracking while dragging = 0 latency, 0 lag, instantaneous response!
+        cardCornerRotY[j] = targetCornerRotY[j];
+        cardCornerRotX[j] = targetCornerRotX[j];
+      } else {
+        // Smooth spring return to original position (target 0, 0)
+        const dY = targetCornerRotY[j] - cardCornerRotY[j];
+        const dX = targetCornerRotX[j] - cardCornerRotX[j];
+        if (Math.abs(dY) < 0.05 && Math.abs(dX) < 0.05) {
+          cardCornerRotY[j] = targetCornerRotY[j];
+          cardCornerRotX[j] = targetCornerRotX[j];
         } else {
-          ctx.fillStyle = `rgba(59, 130, 246, ${pAlpha})`;
-          ctx.shadowColor = '#3b82f6';
-        }
-        ctx.shadowBlur = depthRatio > 0.5 ? 10 * scale : 2;
-        ctx.arc(screenX, screenY, pSize, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Trailing warp speed streaks when cards rotate fast
-        if (Math.abs(velocity) > 0.003) {
-          const trailAngle = pt.theta - velocity * 3.5;
-          const trailX = cx + pRx * Math.cos(trailAngle);
-          const trailY = cy - pRz * Math.sin(trailAngle) * sinAlpha;
-          ctx.beginPath();
-          ctx.moveTo(screenX, screenY);
-          ctx.lineTo(trailX, trailY);
-          ctx.strokeStyle = ctx.fillStyle;
-          ctx.lineWidth = pSize * 0.65;
-          ctx.stroke();
+          cardCornerRotY[j] += dY * 0.24;
+          cardCornerRotX[j] += dX * 0.24;
         }
       }
-
-      if (bgCtx) bgCtx.restore();
-      if (fgCtx) fgCtx.restore();
     }
+
 
     // 4. Determine currently front-most active card from currentTheta
     const deltaPerCard = (2 * Math.PI) / N;
@@ -973,8 +818,8 @@ export function initTimeline() {
       }
       U_vec.crossVectors(N_vec, S_vec).normalize();
 
-      // Depth-based Scale
-      const scale = 0.72 + 0.36 * depthRatio;
+      // Depth-based Scale (80% of original scale)
+      const scale = (0.72 + 0.36 * depthRatio) * 0.8;
 
       S_vec.multiplyScalar(scale);
       U_vec.multiplyScalar(scale);
@@ -1016,22 +861,26 @@ export function initTimeline() {
         rig._lastActive = isFrontActive;
       }
 
-      // Per-card hover tilt & 3D flip: smoothly flips 180 deg to show back face
+      // Per-card hover tilt, 3D flip, & free 360° corner rotation
       const chassis = cardChassis[i];
       if (chassis) {
         const flipDeg = cardFlipCurrentY[i];
-        // When card is flipped 180 deg: local Y rotation adds directly, and local X tilt is inverted
-        const isFlipped = flipDeg > 90;
-        const totalRotY = cardTiltCurrentY[i] + flipDeg;
-        const totalRotX = isFlipped ? -cardTiltCurrentX[i] : cardTiltCurrentX[i];
-        const hasTransform = Math.abs(totalRotX) > 0.01 || Math.abs(totalRotY) > 0.01;
-        if (hasTransform) {
-          chassis.style.transform = `rotateY(${totalRotY.toFixed(2)}deg) rotateX(${totalRotX.toFixed(2)}deg)`;
-          chassis._hasTransform = true;
-        } else if (chassis._hasTransform) {
-          chassis.style.transform = '';
-          chassis._hasTransform = false;
-        }
+        const totalY = cardCornerRotY[i] + flipDeg;
+        const totalX = cardCornerRotX[i];
+
+        const radY = (totalY * Math.PI) / 180;
+        const radX = (totalX * Math.PI) / 180;
+        const cosY = Math.cos(radY);
+        const cosX = Math.cos(radX);
+
+        const hoverY = (cosX < 0) ? -cardTiltCurrentY[i] : cardTiltCurrentY[i];
+        const hoverX = (cosY < 0) ? -cardTiltCurrentX[i] : cardTiltCurrentX[i];
+
+        const totalRotY = totalY + hoverY;
+        const totalRotX = totalX + hoverX;
+
+        chassis.style.transform = `rotateY(${totalRotY.toFixed(2)}deg) rotateX(${totalRotX.toFixed(2)}deg)`;
+        chassis._hasTransform = true;
       }
     }
 
@@ -1060,6 +909,18 @@ export function initTimeline() {
   }, { rootMargin: '120px 0px 120px 0px', threshold: 0.01 });
 
   visibilityObserver.observe(container);
+
+  // Page visibility API (pause 3D timeline when tab is hidden)
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+      }
+    } else if (isSectionVisible && !animationFrameId) {
+      renderLoop();
+    }
+  });
 
   // ============================================================================
   // 4. Interactive Dragging, Inertia & Event Handlers
@@ -1129,9 +990,74 @@ export function initTimeline() {
     snapToIndex(nearestK);
   }
 
+  // 360° Card Rotation anywhere on the active card
+  function startCardRotate(idx, clientX, clientY) {
+    isCornerDragging = true;
+    cornerDragCardIdx = idx;
+    cornerDragStartX = clientX;
+    cornerDragStartY = clientY;
+    pointerDownStartX = clientX;
+    pointerDownStartY = clientY;
+    totalCardDragDist = 0;
+    cornerDragBaseRotY = targetCornerRotY[idx];
+    cornerDragBaseRotX = targetCornerRotX[idx];
+    cardCornerVelY[idx] = 0;
+    cardCornerVelX[idx] = 0;
+
+    document.body.classList.add('is-card-rotating');
+    stage.classList.add('is-card-rotating');
+  }
+
+  function handleCardRotateMove(clientX, clientY) {
+    if (!isCornerDragging || cornerDragCardIdx < 0) return false;
+    const deltaX = clientX - cornerDragStartX;
+    const deltaY = clientY - cornerDragStartY;
+    totalCardDragDist = Math.hypot(deltaX, deltaY);
+
+    const SENS_Y = 0.95;
+    const SENS_X = 0.90;
+
+    targetCornerRotY[cornerDragCardIdx] = cornerDragBaseRotY + deltaX * SENS_Y;
+    targetCornerRotX[cornerDragCardIdx] = cornerDragBaseRotX - deltaY * SENS_X;
+
+    return true;
+  }
+
+  function handleCardRotateUp() {
+    if (!isCornerDragging) return false;
+    isCornerDragging = false;
+    document.body.classList.remove('is-card-rotating');
+    stage.classList.remove('is-card-rotating');
+
+    const idx = cornerDragCardIdx;
+    cornerDragCardIdx = -1;
+
+    // "sau khi thả ra nó xoay về vị trí cũ":
+    // Reset target rotation back to 0 so the spring physics lerps it smoothly home!
+    if (idx >= 0) {
+      targetCornerRotY[idx] = 0;
+      targetCornerRotX[idx] = 0;
+      cardCornerVelY[idx] = 0;
+      cardCornerVelX[idx] = 0;
+    }
+
+    return true;
+  }
+
   // Mouse drag events on stage
   stage.addEventListener('mousedown', (e) => {
     if (e.target.closest('button')) return;
+    const cardRig = e.target.closest('.orbital-card-rig');
+    if (cardRig) {
+      const idx = parseInt(cardRig.getAttribute('data-index'), 10);
+      if (idx === activeIndex || cardRig.classList.contains('is-front-active')) {
+        // Active card: grab anywhere on the card to freely rotate 360 in 3D!
+        e.preventDefault();
+        startCardRotate(idx, e.clientX, e.clientY);
+        return;
+      }
+    }
+    // Background or inactive card: drag orbital carousel
     e.preventDefault();
     handlePointerDown(e.clientX, e.clientY);
   });
@@ -1141,15 +1067,22 @@ export function initTimeline() {
   });
 
   window.addEventListener('mousemove', (e) => {
+    if (handleCardRotateMove(e.clientX, e.clientY)) return;
     handlePointerMove(e.clientX);
   });
 
-  // Per-card hover tilt: each card independently tracks mouse position for its own tilt
+  // Per-card hover tilt & interactions
   cardRigs.forEach((rig, i) => {
     let cachedCardRect = null;
 
+    rig.addEventListener('touchstart', (e) => {
+      if (e.target.closest('button')) return;
+      if ((i === activeIndex || rig.classList.contains('is-front-active')) && e.touches.length === 1) {
+        startCardRotate(i, e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, { passive: true });
+
     rig.addEventListener('mouseenter', () => {
-      // Cache bounding rect on enter to avoid layout thrashing during mousemove
       cachedCardRect = rig.getBoundingClientRect();
     });
 
@@ -1160,21 +1093,28 @@ export function initTimeline() {
     });
 
     rig.addEventListener('mousemove', (e) => {
-      if (isDragging || !cachedCardRect) {
-        cardTiltTargetX[i] = 0;
-        cardTiltTargetY[i] = 0;
+      if (isDragging || isCornerDragging || !cachedCardRect) {
         return;
       }
       const cx = cachedCardRect.left + cachedCardRect.width / 2;
       const cy = cachedCardRect.top + cachedCardRect.height / 2;
       const xRel = Math.max(-1, Math.min(1, (e.clientX - cx) / (cachedCardRect.width / 2)));
       const yRel = Math.max(-1, Math.min(1, (e.clientY - cy) / (cachedCardRect.height / 2)));
-      // Seesaw press: The hovered side sinks down into the screen, opposite side rises up revealing full 3D slab thickness
-      cardTiltTargetY[i] = xRel * 26;
-      cardTiltTargetX[i] = -yRel * 22;
+      cardTiltTargetY[i] = xRel * 10;
+      cardTiltTargetX[i] = -yRel * 8;
     });
 
-    // Click to flip active front card 180 degrees (or snap inactive card to front)
+    // Double-click to smoothly reset 360° card rotation
+    rig.addEventListener('dblclick', () => {
+      targetCornerRotY[i] = 0;
+      targetCornerRotX[i] = 0;
+      cardCornerVelY[i] = 0;
+      cardCornerVelX[i] = 0;
+    });
+
+    // Click on card:
+    // - Active card: stationary click (moveDist <= 8) toggles 3D flip between front and back
+    // - Inactive card: click snaps that card to the front
     rig.addEventListener('click', (e) => {
       const moveDist = Math.hypot(e.clientX - pointerDownStartX, e.clientY - pointerDownStartY);
       if (moveDist > 8) return;
@@ -1188,6 +1128,7 @@ export function initTimeline() {
   });
 
   window.addEventListener('mouseup', (e) => {
+    if (handleCardRotateUp()) return;
     handlePointerUp(e.clientX);
   });
 
@@ -1195,17 +1136,31 @@ export function initTimeline() {
   stage.addEventListener('touchstart', (e) => {
     if (e.target.closest('button')) return;
     if (e.touches.length === 1) {
-      handlePointerDown(e.touches[0].clientX, e.touches[0].clientY);
+      const touch = e.touches[0];
+      const cardRig = e.target.closest('.orbital-card-rig');
+      if (cardRig) {
+        const idx = parseInt(cardRig.getAttribute('data-index'), 10);
+        if (idx === activeIndex) {
+          startCardRotate(idx, touch.clientX, touch.clientY);
+          return;
+        }
+      }
+      handlePointerDown(touch.clientX, touch.clientY);
     }
   }, { passive: true });
 
   window.addEventListener('touchmove', (e) => {
+    if (e.touches.length === 1) {
+      const touch = e.touches[0];
+      if (handleCardRotateMove(touch.clientX, touch.clientY)) return;
+    }
     if (isDragging && e.touches.length === 1) {
       handlePointerMove(e.touches[0].clientX);
     }
   }, { passive: true });
 
   window.addEventListener('touchend', (e) => {
+    if (handleCardRotateUp()) return;
     const touch = e.changedTouches && e.changedTouches[0];
     handlePointerUp(touch ? touch.clientX : dragStartX);
   });

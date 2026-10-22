@@ -256,11 +256,10 @@ export function initConstellation() {
 
   function draw() {
     if (!isCanvasActive) {
-      animationFrameId = requestAnimationFrame(draw);
+      animationFrameId = null;
       return;
     }
 
-    // Always schedule next frame first so animation NEVER dies
     animationFrameId = requestAnimationFrame(draw);
 
     try {
@@ -564,10 +563,27 @@ export function initConstellation() {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       isCanvasActive = entry.isIntersecting;
+      if (isCanvasActive && !animationFrameId) {
+        animationFrameId = requestAnimationFrame(draw);
+      } else if (!isCanvasActive && animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+      }
     });
-  }, { threshold: 0.1 });
+  }, { threshold: 0.05 });
 
   observer.observe(canvas);
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+      }
+    } else if (isCanvasActive && !animationFrameId) {
+      animationFrameId = requestAnimationFrame(draw);
+    }
+  });
 
   window.addEventListener('resize', () => {
     initPositions();

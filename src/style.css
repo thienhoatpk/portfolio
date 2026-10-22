@@ -2260,312 +2260,708 @@ code, pre, kbd, .mono {
 }
 
 /* --------------------------------------------------------------------------
-   Component 5 — Work Experience & Career Timeline (Reference Match)
+   Component 5 — 3D Orbital Career Timeline (Advanced 3D Geometry)
    -------------------------------------------------------------------------- */
 .career-experience-section {
   position: relative;
   overflow: hidden;
+  padding: 80px 0 100px;
+}
+
+.orbital-experience-wrapper {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
 }
 
 /* Header Section */
-.career-experience-header {
+.orbital-header-row,
+.orbital-timeline-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 36px;
-  gap: 24px;
+  gap: 32px;
+  margin-bottom: 24px;
 }
 
-.career-header-info {
+.orbital-header-info,
+.orbital-header-left {
   flex: 1;
+  max-width: 680px;
 }
 
-.career-section-tag {
+.orbital-badge-tag,
+.orbital-journey-tag {
   font-family: var(--font-mono);
   font-size: 0.8125rem;
   font-weight: 700;
   letter-spacing: 0.15em;
   color: #00e5ff;
-  display: inline-block;
-  margin-bottom: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
   text-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+  text-transform: uppercase;
 }
 
-.career-main-title {
-  font-size: 2.25rem;
+.tag-pulse-dot,
+.orbital-journey-tag .pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  box-shadow: 0 0 12px var(--glow-cyan-strong);
+  animation: radar-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.orbital-main-title,
+.orbital-title {
+  font-size: clamp(2rem, 3.5vw, 2.75rem);
   font-weight: 800;
   color: #FFFFFF;
-  margin: 0 0 10px 0;
-  line-height: 1.2;
+  margin: 0 0 12px 0;
+  line-height: 1.15;
   letter-spacing: -0.02em;
 }
 
-.gradient-text-purple {
-  background: linear-gradient(135deg, #a855f7 0%, #d946ef 55%, #ec4899 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  display: inline-block;
-}
-
-.career-main-subtitle {
+.orbital-main-subtitle,
+.orbital-subtitle {
   font-size: 0.9375rem;
   color: #94a3b8;
-  max-width: 580px;
+  max-width: 600px;
   line-height: 1.6;
   margin: 0;
 }
 
-/* Top Right Gauge */
-.career-header-gauge {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+/* Header Stats HUD Box */
+.orbital-stats-hud,
+.horiz-header-stats-hud {
+  background: rgba(12, 19, 36, 0.7);
+  border: 1px solid rgba(0, 229, 255, 0.28);
+  border-radius: 12px;
+  padding: 16px 20px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(0, 229, 255, 0.04);
+  min-width: 380px;
   flex-shrink: 0;
 }
 
-.gauge-ring-box {
-  position: relative;
-  width: 90px;
-  height: 90px;
+.hud-box-title {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #94a3b8;
+  margin-bottom: 12px;
+  text-transform: uppercase;
 }
 
-.gauge-svg-circle {
-  width: 100%;
-  height: 100%;
-  transform: rotate(-90deg);
+.hud-box-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
-.gauge-circle-bg {
-  fill: none;
-  stroke: rgba(255, 255, 255, 0.08);
-  stroke-width: 6;
-}
-
-.gauge-circle-progress {
-  fill: none;
-  stroke: #00e5ff;
-  stroke-width: 6;
-  stroke-dasharray: 264;
-  stroke-dashoffset: 65;
-  stroke-linecap: round;
-  filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.6));
-}
-
-.gauge-content {
-  position: absolute;
-  inset: 0;
+.hud-time-block {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
 }
 
-.gauge-value {
-  font-size: 1.35rem;
+.hud-calendar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.hud-calendar-icon {
+  width: 22px;
+  height: 22px;
+  color: #00e5ff;
+  flex-shrink: 0;
+}
+
+.hud-years-text {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.hud-big-num {
+  font-size: 1.75rem;
   font-weight: 800;
-  color: #FFFFFF;
+  color: #00e5ff;
   line-height: 1;
   font-family: var(--font-mono);
+  text-shadow: 0 0 12px rgba(0, 229, 255, 0.45);
 }
 
-.gauge-label {
-  font-size: 0.6875rem;
-  color: #94a3b8;
-  line-height: 1.1;
+.hud-unit {
+  font-size: 0.8125rem;
+  color: #cbd5e1;
+  font-weight: 500;
+  margin-right: 4px;
+}
+
+.hud-date-sub {
   font-family: var(--font-mono);
-  margin-top: 2px;
-}
-
-.gauge-sublabel {
-  font-size: 0.5875rem;
+  font-size: 0.6875rem;
   color: #64748b;
-  line-height: 1.1;
+  letter-spacing: 0.05em;
+  margin-top: 4px;
 }
 
-.gauge-phrase-box {
+.hud-divider-v {
+  width: 1px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
+
+.hud-metrics-list {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  font-family: var(--font-mono);
-  font-size: 0.8125rem;
+  gap: 6px;
+  flex: 1;
 }
 
-.phrase-coding {
+.hud-metric-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8125rem;
   color: #cbd5e1;
 }
 
-.phrase-growing {
-  color: #64748b;
+.hud-metric-label {
+  font-size: 0.8125rem;
+  color: #cbd5e1;
+  white-space: nowrap;
 }
 
-/* 2-Column Layout */
-.career-layout-grid {
-  display: grid;
-  grid-template-columns: 1.55fr 1fr;
-  gap: 28px;
-  align-items: flex-start;
+.hud-metric-val {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: #00e5ff;
+  margin-left: auto;
+  font-size: 0.875rem;
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.35);
 }
 
-/* Left Column Timeline */
-.career-timeline-col {
-  width: 100%;
-}
-
-.career-timeline-track {
+/* ==========================================================================
+   3D Viewport Stage & Orbital Canvas
+   ========================================================================== */
+.orbital-stage-viewport {
   position: relative;
+  width: 100%;
+  height: 620px;
+  perspective: 1200px;
+  perspective-origin: 50% 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  touch-action: pan-y;
+  cursor: grab;
+  border-radius: 24px;
+  background: radial-gradient(ellipse 70% 55% at 50% 50%, rgba(0, 229, 255, 0.04) 0%, rgba(5, 9, 18, 0.6) 75%, transparent 100%);
+  border: 1px solid rgba(0, 229, 255, 0.1);
+  overflow: visible;
+}
+
+.orbital-stage-viewport:active {
+  cursor: grabbing;
+}
+
+/* SVG Ellipse Orbit Background */
+.orbital-track-canvas-wrap,
+.orbital-canvas-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.orbital-ellipse-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.orbit-inner-guide {
+  fill: none;
+  stroke: rgba(168, 85, 247, 0.22);
+  stroke-width: 1.2;
+  stroke-dasharray: 4 8;
+}
+
+.orbit-ambient-ring {
+  fill: none;
+  stroke: rgba(0, 229, 255, 0.15);
+  stroke-width: 1.5;
+}
+
+.orbit-core-ring {
+  fill: none;
+  stroke-width: 2.5;
+  stroke-dasharray: 8 4;
+}
+
+.orbit-energy-beam {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 3.5;
+  stroke-dasharray: 80 400;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 10px #00e5ff);
+  animation: orbital-beam-dash 6s linear infinite;
+}
+
+@keyframes orbital-beam-dash {
+  to {
+    stroke-dashoffset: -480;
+  }
+}
+
+.orbit-grid-axis {
+  stroke: rgba(0, 229, 255, 0.08);
+  stroke-width: 1;
+  stroke-dasharray: 4 6;
+}
+
+/* 3D Origin World Container */
+.orbital-world {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Individual Card 3D Rig */
+.orbital-card-rig {
+  position: absolute;
+  top: -200px;
+  left: -170px;
+  width: 340px;
+  height: 400px;
+  transform-style: preserve-3d;
+  pointer-events: auto;
+  cursor: pointer;
+  will-change: transform;
+  transition: none;
+}
+
+/* Only front card buttons are clickable */
+.orbital-card-rig .orbital-detail-btn {
+  pointer-events: none;
+}
+.orbital-card-rig.is-front-active .orbital-detail-btn {
+  pointer-events: auto;
+}
+
+/* 3D Projected Floor Shadow onto Orbital Plane */
+.orbital-card-shadow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 320px;
+  height: 80px;
+  margin-top: 220px;
+  margin-left: -160px;
+  background: radial-gradient(ellipse 55% 45% at 50% 50%, rgba(0, 0, 0, 0.88) 0%, rgba(0, 229, 255, 0.18) 32%, rgba(0, 229, 255, 0.05) 55%, transparent 72%);
+  border-radius: 50%;
+  transform: rotateX(80deg);
+  pointer-events: none;
+  opacity: 0.6;
+  transition: none;
+  z-index: 1;
+}
+
+.orbital-card-rig.is-front-active .orbital-card-shadow {
+  opacity: 0.95;
+  background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(0, 0, 0, 0.95) 0%, rgba(0, 229, 255, 0.32) 36%, rgba(0, 229, 255, 0.08) 58%, transparent 72%);
+}
+
+.orbital-card-chassis {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: none; /* Interpolated directly at 60 FPS in JS to prevent transition fighting */
+}
+
+/* Double-Sided Faces with 3D Slab Thickness */
+.card-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: visible; /* Kept visible so 3D children preserve-3d is NEVER flattened */
+  transform-style: preserve-3d;
+}
+
+/* 3D Slab Thickness Rim Edges (96px total thickness along Oz: from Z = -48px to +48px) */
+.card-edge-slab {
+  position: absolute;
+  pointer-events: none;
+  z-index: 2;
+  backface-visibility: visible !important;
+  -webkit-backface-visibility: visible !important;
+  transform-style: preserve-3d;
+}
+
+.card-edge-left,
+.card-edge-right {
+  top: 0px;
+  bottom: 0px;
+  width: 96px;
+  background: 
+    repeating-linear-gradient(
+      180deg,
+      rgba(0, 229, 255, 0.4) 0px,
+      rgba(0, 229, 255, 0.4) 3px,
+      transparent 3px,
+      transparent 18px
+    ),
+    linear-gradient(
+      90deg, 
+      #00e5ff 0%, 
+      #0f2542 10%, 
+      #183c68 28%, 
+      #00e5ff 48%, 
+      #ffffff 50%, 
+      #00e5ff 52%, 
+      #183c68 72%, 
+      #0f2542 90%, 
+      #00e5ff 100%
+    );
+  border-left: 3.5px solid #00e5ff;
+  border-right: 3.5px solid #00e5ff;
+  box-shadow: 
+    0 0 35px rgba(0, 229, 255, 0.8),
+    inset 0 0 25px rgba(0, 229, 255, 0.55);
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px 0;
+  overflow: hidden;
 }
 
-.career-timeline-track::before {
+.card-edge-left {
+  left: -48px;
+  transform: rotateY(-90deg);
+}
+
+.card-edge-right {
+  right: -48px;
+  transform: rotateY(90deg);
+}
+
+.edge-ribs {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(0, 229, 255, 0.3) 0px,
+    rgba(0, 229, 255, 0.3) 2px,
+    transparent 2px,
+    transparent 14px
+  );
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+.edge-tech-tag {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  color: #ffffff;
+  text-shadow: 0 0 10px #00e5ff, 0 0 20px #00e5ff;
+  z-index: 3;
+  background: rgba(3, 10, 22, 0.96);
+  padding: 14px 8px;
+  border-radius: 6px;
+  border: 1.5px solid #00e5ff;
+  box-shadow: 0 0 16px rgba(0, 229, 255, 0.65);
+  white-space: nowrap;
+}
+
+.edge-led-cluster {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 3;
+}
+
+.edge-led {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #00ff88;
+  box-shadow: 0 0 14px #00ff88, 0 0 24px #00ff88;
+  animation: pulse-edge-led 2s infinite ease-in-out;
+}
+
+.edge-led:nth-child(2) {
+  background: #00e5ff;
+  box-shadow: 0 0 14px #00e5ff, 0 0 24px #00e5ff;
+  animation-delay: 0.4s;
+}
+
+.edge-led:nth-child(3) {
+  background: #a855f7;
+  box-shadow: 0 0 14px #a855f7, 0 0 24px #a855f7;
+  animation-delay: 0.8s;
+}
+
+@keyframes pulse-edge-led {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.card-edge-top {
+  left: 0px;
+  right: 0px;
+  top: -48px;
+  height: 96px;
+  transform: rotateX(90deg);
+  background: 
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.35) 0px,
+      rgba(255, 255, 255, 0.35) 3px,
+      transparent 3px,
+      transparent 18px
+    ),
+    linear-gradient(
+      180deg, 
+      #ffffff 0%, 
+      #00e5ff 25%, 
+      #1c4068 50%, 
+      #00e5ff 75%, 
+      #ffffff 100%
+    );
+  border-top: 3.5px solid #ffffff;
+  border-bottom: 3.5px solid #00e5ff;
+  box-shadow: 
+    0 0 40px rgba(0, 229, 255, 0.95),
+    inset 0 0 25px rgba(255, 255, 255, 0.6);
+}
+
+.card-edge-bottom {
+  left: 0px;
+  right: 0px;
+  bottom: -48px;
+  height: 96px;
+  transform: rotateX(-90deg);
+  background: 
+    repeating-linear-gradient(
+      90deg,
+      rgba(168, 85, 247, 0.5) 0px,
+      rgba(168, 85, 247, 0.5) 4px,
+      transparent 4px,
+      transparent 18px
+    ),
+    linear-gradient(
+      180deg, 
+      #00e5ff 0%, 
+      #132742 20%, 
+      #a855f7 50%, 
+      #132742 80%, 
+      #00e5ff 100%
+    );
+  border-top: 3px solid #00e5ff;
+  border-bottom: 3.5px solid #a855f7;
+  box-shadow: 0 14px 40px rgba(168, 85, 247, 0.7);
+}
+
+/* FRONT FACE: Cyberpunk Glassmorphism with Heavy 96px 3D Slab Thickness */
+.card-face-front {
+  background: linear-gradient(135deg, rgba(14, 23, 42, 0.96) 0%, rgba(8, 14, 26, 0.98) 100%);
+  border: 2.5px solid #00e5ff;
+  border-radius: 14px;
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transform: translateZ(48px);
+  box-shadow: 
+    0 0 0 2px rgba(0, 229, 255, 0.65),
+    inset 0 0 0 1.5px rgba(255, 255, 255, 0.35),
+    0 16px 36px rgba(0, 0, 0, 0.85),
+    0 0 20px rgba(0, 229, 255, 0.25);
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+/* Inner Cyber Frame / Inset Bezel for reinforced card thickness */
+.card-face-front::before {
   content: '';
   position: absolute;
-  top: 36px;
-  bottom: 36px;
-  left: 107px;
-  width: 2px;
+  inset: 6px;
+  border: 1px solid rgba(0, 229, 255, 0.25);
+  border-radius: 13px;
+  pointer-events: none;
+  transform: translateZ(4px);
+  box-shadow: inset 0 0 14px rgba(0, 229, 255, 0.08);
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+/* Internal 3D Floating Layers (Parallax Relief) */
+.card-face-front .holo-corner {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+  border: 2px solid var(--accent-cyan);
+  opacity: 0.7;
+  transform: translateZ(32px);
+  transition: opacity 0.3s ease, border-color 0.3s ease;
+}
+
+.card-face-front .corner-tl { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+.card-face-front .corner-tr { top: 10px; right: 10px; border-left: none; border-bottom: none; }
+.card-face-front .corner-bl { bottom: 10px; left: 10px; border-right: none; border-top: none; }
+.card-face-front .corner-br { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+
+/* Holographic Sheen Animation for Active Card */
+.holo-shine-layer {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  transform: translateZ(2px);
+}
+
+.holo-shine-layer::before {
+  content: '';
+  position: absolute;
+  inset: -100%;
   background: linear-gradient(
-    180deg,
-    #00e5ff 0%,
-    #a855f7 35%,
-    #3b82f6 70%,
-    #64748b 100%
+    135deg,
+    transparent 40%,
+    rgba(0, 229, 255, 0.15) 48%,
+    rgba(255, 255, 255, 0.28) 50%,
+    rgba(0, 229, 255, 0.15) 52%,
+    transparent 60%
   );
-  box-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
+  transform: translateX(-100%);
+  pointer-events: none;
 }
 
-.career-timeline-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  cursor: pointer;
-}
-
-.career-date-col {
-  width: 90px;
-  flex-shrink: 0;
-  text-align: right;
-  padding-top: 22px;
-  font-family: var(--font-mono);
-  font-size: 0.8125rem;
-}
-
-.date-range {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  color: #94a3b8;
-  font-weight: 500;
-}
-
-.date-start {
-  color: #e2e8f0;
-  font-weight: 600;
-}
-
-.date-end {
-  color: #94a3b8;
-}
-
-.status-badge-current {
-  display: inline-block;
-  margin-top: 6px;
-  padding: 2px 7px;
-  border-radius: 9999px;
-  font-size: 0.625rem;
-  font-weight: 700;
-  color: #00FFCC;
-  background: rgba(0, 255, 204, 0.12);
-  border: 1px solid rgba(0, 255, 204, 0.4);
-  box-shadow: 0 0 8px rgba(0, 255, 204, 0.25);
-  letter-spacing: 0.05em;
-}
-
-.career-node-marker {
-  position: relative;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #070d1a;
-  border: 2px solid var(--node-accent, #00e5ff);
-  box-shadow: 0 0 10px var(--node-accent, #00e5ff);
-  margin-top: 24px;
-  z-index: 2;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all var(--transition-fast);
-}
-
-.node-inner-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--node-accent, #00e5ff);
-}
-
-.career-timeline-item:hover .career-node-marker {
-  transform: scale(1.2);
-  box-shadow: 0 0 16px var(--node-accent, #00e5ff);
-}
-
-/* Timeline Card */
-.career-card {
-  flex: 1;
-  border-radius: 14px;
-  background: rgba(13, 20, 38, 0.65);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  padding: 18px 20px;
-  transition: all 0.25s ease;
-}
-
-.career-timeline-item:hover .career-card {
-  border-color: rgba(0, 229, 255, 0.35);
-  transform: translateY(-2px);
-  background: rgba(16, 26, 50, 0.8);
-}
-
-.career-card.active-glow {
+/* ACTIVE CARD AT FRONT */
+.orbital-card-rig.is-front-active .card-face-front {
   border-color: #00e5ff;
-  box-shadow: 0 0 25px rgba(0, 229, 255, 0.25), inset 0 0 15px rgba(0, 229, 255, 0.05);
-  background: linear-gradient(135deg, rgba(16, 28, 56, 0.9) 0%, rgba(10, 18, 36, 0.85) 100%);
+  border-width: 2.5px;
+  box-shadow: 
+    0 0 0 2.5px rgba(0, 229, 255, 0.9),
+    inset 0 0 0 1.5px rgba(255, 255, 255, 0.5),
+    inset 0 0 25px rgba(0, 229, 255, 0.25),
+    0 22px 48px rgba(0, 0, 0, 0.9),
+    0 0 35px rgba(0, 229, 255, 0.6);
 }
 
-.career-card-body {
+.orbital-card-rig.is-front-active .card-face-front::before {
+  border-color: rgba(0, 229, 255, 0.7);
+  box-shadow: inset 0 0 18px rgba(0, 229, 255, 0.25), 0 0 10px rgba(0, 229, 255, 0.3);
+}
+
+.orbital-card-rig.is-front-active .card-edge-left,
+.orbital-card-rig.is-front-active .card-edge-right {
+  border-left-color: #00e5ff;
+  border-right-color: #00e5ff;
+  border-width: 4px;
+  box-shadow: 
+    0 0 45px rgba(0, 229, 255, 0.95),
+    inset 0 0 30px rgba(0, 229, 255, 0.7);
+}
+
+.orbital-card-rig.is-front-active .card-edge-top {
+  border-top-color: #ffffff;
+  border-bottom-color: #00e5ff;
+  box-shadow: 0 0 45px rgba(0, 229, 255, 1), inset 0 0 30px #ffffff;
+}
+
+.orbital-card-rig.is-front-active .holo-shine-layer {
+  opacity: 1;
+}
+
+.orbital-card-rig.is-front-active .holo-shine-layer::before {
+  animation: holo-pass 4s ease-in-out infinite;
+}
+
+.orbital-card-rig.is-front-active .holo-corner {
+  opacity: 1;
+  border-color: #00e5ff;
+  box-shadow: 0 0 10px #00e5ff;
+}
+
+@keyframes holo-pass {
+  0% { transform: translateX(-120%) rotate(25deg); }
+  50%, 100% { transform: translateX(120%) rotate(25deg); }
+}
+
+/* Card Header Row */
+.orbital-card-top,
+.orbital-card-head {
   display: flex;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.career-card-main {
-  flex: 1;
-}
-
-.career-card-top-row {
-  display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 14px;
-  margin-bottom: 10px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  flex-shrink: 0;
+  transform: translateZ(16px);
+  transform-style: preserve-3d;
 }
 
+/* Company Logo Badge: Strictly Constrained 44x44 (Never Expands) */
+.orbital-logo-badge,
+.orbital-logo-pod,
 .company-logo-badge {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  max-width: 44px !important;
+  min-height: 44px !important;
+  max-height: 44px !important;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  overflow: hidden;
+  box-shadow: 0 0 16px var(--logo-glow, rgba(0, 229, 255, 0.3));
+  transform: translateZ(22px);
 }
 
+.orbital-logo-badge svg,
+.orbital-logo-pod svg,
 .company-logo-badge svg {
-  width: 20px;
-  height: 20px;
+  width: 22px !important;
+  height: 22px !important;
+  max-width: 22px !important;
+  max-height: 22px !important;
+  display: block !important;
+  flex-shrink: 0 !important;
 }
 
 .logo-bship {
@@ -2579,6 +2975,7 @@ code, pre, kbd, .mono {
   font-weight: 800;
   font-family: var(--font-mono);
   letter-spacing: -0.05em;
+  color: #FFFFFF;
 }
 
 .logo-star {
@@ -2593,387 +2990,575 @@ code, pre, kbd, .mono {
   box-shadow: 0 0 12px rgba(37, 99, 235, 0.4);
 }
 
-.logo-archive {
-  background: linear-gradient(135deg, #475569 0%, #334155 100%);
+.logo-academy {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
   color: #FFFFFF;
-  box-shadow: 0 0 12px rgba(71, 85, 105, 0.4);
+  box-shadow: 0 0 12px rgba(2, 132, 199, 0.4);
 }
 
-.career-title-group .company-name {
-  font-size: 1.2rem;
+.logo-code {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #FFFFFF;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+}
+
+.logo-ai {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #FFFFFF;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+}
+
+.logo-default {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--accent-cyan);
+}
+
+/* Card Company Info Block */
+.orbital-card-id-block,
+.orbital-meta-pod {
+  flex: 1;
+  min-width: 0;
+}
+
+.orbital-company,
+.orbital-company-name {
+  font-size: 1.125rem;
   font-weight: 700;
   color: #FFFFFF;
-  line-height: 1.2;
   margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
 }
 
-.career-title-group .role-name {
-  font-size: 0.9375rem;
-  font-weight: 500;
-  color: #cbd5e1;
+.orbital-role,
+.orbital-role-title {
+  font-size: 0.82rem;
+  color: var(--accent-cyan);
+  font-family: var(--font-mono);
   margin: 2px 0 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.location-text {
-  display: inline-flex;
+.orbital-date-row,
+.orbital-period-tag {
+  display: flex;
   align-items: center;
-  gap: 4px;
-  font-size: 0.8125rem;
-  color: #94a3b8;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: #64748b;
+  letter-spacing: 0.04em;
 }
 
-.loc-pin-icon {
+.orbital-pin-svg {
   width: 12px;
   height: 12px;
-  color: #94a3b8;
-}
-
-.company-desc {
-  font-size: 0.875rem;
-  line-height: 1.55;
-  color: #cbd5e1;
-  margin: 0 0 12px 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.company-tech-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.company-tech-tag {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  padding: 3px 9px;
-  border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: #94a3b8;
-  transition: all 0.2s;
-}
-
-.career-card:hover .company-tech-tag {
-  border-color: rgba(255, 255, 255, 0.15);
-  color: #cbd5e1;
-}
-
-/* Card Thumb */
-.career-card-thumb-wrap {
-  width: 160px;
+  color: #a855f7;
   flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-end;
 }
 
-.career-card-thumb {
-  width: 100%;
-  height: 85px;
-  object-fit: cover;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  transition: transform 0.25s ease;
-}
-
-.career-timeline-item:hover .career-card-thumb {
-  transform: scale(1.03);
-  border-color: rgba(0, 229, 255, 0.4);
-}
-
-.career-view-link {
-  background: none;
-  border: none;
+.orbital-badge-current,
+.orbital-current-tag {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: #00e5ff;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 0 0;
-  transition: all 0.2s;
-}
-
-.career-view-link:hover {
-  color: #38bdf8;
-  transform: translateX(2px);
-}
-
-/* Right Column Sidebar */
-.career-sidebar-col {
-  position: sticky;
-  top: 96px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-/* Detail Panel */
-.career-detail-panel {
-  padding: 24px;
-  border-radius: 14px;
-  background: rgba(14, 22, 42, 0.85);
-  border: 1px solid rgba(0, 229, 255, 0.2);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-  animation: fadeIn 0.25s ease-out;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.detail-header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 8px;
-}
-
-.detail-company-identity {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.detail-company-title {
-  font-size: 1.25rem;
+  font-size: 0.62rem;
   font-weight: 700;
-  color: #FFFFFF;
-  margin: 0;
-  line-height: 1.2;
+  letter-spacing: 0.06em;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: rgba(0, 255, 136, 0.15);
+  border: 1px solid rgba(0, 255, 136, 0.4);
+  color: #00ff88;
+  text-transform: uppercase;
+  margin-left: auto;
+  align-self: flex-start;
+  flex-shrink: 0;
+  transform: translateZ(18px);
 }
 
-.detail-role-subtitle {
-  font-size: 0.875rem;
-  color: #cbd5e1;
-  margin-top: 2px;
-}
-
-.detail-period-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--font-mono);
-  font-size: 0.8125rem;
-  color: #94a3b8;
-  margin-bottom: 16px;
-}
-
-.clock-icon {
-  width: 13px;
-  height: 13px;
-  color: #64748b;
-}
-
-.detail-media-wrap {
-  position: relative;
+/* Card Thumbnail Box with 3D Depth Elevation */
+.orbital-thumb-box {
+  width: 100%;
+  height: 110px;
   border-radius: 10px;
   overflow: hidden;
-  margin-bottom: 16px;
-  aspect-ratio: 16/9;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 12px 0 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #060a14;
+  flex-shrink: 0;
+  position: relative;
+  transform: translateZ(20px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.7), 0 0 14px rgba(0, 229, 255, 0.2);
 }
 
-.detail-featured-img {
+.orbital-thumb-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 0.4s ease;
 }
 
-.video-play-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.25);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.orbital-card-rig.is-front-active:hover .orbital-thumb-img {
+  transform: scale(1.05);
 }
 
-.play-btn-circle {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: rgba(0, 180, 216, 0.65);
-  backdrop-filter: blur(6px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #FFFFFF;
-  box-shadow: 0 0 16px rgba(0, 180, 216, 0.6);
-  transition: transform 0.2s;
-}
-
-.play-btn-circle svg {
-  width: 18px;
-  height: 18px;
-  margin-left: 2px;
-}
-
-.detail-overview-text {
-  font-size: 0.875rem;
-  line-height: 1.6;
-  color: #cbd5e1;
-  margin: 0 0 20px 0;
-}
-
-.detail-section-block {
-  margin-bottom: 18px;
-}
-
-.detail-section-title {
-  font-size: 0.9375rem;
-  font-weight: 700;
-  color: #FFFFFF;
-  margin: 0 0 10px 0;
-}
-
-.detail-achievements-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.detail-achievements-list li {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  font-size: 0.85rem;
-  line-height: 1.5;
+/* Card Description */
+.orbital-desc {
+  font-size: 0.81rem;
   color: #94a3b8;
-}
-
-.check-icon-svg {
-  color: #00e5ff;
-  width: 14px;
-  height: 14px;
+  line-height: 1.45;
+  margin: 0 0 10px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
   flex-shrink: 0;
-  margin-top: 2px;
+  transform: translateZ(12px);
 }
 
-.check-icon-svg svg {
-  width: 100%;
-  height: 100%;
-}
-
-.detail-tech-grid {
+/* Tech Pills with Floating 3D Layer */
+.orbital-tech-pills,
+.orbital-card-tech {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
+  margin-bottom: 12px;
+  flex: 1;
+  align-content: flex-start;
+  transform: translateZ(18px);
+  transform-style: preserve-3d;
 }
 
-.detail-tech-badge {
+.orbital-tech-tag,
+.orbital-tech-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+  transform: translateZ(8px);
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s ease;
+}
+
+.orbital-tech-tag:hover,
+.orbital-tech-badge:hover {
+  background: rgba(0, 229, 255, 0.12);
+  border-color: rgba(0, 229, 255, 0.35);
+  color: #FFFFFF;
+  transform: translateZ(14px) translateY(-1px);
+}
+
+/* Card Footer & Action Button */
+.orbital-card-footer,
+.orbital-card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: auto;
+  flex-shrink: 0;
+  transform: translateZ(20px);
+}
+
+.orbital-detail-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border-radius: 8px;
+  background: rgba(0, 229, 255, 0.1);
+  border: 1px solid rgba(0, 229, 255, 0.35);
+  color: #00e5ff;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transform: translateZ(10px);
+  box-shadow: 0 8px 18px rgba(0, 229, 255, 0.28);
+  transition: all 0.25s ease;
+}
+
+.orbital-detail-btn svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.25s ease;
+}
+
+.orbital-detail-btn:hover {
+  background: var(--accent-cyan);
+  color: #050912;
+  box-shadow: 0 12px 28px rgba(0, 229, 255, 0.55), 0 0 22px var(--glow-cyan-strong);
+  border-color: var(--accent-cyan);
+  transform: translateZ(16px) translateY(-2px);
+}
+
+.orbital-detail-btn:hover svg {
+  transform: translateX(3px);
+}
+
+/* ==========================================================================
+   BACK FACE: High-Tech Cyber HUD Chassis (Never Mirrored / No Backwards Text)
+   ========================================================================== */
+.card-face-back {
+  background: linear-gradient(135deg, #090e18 0%, #060a12 100%);
+  border: 2.5px solid rgba(0, 229, 255, 0.5);
+  border-radius: 14px;
+  transform: rotateY(180deg) translateZ(48px);
+  transform-style: preserve-3d;
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 
+    0 0 0 2px rgba(0, 229, 255, 0.5),
+    0 16px 36px rgba(0, 0, 0, 0.85);
+  transition: none;
+}
+
+.back-chassis-inner,
+.back-chassis-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transform-style: preserve-3d;
+}
+
+.back-header,
+.back-chassis-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed rgba(0, 229, 255, 0.2);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--accent-cyan);
+  letter-spacing: 0.1em;
+  transform: translateZ(10px);
+}
+
+.back-status-dot,
+.back-status-pill {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00ff88;
+  box-shadow: 0 0 6px #00ff88;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.back-hex-core,
+.back-chassis-core {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 8px;
+  margin: auto 0;
+  transform: translateZ(20px);
+}
+
+.back-hex-core .orbital-logo-badge {
+  width: 48px !important;
+  height: 48px !important;
+  min-width: 48px !important;
+  max-width: 48px !important;
+}
+
+.back-company-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.back-system-role,
+.back-company-role {
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  color: var(--text-tertiary);
+  margin: 0;
+}
+
+.back-specs-grid,
+.back-telemetry-specs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 12px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  transform: translateZ(14px);
+}
+
+.back-spec-item,
+.spec-line {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.spec-label {
+  color: #64748b;
+  font-size: 0.6rem;
+}
+
+.spec-val {
+  color: var(--accent-cyan);
+  font-weight: 600;
+}
+
+.back-circuit-vent {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  padding-top: 8px;
+  transform: translateZ(6px);
+}
+
+.back-circuit-vent span {
+  width: 24px;
+  height: 3px;
+  background: rgba(0, 229, 255, 0.25);
+  border-radius: 2px;
+}
+
+/* ==========================================================================
+   Navigation Arrow Buttons
+   ========================================================================== */
+.orbital-arrow-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(10, 16, 28, 0.85);
+  border: 1px solid rgba(0, 229, 255, 0.35);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 50;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.7), 0 0 15px rgba(0, 229, 255, 0.15);
+  transition: all 0.25s ease;
+}
+
+.orbital-arrow-btn svg {
+  width: 22px;
+  height: 22px;
+}
+
+.orbital-arrow-btn.prev-arrow { left: 24px; }
+.orbital-arrow-btn.next-arrow { right: 24px; }
+
+.orbital-arrow-btn:hover {
+  background: var(--accent-cyan);
+  color: #050912;
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 25px var(--glow-cyan-strong);
+  transform: translateY(-50%) scale(1.08);
+}
+
+/* ==========================================================================
+   Bottom Milestone Chips Dock & Auto Controls
+   ========================================================================== */
+.orbital-bottom-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+  z-index: 20;
+}
+
+.orbital-chips-dock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  background: rgba(10, 16, 28, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 6px;
+  border-radius: 100px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
+
+.orbital-chip-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 100px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.orbital-chip-btn .chip-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  box-shadow: 0 0 6px currentColor;
+}
+
+.orbital-chip-btn .chip-current-badge {
+  font-size: 0.62rem;
+  background: rgba(0, 255, 136, 0.15);
+  color: #00ff88;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+.orbital-chip-btn:hover {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.orbital-chip-btn.active {
+  background: rgba(0, 229, 255, 0.15);
+  border-color: rgba(0, 229, 255, 0.45);
+  color: #FFFFFF;
+  box-shadow: 0 0 16px rgba(0, 229, 255, 0.25);
+}
+
+.orbital-utility-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-tertiary);
+}
+
+.orbital-util-btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 5px 10px;
-  border-radius: 6px;
-  background: rgba(10, 16, 30, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: #e2e8f0;
-  transition: border-color 0.2s;
-}
-
-.detail-tech-badge:hover {
-  border-color: rgba(0, 229, 255, 0.3);
-}
-
-.tech-icon-circle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75rem;
-}
-
-.go-icon {
-  color: #00add8;
-  font-weight: 800;
-}
-
-.gorm-icon {
-  color: #ec4899;
-  font-weight: 700;
-  font-size: 0.65rem;
-}
-
-.php-icon {
-  color: #a855f7;
-  font-weight: 700;
-  font-size: 0.65rem;
-}
-
-.detail-action-btn {
-  width: 100%;
-  padding: 11px 16px;
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  background: rgba(0, 180, 216, 0.12);
-  border: 1px solid rgba(0, 229, 255, 0.4);
-  color: #00e5ff;
+  color: var(--text-secondary);
   font-family: var(--font-mono);
-  font-size: 0.8125rem;
-  font-weight: 600;
+  font-size: 0.76rem;
   cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.orbital-util-btn .util-icon {
+  font-size: 1rem;
+}
+
+.orbital-util-btn.active {
+  background: rgba(0, 229, 255, 0.12);
+  border-color: rgba(0, 229, 255, 0.35);
+  color: var(--accent-cyan);
+}
+
+.orbital-drag-tip {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 8px;
-  margin-top: 8px;
-  transition: all 0.2s;
+  color: var(--text-tertiary);
 }
 
-.detail-action-btn:hover {
-  background: rgba(0, 229, 255, 0.22);
-  box-shadow: 0 0 16px rgba(0, 229, 255, 0.3);
-  transform: translateY(-1px);
+.orbital-drag-tip .drag-hand-icon {
+  font-size: 1rem;
+  color: var(--accent-cyan);
 }
 
-/* Responsive Breakpoints */
-@media (max-width: 1024px) {
-  .career-layout-grid {
-    grid-template-columns: 1fr;
+/* ==========================================================================
+   Responsive Adaptations
+   ========================================================================== */
+@media (max-width: 960px) {
+  .orbital-stage-viewport {
+    height: 560px;
   }
-  .career-sidebar-col {
-    position: static;
+  .orbital-card-rig {
+    width: 340px;
+    height: 390px;
+    top: -195px;
+    left: -170px;
   }
+  .orbital-arrow-btn.prev-arrow { left: 10px; }
+  .orbital-arrow-btn.next-arrow { right: 10px; }
 }
 
-@media (max-width: 640px) {
-  .career-experience-header {
+@media (max-width: 768px) {
+  .orbital-header-row,
+  .orbital-timeline-header {
     flex-direction: column;
-    gap: 20px;
   }
-  .career-timeline-track::before {
-    left: 85px;
+  .orbital-stage-viewport {
+    height: 520px;
   }
-  .career-date-col {
-    width: 70px;
+  .orbital-card-rig {
+    width: 300px;
+    height: 370px;
+    top: -185px;
+    left: -150px;
+  }
+  .card-face-front, .card-face-back {
+    padding: 18px;
+  }
+  .orbital-telemetry-hud {
+    display: none;
+  }
+  .orbital-utility-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .orbital-stage-viewport {
+    height: 480px;
+  }
+  .orbital-card-rig {
+    width: 270px;
+    height: 350px;
+    top: -175px;
+    left: -135px;
+  }
+  .orbital-chips-dock {
+    border-radius: 16px;
+    padding: 8px;
+  }
+  .orbital-chip-btn {
+    padding: 6px 12px;
     font-size: 0.75rem;
-  }
-  .career-card-body {
-    flex-direction: column;
-  }
-  .career-card-thumb-wrap {
-    width: 100%;
-    align-items: flex-start;
-    gap: 8px;
-  }
-  .career-card-thumb {
-    height: 140px;
   }
 }
 

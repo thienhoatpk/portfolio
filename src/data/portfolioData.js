@@ -680,11 +680,11 @@ export const WORK_EXPERIENCES = workExperienceRaw.map(exp => {
 });
 
 export const CAREER_STATS = {
-  years: "3+",
-  yearsDetail: "3y6m",
-  companies: 4,
-  projects: 4,
-  technologies: "12+",
+  years: "4+",
+  yearsDetail: "4 years",
+  companies: 6,
+  projects: 6,
+  technologies: "16+",
   quote: "Không chỉ viết code, mình đang xây dựng những điều có ý nghĩa.",
   author: "Hòa Nguyễn Thiện"
 };

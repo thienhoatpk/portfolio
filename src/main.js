@@ -51,9 +51,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Component 1: Interactive Workspace Terminal
   initTerminal();
-
-  console.log(
-    '%c[NTH://ENGINE] Dark Gaming Neon Portfolio System Online.',
-    'color: #00E5FF; font-weight: bold; font-family: monospace; font-size: 14px; background: #080B12; padding: 4px 8px; border: 1px solid #00E5FF;'
-  );
 });

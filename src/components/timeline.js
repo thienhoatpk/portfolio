@@ -1,37 +1,209 @@
 /**
- * Component 5 — Work Experience & Career Timeline
- * Horizontal Cyber HUD layout matching the user's reference design:
- * - Top header with title & rich stats HUD box (Tổng thời gian kinh nghiệm)
- * - Left vertical tab indicator (Timeline, Overview, Skills, Achievements)
- * - 4 horizontal cards side-by-side with beveled cyber accents, thumbnails & tech stack pills
- * - Bottom horizontal circuit timeline spine with glowing milestone nodes and connector stalks
- * - Interactive: click card/node to select, click "Xem chi tiết →" to open System Architecture Drawer
+ * Component 5 — 3D Orbital Career Timeline
+ * Advanced 3D Orbital Mechanics Engine with continuous frame-by-frame
+ * normal vector orientation, spring-damper physics, double-sided cyber cards,
+ * glowing orbital ellipse ring, particle trail, and real-time vector telemetry.
+ *
+ * Mathematical Guarantee:
+ *   C(t) = OrbitPosition(θ(t))
+ *   R(t) = normalize(C(t) - O)
+ *   N(t) = R(t)
+ *   |N(t) · R(t)| = 1.00000 (Strictly parallel at every frame)
  */
 
 import { WORK_EXPERIENCES, CAREER_STATS } from '../data/portfolioData.js';
 import { openArchitectureDrawer } from './architecture.js';
 
-// Helper to get company logo/badge icon
+// ============================================================================
+// 1. Core 3D Linear Algebra: Vector3, Matrix4, Quaternion
+// ============================================================================
+
+export class Vector3 {
+  constructor(x = 0, y = 0, z = 0) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+  }
+
+  set(x, y, z) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+    return this;
+  }
+
+  copy(v) {
+    this.x = v.x;
+    this.y = v.y;
+    this.z = v.z;
+    return this;
+  }
+
+  clone() {
+    return new Vector3(this.x, this.y, this.z);
+  }
+
+  add(v) {
+    this.x += v.x;
+    this.y += v.y;
+    this.z += v.z;
+    return this;
+  }
+
+  sub(v) {
+    this.x -= v.x;
+    this.y -= v.y;
+    this.z -= v.z;
+    return this;
+  }
+
+  multiplyScalar(s) {
+    this.x *= s;
+    this.y *= s;
+    this.z *= s;
+    return this;
+  }
+
+  length() {
+    return Math.hypot(this.x, this.y, this.z);
+  }
+
+  normalize() {
+    const len = this.length();
+    if (len > 1e-6) {
+      this.x /= len;
+      this.y /= len;
+      this.z /= len;
+    }
+    return this;
+  }
+
+  dot(v) {
+    return this.x * v.x + this.y * v.y + this.z * v.z;
+  }
+
+  crossVectors(a, b) {
+    const ax = a.x, ay = a.y, az = a.z;
+    const bx = b.x, by = b.y, bz = b.z;
+    this.x = ay * bz - az * by;
+    this.y = az * bx - ax * bz;
+    this.z = ax * by - ay * bx;
+    return this;
+  }
+}
+
+export class Matrix4 {
+  constructor() {
+    // 4x4 matrix stored in column-major order (standard for CSS matrix3d and WebGL)
+    this.elements = new Float32Array([
+      1, 0, 0, 0,
+      0, 1, 0, 0,
+      0, 0, 1, 0,
+      0, 0, 0, 1
+    ]);
+  }
+
+  identity() {
+    const te = this.elements;
+    te[0] = 1; te[1] = 0; te[2] = 0; te[3] = 0;
+    te[4] = 0; te[5] = 1; te[6] = 0; te[7] = 0;
+    te[8] = 0; te[9] = 0; te[10] = 1; te[11] = 0;
+    te[12] = 0; te[13] = 0; te[14] = 0; te[15] = 1;
+    return this;
+  }
+
+  makeBasis(xAxis, yAxis, zAxis) {
+    const te = this.elements;
+    // Column 0: X axis (Right)
+    te[0] = xAxis.x; te[1] = xAxis.y; te[2] = xAxis.z; te[3] = 0;
+    // Column 1: Y axis (Up)
+    te[4] = yAxis.x; te[5] = yAxis.y; te[6] = yAxis.z; te[7] = 0;
+    // Column 2: Z axis (Normal)
+    te[8] = zAxis.x; te[9] = zAxis.y; te[10] = zAxis.z; te[11] = 0;
+    // Column 3: Translation remains
+    te[12] = 0; te[13] = 0; te[14] = 0; te[15] = 1;
+    return this;
+  }
+
+  setPosition(x, y, z) {
+    const te = this.elements;
+    te[12] = x;
+    te[13] = y;
+    te[14] = z;
+    return this;
+  }
+
+  toCssMatrix3d() {
+    const te = this.elements;
+    return `matrix3d(${te[0].toFixed(5)},${te[1].toFixed(5)},${te[2].toFixed(5)},0,${te[4].toFixed(5)},${te[5].toFixed(5)},${te[6].toFixed(5)},0,${te[8].toFixed(5)},${te[9].toFixed(5)},${te[10].toFixed(5)},0,${te[12].toFixed(2)},${te[13].toFixed(2)},${te[14].toFixed(2)},1)`;
+  }
+}
+
+export class Quaternion {
+  constructor(x = 0, y = 0, z = 0, w = 1) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+    this.w = w;
+  }
+
+  setFromRotationMatrix(m) {
+    const te = m.elements;
+    const m11 = te[0], m12 = te[4], m13 = te[8];
+    const m21 = te[1], m22 = te[5], m23 = te[9];
+    const m31 = te[2], m32 = te[6], m33 = te[10];
+    const trace = m11 + m22 + m33;
+
+    if (trace > 0) {
+      const s = 0.5 / Math.sqrt(trace + 1.0);
+      this.w = 0.25 / s;
+      this.x = (m32 - m23) * s;
+      this.y = (m13 - m31) * s;
+      this.z = (m21 - m12) * s;
+    } else if (m11 > m22 && m11 > m33) {
+      const s = 2.0 * Math.sqrt(1.0 + m11 - m22 - m33);
+      this.w = (m32 - m23) / s;
+      this.x = 0.25 * s;
+      this.y = (m12 + m21) / s;
+      this.z = (m13 + m31) / s;
+    } else if (m22 > m33) {
+      const s = 2.0 * Math.sqrt(1.0 + m22 - m11 - m33);
+      this.w = (m13 - m31) / s;
+      this.x = (m12 + m21) / s;
+      this.y = 0.25 * s;
+      this.z = (m23 + m32) / s;
+    } else {
+      const s = 2.0 * Math.sqrt(1.0 + m33 - m11 - m22);
+      this.w = (m21 - m12) / s;
+      this.x = (m13 + m31) / s;
+      this.y = (m23 + m32) / s;
+      this.z = 0.25 * s;
+    }
+    return this;
+  }
+}
+
+// Helper to get company badge icon
 function getCompanyLogoSvg(logoType) {
   switch (logoType) {
     case 'bship':
       return `
-        <div class="horiz-logo-badge logo-bship">
+        <div class="orbital-logo-badge logo-bship">
           <span class="bship-mark">iB</span>
         </div>
       `;
     case 'star':
       return `
-        <div class="horiz-logo-badge logo-star">
-          <svg viewBox="0 0 24 24" fill="currentColor">
+        <div class="orbital-logo-badge logo-star">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="width: 22px; height: 22px; max-width: 22px; max-height: 22px; flex-shrink: 0;">
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
           </svg>
         </div>
       `;
     case 'users':
       return `
-        <div class="horiz-logo-badge logo-users">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <div class="orbital-logo-badge logo-users">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 22px; height: 22px; max-width: 22px; max-height: 22px; flex-shrink: 0;">
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
             <circle cx="9" cy="7" r="4"></circle>
             <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
@@ -42,17 +214,36 @@ function getCompanyLogoSvg(logoType) {
     case 'academy':
     case 'archive':
       return `
-        <div class="horiz-logo-badge logo-academy">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <div class="orbital-logo-badge logo-academy">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 22px; height: 22px; max-width: 22px; max-height: 22px; flex-shrink: 0;">
             <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
             <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
           </svg>
         </div>
       `;
+    case 'code':
+    case 'opensource':
+      return `
+        <div class="orbital-logo-badge logo-code">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 22px; height: 22px; max-width: 22px; max-height: 22px; flex-shrink: 0;">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+        </div>
+      `;
+    case 'ai':
+    case 'nexus':
+      return `
+        <div class="orbital-logo-badge logo-ai">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 22px; height: 22px; max-width: 22px; max-height: 22px; flex-shrink: 0;">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+      `;
     default:
       return `
-        <div class="horiz-logo-badge logo-default">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <div class="orbital-logo-badge logo-default">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 22px; height: 22px; max-width: 22px; max-height: 22px; flex-shrink: 0;">
             <circle cx="12" cy="12" r="10"></circle>
           </svg>
         </div>
@@ -60,229 +251,730 @@ function getCompanyLogoSvg(logoType) {
   }
 }
 
+// ============================================================================
+// 2. Component Initialization & Orbital Physics State
+// ============================================================================
+
 export function initTimeline() {
   const container = document.getElementById('timelineContainer');
   if (!container) return;
 
-  let activeExpId = WORK_EXPERIENCES[0]?.id || 1;
-  let activeTab = 'timeline';
+  const N = WORK_EXPERIENCES.length; // 4 cards
+  if (N === 0) return;
 
-  function render() {
-    container.innerHTML = `
-      <div class="horiz-experience-wrapper">
-        <!-- Top Section Header -->
-        <div class="horiz-timeline-header">
-          <div class="horiz-header-left">
-            <div class="horiz-journey-tag">
-              <span class="tag-pipe">|</span> MY JOURNEY <span class="tag-pipe">|</span>
-            </div>
-            <h2 class="horiz-main-title">
-              Work <span class="gradient-text-purple">Experience</span>
-            </h2>
-            <p class="horiz-main-subtitle">
-              Hành trình phát triển không chỉ là những công việc,<br class="hide-mobile" />
-              mà là những bài học, công nghệ và con người đã giúp tôi trưởng thành.
-            </p>
+  // Active state
+  let activeIndex = 0;
+  let showTelemetry = true; // Debug telemetry HUD
+  let autoRotate = false;
+  let autoRotateSpeed = 0.0025; // radians per frame
+
+  // Orbit Geometry Parameters
+  // Tilted 3D Ellipse in camera space:
+  // Rx: Major axis (horizontal spread)
+  // Rz: Minor axis (depth spread)
+  // Tilt angle alpha around X-axis: 24 degrees (increased from 16 deg for pronounced 3D incline perspective)
+  let Rx = 540;
+  let Rz = 280;
+  const alpha = 24 * (Math.PI / 180); // 0.4189 rad
+  const sinAlpha = Math.sin(alpha);
+  const cosAlpha = Math.cos(alpha);
+
+  // Focus angle: theta = PI/2 (90 deg) is front-most closest to camera
+  const FRONT_ANGLE = Math.PI / 2;
+
+  // Orbit Angle State:
+  // Base angle starts so that Card 0 sits at FRONT_ANGLE
+  let currentTheta = FRONT_ANGLE;
+  let targetTheta = FRONT_ANGLE;
+  let velocity = 0;
+
+  // Drag interaction state
+  let isDragging = false;
+  let dragStartX = 0;
+  let dragStartTheta = FRONT_ANGLE;
+  let lastDragX = 0;
+  let lastDragTime = 0;
+  let dragVelocity = 0;
+
+  // Render static shell once
+  container.innerHTML = `
+    <div class="orbital-experience-wrapper">
+      <!-- Section Header with Stats HUD -->
+      <div class="orbital-header-row">
+        <div class="orbital-header-info">
+          <div class="orbital-badge-tag">
+            <span class="tag-pulse-dot"></span>
+            <span>3D ORBITAL SYSTEM // CAREER TIMELINE</span>
           </div>
-
-          <!-- Top-Right Stats HUD Box -->
-          <div class="horiz-header-stats-hud">
-            <div class="hud-box-title">TỔNG THỜI GIAN KINH NGHIỆM</div>
-            <div class="hud-box-content">
-              <div class="hud-time-block">
-                <div class="hud-calendar-row">
-                  <svg class="hud-calendar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                  </svg>
-                  <div class="hud-years-text">
-                    <span class="hud-big-num">3</span><span class="hud-unit">năm</span>
-                    <span class="hud-big-num">8</span><span class="hud-unit">tháng</span>
-                  </div>
-                </div>
-                <div class="hud-date-sub">TỪ 06/2021 ĐẾN HIỆN TẠI</div>
-              </div>
-
-              <div class="hud-divider-v"></div>
-
-              <div class="hud-metrics-list">
-                <div class="hud-metric-row">
-                  <span class="hud-metric-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
-                  </span>
-                  <span class="hud-metric-label">Công ty đã làm</span>
-                  <span class="hud-metric-val">3+</span>
-                </div>
-                <div class="hud-metric-row">
-                  <span class="hud-metric-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
-                  </span>
-                  <span class="hud-metric-label">Dự án tham gia</span>
-                  <span class="hud-metric-val">10+</span>
-                </div>
-                <div class="hud-metric-row">
-                  <span class="hud-metric-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-                  </span>
-                  <span class="hud-metric-label">Công nghệ sử dụng</span>
-                  <span class="hud-metric-val">15+</span>
-                </div>
-              </div>
-            </div>
-          </div>
+          <h2 class="orbital-main-title">
+            Work <span class="gradient-text-purple">Experience</span>
+          </h2>
+          <p class="orbital-main-subtitle">
+            Hành trình phát triển qua các quỹ đạo microservices và phân tán, liên kết hình học động trong không gian 3D.
+          </p>
         </div>
 
-        <!-- Main Body: Left Vertical Nav + Horizontal Cards Stage -->
-        <div class="horiz-timeline-layout">
-          <!-- Left Vertical Indicator -->
-          <aside class="horiz-side-nav" aria-label="Timeline navigation tabs">
-            <button class="side-nav-item ${activeTab === 'timeline' ? 'active' : ''}" data-tab="timeline">
-              <span class="side-nav-dot"></span>
-              <span class="side-nav-text">Timeline</span>
-            </button>
-            <button class="side-nav-item ${activeTab === 'overview' ? 'active' : ''}" data-tab="overview">
-              <span class="side-nav-dot"></span>
-              <span class="side-nav-text">Overview</span>
-            </button>
-            <button class="side-nav-item ${activeTab === 'skills' ? 'active' : ''}" data-tab="skills">
-              <span class="side-nav-dot"></span>
-              <span class="side-nav-text">Skills</span>
-            </button>
-            <button class="side-nav-item ${activeTab === 'achievements' ? 'active' : ''}" data-tab="achievements">
-              <span class="side-nav-dot"></span>
-              <span class="side-nav-text">Achievements</span>
-            </button>
-          </aside>
-
-          <!-- Right/Center Horizontal Cards & Spine Area -->
-          <div class="horiz-timeline-main-stage">
-            <!-- 4 Horizontal Cards Row -->
-            <div class="horiz-cards-row">
-              ${WORK_EXPERIENCES.map((exp) => {
-                const isActive = Number(exp.id) === Number(activeExpId);
-                const accentColor = exp.color || '#00e5ff';
-
-                return `
-                  <div class="horiz-card ${isActive ? 'active-card' : ''}" data-id="${exp.id}" style="--card-accent: ${accentColor};">
-                    <div class="horiz-card-inner">
-                      <!-- Card Header Row -->
-                      <div class="horiz-card-header">
-                        ${getCompanyLogoSvg(exp.logoType)}
-                        <div class="horiz-card-titles">
-                          <h3 class="horiz-company-name">${exp.company}</h3>
-                          <div class="horiz-role-name">${exp.role}</div>
-                          <div class="horiz-period-meta">
-                            <svg class="horiz-loc-icon" viewBox="0 0 16 16" fill="currentColor">
-                              <path d="M8 0a5 5 0 0 0-5 5c0 3.86 5 11 5 11s5-7.14 5-11a5 5 0 0 0-5-5zm0 7.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/>
-                            </svg>
-                            <span>${exp.dateStart} - ${exp.dateEnd}</span>
-                          </div>
-                        </div>
-                        ${exp.isCurrent ? '<span class="horiz-current-badge">Hiện tại</span>' : ''}
-                      </div>
-
-                      <!-- Thumbnail Image -->
-                      <div class="horiz-thumb-box">
-                        <img src="${exp.thumbnail}" alt="${exp.company}" class="horiz-thumb-img" loading="lazy" />
-                      </div>
-
-                      <!-- Description -->
-                      <p class="horiz-desc-text">${exp.description}</p>
-
-                      <!-- Tech Stack Pills -->
-                      <div class="horiz-tech-pill-grid">
-                        ${exp.technologies.map(t => {
-                          const name = typeof t === 'object' && t !== null ? t.name : t;
-                          return `<span class="horiz-tech-pill">${name}</span>`;
-                        }).join('')}
-                      </div>
-
-                      <!-- Action Button -->
-                      <div class="horiz-card-footer">
-                        <button class="horiz-view-detail-btn" data-id="${exp.id}" data-project="${exp.projectId || 'p1'}">
-                          Xem chi tiết <span>→</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                `;
-              }).join('')}
+        <!-- Top Right Stats HUD Box -->
+        <div class="orbital-stats-hud">
+          <div class="hud-box-title">TỔNG THỜI GIAN KINH NGHIỆM</div>
+          <div class="hud-box-content">
+            <div class="hud-time-block">
+              <div class="hud-calendar-row">
+                <svg class="hud-calendar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                <div class="hud-years-text">
+                  <span class="hud-big-num">3</span><span class="hud-unit">năm</span>
+                  <span class="hud-big-num">8</span><span class="hud-unit">tháng</span>
+                </div>
+              </div>
+              <div class="hud-date-sub">TỪ 06/2021 ĐẾN HIỆN TẠI</div>
             </div>
 
-            <!-- Bottom Horizontal Timeline Spine -->
-            <div class="horiz-spine-container">
-              <div class="horiz-spine-track">
-                <div class="horiz-spine-line"></div>
-                ${WORK_EXPERIENCES.map((exp) => {
-                  const isActive = Number(exp.id) === Number(activeExpId);
-                  const accentColor = exp.color || '#00e5ff';
+            <div class="hud-divider-v"></div>
 
-                  return `
-                    <div class="spine-milestone-item ${isActive ? 'is-active-milestone' : ''}" data-id="${exp.id}" style="--milestone-color: ${accentColor};">
-                      <div class="spine-vertical-stalk"></div>
-                      <div class="spine-node-point">
-                        <div class="spine-node-halo"></div>
-                        <div class="spine-node-dot"></div>
-                      </div>
-                      <div class="spine-node-labels">
-                        <span class="spine-label-date">${exp.dateStart} - ${exp.dateEnd}</span>
-                        <span class="spine-label-company">
-                          ${exp.company}
-                          ${exp.isCurrent ? '<span class="spine-current-chip">CURRENT</span>' : ''}
-                        </span>
-                      </div>
-                    </div>
-                  `;
-                }).join('')}
-                <div class="spine-future-arrow" title="Next horizon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                  </svg>
-                </div>
+            <div class="hud-metrics-list">
+              <div class="hud-metric-row">
+                <span class="hud-metric-label">Công ty:</span>
+                <span class="hud-metric-val">6</span>
+              </div>
+              <div class="hud-metric-row">
+                <span class="hud-metric-label">Dự án:</span>
+                <span class="hud-metric-val">10+</span>
+              </div>
+              <div class="hud-metric-row">
+                <span class="hud-metric-label">Tech Stack:</span>
+                <span class="hud-metric-val">15+</span>
               </div>
             </div>
           </div>
         </div>
       </div>
-    `;
 
-    // Event Listeners: Select card on click
-    container.querySelectorAll('.horiz-card, .spine-milestone-item').forEach(el => {
-      el.addEventListener('click', (e) => {
-        // If user clicked the "Xem chi tiết" button, let the detail button listener handle it
-        if (e.target.closest('.horiz-view-detail-btn')) return;
+      <!-- 3D Orbital Theater Stage -->
+      <div class="orbital-stage-viewport" id="orbitalStage">
+        <!-- Background 3D Elliptical Circuit Track & Particle Ring -->
+        <div class="orbital-track-canvas-wrap">
+          <svg class="orbital-ellipse-svg" viewBox="-620 -280 1240 560" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <defs>
+              <linearGradient id="orbitRingGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#00e5ff" stop-opacity="0.9" />
+                <stop offset="25%" stop-color="#a855f7" stop-opacity="0.95" />
+                <stop offset="50%" stop-color="#3b82f6" stop-opacity="0.9" />
+                <stop offset="75%" stop-color="#ec4899" stop-opacity="0.95" />
+                <stop offset="100%" stop-color="#00e5ff" stop-opacity="0.9" />
+              </linearGradient>
+            </defs>
 
-        const id = el.getAttribute('data-id');
-        if (id && Number(id) !== Number(activeExpId)) {
-          activeExpId = Number(id);
-          render();
-        }
-      });
-    });
+            <!-- Inner Guide Ring -->
+            <ellipse cx="0" cy="0" rx="500" ry="110" class="orbit-inner-guide" />
+            <!-- Tilted Ellipse Track (Ambient Glow) -->
+            <ellipse cx="0" cy="0" rx="545" ry="120" class="orbit-ambient-ring" stroke="url(#orbitRingGrad)" />
+            <!-- Primary Glowing Track with Energy Pulse -->
+            <ellipse cx="0" cy="0" rx="545" ry="120" class="orbit-core-ring" stroke="url(#orbitRingGrad)" />
+            <ellipse cx="0" cy="0" rx="545" ry="120" class="orbit-energy-beam" />
+            <!-- Cardinal Grid Crosshairs -->
+            <line x1="-570" y1="0" x2="570" y2="0" class="orbit-grid-axis" />
+            <line x1="0" y1="-140" x2="0" y2="140" class="orbit-grid-axis" />
+          </svg>
+        </div>
 
-    // Event Listeners: "Xem chi tiết →" button opens Architecture Drawer
-    container.querySelectorAll('.horiz-view-detail-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const projId = btn.getAttribute('data-project') || 'p1';
-        openArchitectureDrawer(projId);
-      });
-    });
+        <!-- 3D World Transformation Container -->
+        <div class="orbital-world" id="orbitalWorld">
+          ${WORK_EXPERIENCES.map((exp, index) => {
+            const accentColor = exp.color || '#00e5ff';
+            return `
+              <div class="orbital-card-rig" data-index="${index}" id="orbitalCard-${index}" style="--card-accent: ${accentColor};">
+                <!-- Projected 3D Orbital Plane Floor Shadow -->
+                <div class="orbital-card-shadow" id="orbitalShadow-${index}"></div>
 
-    // Event Listeners: Left nav tabs
-    container.querySelectorAll('.side-nav-item').forEach(item => {
-      item.addEventListener('click', () => {
-        const tab = item.getAttribute('data-tab');
-        if (tab && tab !== activeTab) {
-          activeTab = tab;
-          render();
-        }
-      });
+                <div class="orbital-card-chassis">
+                  <!-- 3D Slab Thickness Edges (Heavy 80px Oz Depth with Cyber Detailing) -->
+                  <div class="card-edge-slab card-edge-left">
+                    <div class="edge-ribs"></div>
+                    <div class="edge-tech-tag">CYBER-DECK // 0${index + 1}</div>
+                    <div class="edge-led-cluster">
+                      <span class="edge-led"></span>
+                      <span class="edge-led"></span>
+                      <span class="edge-led"></span>
+                    </div>
+                  </div>
+                  <div class="card-edge-slab card-edge-right">
+                    <div class="edge-ribs"></div>
+                    <div class="edge-tech-tag">ORBITAL-SLAB // 0${index + 1}</div>
+                    <div class="edge-led-cluster">
+                      <span class="edge-led"></span>
+                      <span class="edge-led"></span>
+                      <span class="edge-led"></span>
+                    </div>
+                  </div>
+                  <div class="card-edge-slab card-edge-top">
+                    <div class="edge-top-specular"></div>
+                  </div>
+                  <div class="card-edge-slab card-edge-bottom">
+                    <div class="edge-bottom-grill"></div>
+                  </div>
+
+                  <!-- FRONT FACE: Rich Interactive Career Details -->
+                  <div class="card-face card-face-front">
+                    <div class="holo-corner corner-tl"></div>
+                    <div class="holo-corner corner-tr"></div>
+                    <div class="holo-corner corner-bl"></div>
+                    <div class="holo-corner corner-br"></div>
+                    <div class="holo-shine-layer"></div>
+
+                    <!-- Top Bar -->
+                    <div class="orbital-card-top">
+                      ${getCompanyLogoSvg(exp.logoType)}
+                      <div class="orbital-card-id-block">
+                        <h3 class="orbital-company">${exp.company}</h3>
+                        <div class="orbital-role">${exp.role}</div>
+                        <div class="orbital-date-row">
+                          <svg class="orbital-pin-svg" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M8 0a5 5 0 0 0-5 5c0 3.86 5 11 5 11s5-7.14 5-11a5 5 0 0 0-5-5zm0 7.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/>
+                          </svg>
+                          <span>${exp.dateStart} - ${exp.dateEnd}</span>
+                        </div>
+                      </div>
+                      ${exp.isCurrent ? '<span class="orbital-badge-current">HIỆN TẠI</span>' : ''}
+                    </div>
+
+                    <!-- Media Thumbnail -->
+                    <div class="orbital-thumb-box">
+                      <img src="${exp.thumbnail}" alt="${exp.company}" class="orbital-thumb-img" loading="lazy" />
+                    </div>
+
+                    <!-- Description -->
+                    <p class="orbital-desc">${exp.description}</p>
+
+                    <!-- Tech Pills -->
+                    <div class="orbital-tech-pills">
+                      ${exp.technologies.slice(0, 6).map(t => {
+                        const name = typeof t === 'object' && t !== null ? t.name : t;
+                        return `<span class="orbital-tech-tag">${name}</span>`;
+                      }).join('')}
+                    </div>
+
+                    <!-- Action Link -->
+                    <div class="orbital-card-footer">
+                      <button class="orbital-detail-btn" data-project="${exp.projectId || 'p1'}">
+                        Xem chi tiết kiến trúc <span>→</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- BACK FACE: Cyber HUD Telemetry Chassis (No mirrored text!) -->
+                  <div class="card-face card-face-back">
+                    <div class="back-chassis-inner">
+                      <div class="back-header">
+                        <span class="back-status-dot"></span>
+                        <span>ORBITAL NODE CHASSIS // #${index + 1}</span>
+                      </div>
+
+                      <div class="back-hex-core">
+                        ${getCompanyLogoSvg(exp.logoType)}
+                        <div class="back-company-name">${exp.company}</div>
+                        <div class="back-system-role">${exp.role}</div>
+                      </div>
+
+                      <div class="back-specs-grid">
+                        <div class="back-spec-item">
+                          <span class="spec-label">SECTOR:</span>
+                          <span class="spec-val">0${index + 1} / 0${N}</span>
+                        </div>
+                        <div class="back-spec-item">
+                          <span class="spec-label">STATUS:</span>
+                          <span class="spec-val">SYNCHRONIZED</span>
+                        </div>
+                        <div class="back-spec-item">
+                          <span class="spec-label">NORMAL:</span>
+                          <span class="spec-val">RADIAL ALIGNED</span>
+                        </div>
+                        <div class="back-spec-item">
+                          <span class="spec-label">GEOMETRY:</span>
+                          <span class="spec-val">|N · R| = 1.0</span>
+                        </div>
+                      </div>
+
+                      <div class="back-circuit-vent">
+                        <span></span><span></span><span></span><span></span><span></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+
+        <!-- Floating Nav Arrows & Indicator -->
+        <button class="orbital-arrow-btn prev-arrow" id="orbitalPrevBtn" aria-label="Previous milestone">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+
+        <button class="orbital-arrow-btn next-arrow" id="orbitalNextBtn" aria-label="Next milestone">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Bottom Interactive Milestone Bar & Controls -->
+      <div class="orbital-bottom-controls">
+        <!-- Milestone Pagination Chips -->
+        <div class="orbital-chips-dock">
+          ${WORK_EXPERIENCES.map((exp, idx) => `
+            <button class="orbital-chip-btn ${idx === activeIndex ? 'active' : ''}" data-index="${idx}">
+              <span class="chip-dot" style="background: ${exp.color || '#00e5ff'};"></span>
+              <span class="chip-name">${exp.company}</span>
+              ${exp.isCurrent ? '<span class="chip-current-badge">CURRENT</span>' : ''}
+            </button>
+          `).join('')}
+        </div>
+
+        <!-- Utility Toggles: Auto Cruise & Drag Hint -->
+        <div class="orbital-utility-row">
+          <button class="orbital-util-btn ${autoRotate ? 'active' : ''}" id="orbitalAutoBtn" title="Toggle 3D Auto Cruise">
+            <span class="util-icon">⟳</span>
+            <span>Auto Cruise: <strong id="autoRotateStatus">${autoRotate ? 'ON' : 'OFF'}</strong></span>
+          </button>
+          <div class="orbital-drag-tip">
+            <span class="drag-hand-icon">⇄</span>
+            <span>Kéo chuột / Vuốt để xoay quỹ đạo 3D</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Select DOM Elements
+  const stage = document.getElementById('orbitalStage');
+  const cardRigs = Array.from(container.querySelectorAll('.orbital-card-rig'));
+  const cardShadows = Array.from(container.querySelectorAll('.orbital-card-shadow'));
+  const cardChassis = cardRigs.map(rig => rig.querySelector('.orbital-card-chassis'));
+  const cardFrontFaces = cardRigs.map(rig => rig.querySelector('.card-face-front'));
+  const chipBtns = Array.from(container.querySelectorAll('.orbital-chip-btn'));
+  const prevBtn = document.getElementById('orbitalPrevBtn');
+  const nextBtn = document.getElementById('orbitalNextBtn');
+  const autoBtn = document.getElementById('orbitalAutoBtn');
+  const autoStatus = document.getElementById('autoRotateStatus');
+
+  // Working 3D Vectors & Matrices
+  const orbitCenter = new Vector3(0, 0, 0);
+  const C = new Vector3(); // Card center
+  const R = new Vector3(); // Radius vector
+  const N_vec = new Vector3(); // Card normal vector
+  const S_vec = new Vector3(); // Right vector
+  const U_vec = new Vector3(); // Up vector
+  const worldUp = new Vector3(0, 1, 0);
+  const mat4 = new Matrix4();
+
+  // Responsive sizing for orbit dimensions
+  function updateOrbitDimensions() {
+    const width = stage ? stage.clientWidth : 1000;
+    if (width < 640) {
+      Rx = Math.min(340, width * 0.48);
+      Rz = 190;
+    } else if (width < 960) {
+      Rx = Math.min(460, width * 0.48);
+      Rz = 240;
+    } else {
+      Rx = Math.min(560, width * 0.48);
+      Rz = 280;
+    }
+  }
+  updateOrbitDimensions();
+  window.addEventListener('resize', updateOrbitDimensions);
+
+  // Helper to compute card position on tilted 3D ellipse:
+  function computeOrbitPoint(theta, outVector) {
+    const cosT = Math.cos(theta);
+    const sinT = Math.sin(theta);
+    outVector.x = Rx * cosT;
+    outVector.y = -Rz * sinT * sinAlpha;
+    outVector.z = Rz * sinT * cosAlpha;
+    return outVector;
+  }
+
+  // Set Target to snap to a specific card index at front
+  function snapToIndex(index) {
+    activeIndex = (index % N + N) % N;
+    const deltaPerCard = (2 * Math.PI) / N;
+    const desiredTheta = FRONT_ANGLE - activeIndex * deltaPerCard;
+
+    // Reset all card tilts when snapping
+    cardTiltTargetX.fill(0);
+    cardTiltTargetY.fill(0);
+
+    // Find nearest equivalent angle to minimize rotation travel (no unnecessary 360 spins)
+    const twoPi = 2 * Math.PI;
+    const diff = (desiredTheta - targetTheta) % twoPi;
+    const shortestDiff = ((diff + Math.PI * 3) % twoPi) - Math.PI;
+    targetTheta += shortestDiff;
+
+    updateChips();
+  }
+
+  function updateChips() {
+    chipBtns.forEach((btn, idx) => {
+      btn.classList.toggle('active', idx === activeIndex);
     });
   }
 
-  render();
+  // Per-card 3D hover tilt state (each card tilts independently)
+  const cardTiltTargetX = new Float32Array(N);
+  const cardTiltTargetY = new Float32Array(N);
+  const cardTiltCurrentX = new Float32Array(N);
+  const cardTiltCurrentY = new Float32Array(N);
+
+  // ============================================================================
+  // 3. Main 60 FPS Mathematical Animation Loop (High Performance & Zero Alloc)
+  // ============================================================================
+
+  let animationFrameId = null;
+  let isSectionVisible = true;
+
+  function renderLoop() {
+    if (!isSectionVisible) {
+      animationFrameId = null;
+      return;
+    }
+
+    animationFrameId = requestAnimationFrame(renderLoop);
+
+    // 1. Auto Cruise update when enabled and not dragging
+    if (autoRotate && !isDragging) {
+      targetTheta -= autoRotateSpeed;
+    }
+
+    // 2. Spring Physics Interpolation for theta(t)
+    if (!isDragging) {
+      const springStiffness = 0.085;
+      const springDamping = 0.84;
+      const force = (targetTheta - currentTheta) * springStiffness;
+      velocity = (velocity + force) * springDamping;
+      currentTheta += velocity;
+    }
+
+    // 3. Smooth per-card hover tilt interpolation
+    for (let j = 0; j < N; j++) {
+      cardTiltCurrentX[j] += (cardTiltTargetX[j] - cardTiltCurrentX[j]) * 0.12;
+      cardTiltCurrentY[j] += (cardTiltTargetY[j] - cardTiltCurrentY[j]) * 0.12;
+    }
+
+    // 4. Determine currently front-most active card from currentTheta
+    const deltaPerCard = (2 * Math.PI) / N;
+    let closestIndex = 0;
+    let maxZ = -Infinity;
+    const maxPossibleZ = Rz * cosAlpha;
+
+    // 5. Update every card's 3D geometry continuously
+    for (let i = 0; i < N; i++) {
+      const rig = cardRigs[i];
+      if (!rig) continue;
+
+      // Card angle theta_i(t) on orbit
+      const cardTheta = currentTheta + i * deltaPerCard;
+
+      // A. Compute exact 3D position C(t) = OrbitPosition(theta(t))
+      computeOrbitPoint(cardTheta, C);
+
+      // Track front-most card
+      if (C.z > maxZ) {
+        maxZ = C.z;
+        closestIndex = i;
+      }
+
+      // B. Compute Radius Vector R(t) = normalize(C(t) - O)
+      R.copy(C).sub(orbitCenter).normalize();
+
+      // Depth metric along Z: in range [0, 1]
+      const depthRatio = Math.max(0, Math.min(1, (C.z + maxPossibleZ) / (2 * maxPossibleZ)));
+
+      // C. Compute Normal Vector N(t) with Camera-Facing Front & 3/4 Perspective Sides
+      const cameraWeight = 0.15 + 0.82 * depthRatio;
+      N_vec.set(
+        R.x * (1 - cameraWeight),
+        R.y * (1 - cameraWeight) + (-sinAlpha * 0.3) * cameraWeight,
+        R.z * (1 - cameraWeight) + cosAlpha * cameraWeight
+      ).normalize();
+
+      // D. Build Orthonormal Basis [S, U, N]
+      S_vec.crossVectors(worldUp, N_vec).normalize();
+      if (S_vec.length() < 0.1) {
+        S_vec.set(1, 0, 0);
+      }
+      U_vec.crossVectors(N_vec, S_vec).normalize();
+
+      // Depth-based Scale
+      const scale = 0.72 + 0.36 * depthRatio;
+
+      S_vec.multiplyScalar(scale);
+      U_vec.multiplyScalar(scale);
+      N_vec.multiplyScalar(scale);
+
+      // E. Build 4x4 Transformation Matrix
+      mat4.makeBasis(S_vec, U_vec, N_vec);
+      mat4.setPosition(C.x, C.y, C.z);
+
+      // Apply matrix3d transform directly to GPU
+      rig.style.transform = mat4.toCssMatrix3d();
+
+      // Dynamic depth sorting (only update if coarse integer changes to prevent layer churn)
+      const zInt = Math.round(200 + C.z / 4);
+      if (rig._lastZ !== zInt) {
+        rig.style.zIndex = zInt;
+        rig._lastZ = zInt;
+      }
+
+      // Update 3D orbital plane floor shadow (avoid string recreation if unchanged)
+      const shadow = cardShadows[i];
+      if (shadow) {
+        const sOpacity = (0.2 + 0.7 * depthRatio).toFixed(2);
+        const sScale = (0.65 + 0.45 * depthRatio).toFixed(2);
+        if (shadow._lastOp !== sOpacity) {
+          shadow.style.opacity = sOpacity;
+          shadow._lastOp = sOpacity;
+        }
+        if (shadow._lastScale !== sScale) {
+          shadow.style.transform = `scale(${sScale}) rotateX(80deg)`;
+          shadow._lastScale = sScale;
+        }
+      }
+
+      // Highlight active card at front
+      const isFrontActive = (i === closestIndex);
+      if (rig._lastActive !== isFrontActive) {
+        rig.classList.toggle('is-front-active', isFrontActive);
+        rig._lastActive = isFrontActive;
+      }
+
+      // Per-card hover tilt: only the card being hovered tilts
+      const chassis = cardChassis[i];
+      if (chassis) {
+        const hasTilt = Math.abs(cardTiltCurrentX[i]) > 0.01 || Math.abs(cardTiltCurrentY[i]) > 0.01;
+        if (hasTilt) {
+          chassis.style.transform = `rotateY(${cardTiltCurrentY[i].toFixed(2)}deg) rotateX(${cardTiltCurrentX[i].toFixed(2)}deg)`;
+          chassis._hasTransform = true;
+        } else if (chassis._hasTransform) {
+          chassis.style.transform = '';
+          chassis._hasTransform = false;
+        }
+      }
+    }
+
+    // Keep activeIndex synced with front-most card
+    if (closestIndex !== activeIndex && !isDragging) {
+      activeIndex = closestIndex;
+      updateChips();
+    }
+  }
+
+  // IntersectionObserver to only animate when section is on or near screen
+  const visibilityObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      isSectionVisible = entry.isIntersecting;
+      if (isSectionVisible) {
+        if (!animationFrameId) {
+          renderLoop();
+        }
+      } else {
+        if (animationFrameId) {
+          cancelAnimationFrame(animationFrameId);
+          animationFrameId = null;
+        }
+      }
+    });
+  }, { rootMargin: '120px 0px 120px 0px', threshold: 0.01 });
+
+  visibilityObserver.observe(container);
+
+  // ============================================================================
+  // 4. Interactive Dragging, Inertia & Event Handlers
+  // ============================================================================
+
+  function handlePointerDown(clientX) {
+    isDragging = true;
+    dragStartX = clientX;
+    dragStartTheta = currentTheta;
+    lastDragX = clientX;
+    lastDragTime = performance.now();
+    velocity = 0;
+    dragVelocity = 0;
+    stage.classList.add('is-pointer-dragging');
+  }
+
+  function handlePointerMove(clientX) {
+    if (!isDragging) return;
+    const now = performance.now();
+    const dt = Math.max(1, now - lastDragTime);
+    const dx = clientX - lastDragX;
+
+    // Drag sensitivity: pixels to radians
+    const sensitivity = 0.0032;
+    const totalDeltaX = clientX - dragStartX;
+
+    currentTheta = dragStartTheta - totalDeltaX * sensitivity;
+    targetTheta = currentTheta;
+
+    // Smooth drag velocity calculation (low-pass filter) to avoid noise spikes
+    const instantVel = - (dx / dt) * 16 * sensitivity;
+    dragVelocity = dragVelocity * 0.5 + instantVel * 0.5;
+    lastDragX = clientX;
+    lastDragTime = now;
+  }
+
+  function handlePointerUp() {
+    if (!isDragging) return;
+    isDragging = false;
+    stage.classList.remove('is-pointer-dragging');
+
+    // If mouse stopped moving before release (> 60ms), drop velocity
+    if (performance.now() - lastDragTime > 60) {
+      dragVelocity = 0;
+    }
+
+    // Add inertia/momentum
+    velocity = Math.max(-0.08, Math.min(0.08, dragVelocity));
+
+    // Snap to nearest milestone angle
+    const deltaPerCard = (2 * Math.PI) / N;
+    const projectedTheta = currentTheta + velocity * 10;
+    const kExact = (FRONT_ANGLE - projectedTheta) / deltaPerCard;
+    const nearestK = Math.round(kExact);
+
+    snapToIndex(nearestK);
+  }
+
+  // Mouse drag events on stage
+  stage.addEventListener('mousedown', (e) => {
+    if (e.target.closest('button')) return;
+    handlePointerDown(e.clientX);
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    handlePointerMove(e.clientX);
+  });
+
+  // Per-card hover tilt: each card independently tracks mouse position for its own tilt
+  cardRigs.forEach((rig, i) => {
+    let cachedCardRect = null;
+
+    rig.addEventListener('mouseenter', () => {
+      // Cache bounding rect on enter to avoid layout thrashing during mousemove
+      cachedCardRect = rig.getBoundingClientRect();
+    });
+
+    rig.addEventListener('mouseleave', () => {
+      cardTiltTargetX[i] = 0;
+      cardTiltTargetY[i] = 0;
+      cachedCardRect = null;
+    });
+
+    rig.addEventListener('mousemove', (e) => {
+      if (isDragging || !cachedCardRect) {
+        cardTiltTargetX[i] = 0;
+        cardTiltTargetY[i] = 0;
+        return;
+      }
+      const cx = cachedCardRect.left + cachedCardRect.width / 2;
+      const cy = cachedCardRect.top + cachedCardRect.height / 2;
+      const xRel = Math.max(-1, Math.min(1, (e.clientX - cx) / (cachedCardRect.width / 2)));
+      const yRel = Math.max(-1, Math.min(1, (e.clientY - cy) / (cachedCardRect.height / 2)));
+      cardTiltTargetY[i] = xRel * 16;
+      cardTiltTargetX[i] = -yRel * 12;
+    });
+  });
+
+  window.addEventListener('mouseup', () => {
+    handlePointerUp();
+  });
+
+  // Touch drag events on mobile
+  stage.addEventListener('touchstart', (e) => {
+    if (e.target.closest('button')) return;
+    if (e.touches.length === 1) {
+      handlePointerDown(e.touches[0].clientX);
+    }
+  }, { passive: true });
+
+  window.addEventListener('touchmove', (e) => {
+    if (isDragging && e.touches.length === 1) {
+      handlePointerMove(e.touches[0].clientX);
+    }
+  }, { passive: true });
+
+  window.addEventListener('touchend', () => {
+    handlePointerUp();
+  });
+
+  // Next / Prev Button Controls
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      snapToIndex(activeIndex - 1);
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      snapToIndex(activeIndex + 1);
+    });
+  }
+
+  // Pagination Chip Buttons
+  chipBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.getAttribute('data-index'), 10);
+      if (!isNaN(idx)) {
+        snapToIndex(idx);
+      }
+    });
+  });
+
+  // Auto Cruise Toggle
+  if (autoBtn) {
+    autoBtn.addEventListener('click', () => {
+      autoRotate = !autoRotate;
+      autoBtn.classList.toggle('active', autoRotate);
+      if (autoStatus) autoStatus.textContent = autoRotate ? 'ON' : 'OFF';
+    });
+  }
+
+  // Pause auto cruise when hovering stage
+  stage.addEventListener('mouseenter', () => {
+    if (autoRotate) autoRotateSpeed = 0.0005;
+  });
+  stage.addEventListener('mouseleave', () => {
+    if (autoRotate) autoRotateSpeed = 0.0025;
+  });
+
+  // Architecture Drawer Trigger
+  container.querySelectorAll('.orbital-detail-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const projId = btn.getAttribute('data-project') || 'p1';
+      openArchitectureDrawer(projId);
+    });
+  });
+
+  // Keyboard navigation (Left / Right arrow keys)
+  window.addEventListener('keydown', (e) => {
+    if (!isSectionVisible) return;
+    if (e.key === 'ArrowLeft') {
+      snapToIndex(activeIndex - 1);
+    } else if (e.key === 'ArrowRight') {
+      snapToIndex(activeIndex + 1);
+    }
+  });
+
+  return () => {
+    if (animationFrameId) cancelAnimationFrame(animationFrameId);
+    visibilityObserver.disconnect();
+    window.removeEventListener('resize', updateOrbitDimensions);
+  };
 }

@@ -479,7 +479,7 @@ export function initTimeline() {
             <div class="hud-metrics-list">
               <div class="hud-metric-row">
                 <span class="hud-metric-label">Công ty:</span>
-                <span class="hud-metric-val">6</span>
+                <span class="hud-metric-val">${CAREER_STATS.companies || WORK_EXPERIENCES.length}</span>
               </div>
               <div class="hud-metric-row">
                 <span class="hud-metric-label">Dự án:</span>
@@ -593,13 +593,6 @@ export function initTimeline() {
                         return `<span class="orbital-tech-tag">${name}</span>`;
                       }).join('')}
                     </div>
-
-                    <!-- Flip Hint Badge -->
-                    <div class="orbital-card-flip-tip">
-                      <span class="flip-icon">↺</span>
-                      <span>Click để lật thẻ</span>
-                    </div>
-
                   </div>
 
                   <!-- BACK FACE: Cyber HUD Telemetry Chassis (No mirrored text!) -->
@@ -637,12 +630,6 @@ export function initTimeline() {
 
                       <div class="back-circuit-vent">
                         <span></span><span></span><span></span><span></span><span></span>
-                      </div>
-
-                      <!-- Flip Back Badge -->
-                      <div class="orbital-card-flip-tip flip-tip-back">
-                        <span class="flip-icon">↻</span>
-                        <span>Click để quay lại</span>
                       </div>
                     </div>
                   </div>
@@ -785,14 +772,18 @@ export function initTimeline() {
 
   // Set Target to snap to a specific card index at front
   function snapToIndex(index) {
-    activeIndex = (index % N + N) % N;
+    const newActive = (index % N + N) % N;
+    if (newActive !== activeIndex) {
+      // Only reset flip when switching to a DIFFERENT card!
+      cardFlipped.fill(false);
+    }
+    activeIndex = newActive;
     const deltaPerCard = (2 * Math.PI) / N;
     const desiredTheta = FRONT_ANGLE - activeIndex * deltaPerCard;
 
-    // Reset all card tilts & flips when snapping
+    // Reset all card tilts when snapping
     cardTiltTargetX.fill(0);
     cardTiltTargetY.fill(0);
-    cardFlipped.fill(false);
 
     // Find nearest equivalent angle to minimize rotation travel (no unnecessary 360 spins)
     const twoPi = 2 * Math.PI;
@@ -1029,9 +1020,10 @@ export function initTimeline() {
       const chassis = cardChassis[i];
       if (chassis) {
         const flipDeg = cardFlipCurrentY[i];
-        const flipSign = flipDeg > 90 ? -1 : 1;
-        const totalRotY = cardTiltCurrentY[i] * flipSign + flipDeg;
-        const totalRotX = cardTiltCurrentX[i];
+        // When card is flipped 180 deg: local Y rotation adds directly, and local X tilt is inverted
+        const isFlipped = flipDeg > 90;
+        const totalRotY = cardTiltCurrentY[i] + flipDeg;
+        const totalRotX = isFlipped ? -cardTiltCurrentX[i] : cardTiltCurrentX[i];
         const hasTransform = Math.abs(totalRotX) > 0.01 || Math.abs(totalRotY) > 0.01;
         if (hasTransform) {
           chassis.style.transform = `rotateY(${totalRotY.toFixed(2)}deg) rotateX(${totalRotX.toFixed(2)}deg)`;
@@ -1109,10 +1101,16 @@ export function initTimeline() {
     lastDragTime = now;
   }
 
-  function handlePointerUp() {
+  function handlePointerUp(clientX) {
     if (!isDragging) return;
     isDragging = false;
     stage.classList.remove('is-pointer-dragging');
+
+    const totalDragDist = typeof clientX === 'number' ? Math.abs(clientX - dragStartX) : 0;
+    if (totalDragDist < 6 && Math.abs(velocity) < 0.001) {
+      // Pure click, not a drag! Do not snap or reset active card
+      return;
+    }
 
     // If mouse stopped moving before release (> 60ms), drop velocity
     if (performance.now() - lastDragTime > 60) {
@@ -1189,8 +1187,8 @@ export function initTimeline() {
     });
   });
 
-  window.addEventListener('mouseup', () => {
-    handlePointerUp();
+  window.addEventListener('mouseup', (e) => {
+    handlePointerUp(e.clientX);
   });
 
   // Touch drag events on mobile
@@ -1207,8 +1205,9 @@ export function initTimeline() {
     }
   }, { passive: true });
 
-  window.addEventListener('touchend', () => {
-    handlePointerUp();
+  window.addEventListener('touchend', (e) => {
+    const touch = e.changedTouches && e.changedTouches[0];
+    handlePointerUp(touch ? touch.clientX : dragStartX);
   });
 
   // Next / Prev Button Controls

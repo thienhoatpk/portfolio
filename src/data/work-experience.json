@@ -86,49 +86,5 @@
     "logo_type": "academy",
     "color": "#00f0ff",
     "project_id": "p4"
-  },
-  {
-    "id": 5,
-    "company": "Open Source Labs",
-    "role": "Distributed Systems Contributor",
-    "period": "01/2021 — 05/2021",
-    "date_start": "01/2021",
-    "date_end": "05/2021",
-    "is_current": false,
-    "location": "Global / Remote",
-    "description": "Nghiên cứu cơ chế đồng thuận phân tán, tối ưu hóa bộ nhớ đệm đa tầng và đóng góp cho các thư viện mã nguồn mở Go.",
-    "detail_overview": "Tham gia nghiên cứu và tối ưu hóa các module truyền tải dữ liệu phân tán, tối ưu I/O throughput và thuật toán consistent hashing.",
-    "achievements": [
-      "Đóng góp pull requests cho hệ sinh thái Go backend và networking libraries.",
-      "Benchmark và tối ưu throughput RPC giảm 35% CPU overhead.",
-      "Xây dựng tài liệu kỹ thuật về cơ chế đồng thuận phân tán."
-    ],
-    "tech_stack_ids": [1, 5, 12, 13, 17],
-    "thumbnail": "/images/blockchain_hub.jpg",
-    "logo_type": "code",
-    "color": "#10b981",
-    "project_id": "p5"
-  },
-  {
-    "id": 6,
-    "company": "Nexus AI Systems",
-    "role": "AI & RAG Research Fellow",
-    "period": "09/2020 — 12/2020",
-    "date_start": "09/2020",
-    "date_end": "12/2020",
-    "is_current": false,
-    "location": "Hồ Chí Minh, Việt Nam",
-    "description": "Nghiên cứu kiến trúc xử lý ngôn ngữ tự nhiên, pipeline truy xuất dữ liệu vector (RAG) và thuật toán phân tán thời gian thực.",
-    "detail_overview": "Tham gia nghiên cứu vector databases, hybrid search và kiến trúc retrieval pipeline tích hợp LLM cho hệ thống hỏi đáp thông minh.",
-    "achievements": [
-      "Xây dựng pipeline RAG tích hợp vector store đạt độ trễ truy xuất < 45ms.",
-      "Thực hiện fine-tuning embedding models phục vụ bài toán semantic search.",
-      "Tối ưu hóa pipeline xử lý tài liệu đa định dạng quy mô lớn."
-    ],
-    "tech_stack_ids": [3, 6, 11, 20, 9],
-    "thumbnail": "/images/ai_analytics.jpg",
-    "logo_type": "ai",
-    "color": "#f59e0b",
-    "project_id": "p6"
   }
 ]

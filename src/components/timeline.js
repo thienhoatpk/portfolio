@@ -415,7 +415,13 @@ export function initTimeline() {
                     <div class="edge-top-specular"></div>
                   </div>
                   <div class="card-edge-slab card-edge-bottom">
-                    <div class="edge-bottom-grill"></div>
+                    <div class="edge-ribs-h"></div>
+                    <div class="edge-tech-tag-h">COOLING-VENT // EXHAUST 0${index + 1}</div>
+                    <div class="edge-led-cluster-h">
+                      <span class="edge-led"></span>
+                      <span class="edge-led"></span>
+                      <span class="edge-led"></span>
+                    </div>
                   </div>
 
                   <!-- FRONT FACE: Rich Interactive Career Details -->
@@ -696,12 +702,13 @@ export function initTimeline() {
       // Depth metric along Z: in range [0, 1]
       const depthRatio = Math.max(0, Math.min(1, (C.z + maxPossibleZ) / (2 * maxPossibleZ)));
 
-      // C. Compute Normal Vector N(t) with Camera-Facing Front & 3/4 Perspective Sides
-      const cameraWeight = 0.15 + 0.82 * depthRatio;
+      // C. Compute Normal Vector N(t): Front card faces camera 100% directly; side cards turn into 3/4 perspective
+      const cameraWeight = Math.min(1, Math.pow(depthRatio, 2.2));
+      const sideWeight = 1 - cameraWeight;
       N_vec.set(
-        R.x * (1 - cameraWeight),
-        R.y * (1 - cameraWeight) + (-sinAlpha * 0.3) * cameraWeight,
-        R.z * (1 - cameraWeight) + cosAlpha * cameraWeight
+        R.x * sideWeight,
+        R.y * sideWeight,
+        R.z * sideWeight + cameraWeight
       ).normalize();
 
       // D. Build Orthonormal Basis [S, U, N]

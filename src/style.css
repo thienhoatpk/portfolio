@@ -2604,10 +2604,10 @@ code, pre, kbd, .mono {
 .card-face {
   position: absolute;
   inset: 0;
-  border-radius: 18px;
+  border-radius: 14px;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  overflow: visible; /* Kept visible so 3D children preserve-3d is NEVER flattened */
+  overflow: hidden; /* Cleanly clip card contents to rounded corners, preventing any elements from poking out */
   transform-style: preserve-3d;
 }
 
@@ -2744,24 +2744,31 @@ code, pre, kbd, .mono {
   background: 
     repeating-linear-gradient(
       90deg,
-      rgba(255, 255, 255, 0.35) 0px,
-      rgba(255, 255, 255, 0.35) 3px,
+      rgba(0, 229, 255, 0.4) 0px,
+      rgba(0, 229, 255, 0.4) 3px,
       transparent 3px,
       transparent 18px
     ),
     linear-gradient(
       180deg, 
-      #ffffff 0%, 
-      #00e5ff 25%, 
-      #1c4068 50%, 
-      #00e5ff 75%, 
-      #ffffff 100%
+      #00e5ff 0%, 
+      #0f2542 10%, 
+      #183c68 28%, 
+      #00e5ff 48%, 
+      #ffffff 50%, 
+      #00e5ff 52%, 
+      #183c68 72%, 
+      #0f2542 90%, 
+      #00e5ff 100%
     );
-  border-top: 3.5px solid #ffffff;
-  border-bottom: 3.5px solid #00e5ff;
+  border: 3.5px solid #00e5ff;
   box-shadow: 
     0 0 40px rgba(0, 229, 255, 0.95),
     inset 0 0 25px rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .card-edge-bottom {
@@ -2773,22 +2780,70 @@ code, pre, kbd, .mono {
   background: 
     repeating-linear-gradient(
       90deg,
-      rgba(168, 85, 247, 0.5) 0px,
-      rgba(168, 85, 247, 0.5) 4px,
-      transparent 4px,
+      rgba(0, 229, 255, 0.45) 0px,
+      rgba(0, 229, 255, 0.45) 3px,
+      transparent 3px,
       transparent 18px
     ),
     linear-gradient(
       180deg, 
       #00e5ff 0%, 
-      #132742 20%, 
-      #a855f7 50%, 
-      #132742 80%, 
+      #0f2542 10%, 
+      #183c68 28%, 
+      #00e5ff 48%, 
+      #ffffff 50%, 
+      #00e5ff 52%, 
+      #183c68 72%, 
+      #0f2542 90%, 
       #00e5ff 100%
     );
-  border-top: 3px solid #00e5ff;
-  border-bottom: 3.5px solid #a855f7;
-  box-shadow: 0 14px 40px rgba(168, 85, 247, 0.7);
+  border: 3.5px solid #00e5ff;
+  box-shadow: 
+    0 0 35px rgba(0, 229, 255, 0.8),
+    inset 0 0 25px rgba(0, 229, 255, 0.55);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  overflow: hidden;
+}
+
+.edge-ribs-h {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(0, 229, 255, 0.3) 0px,
+    rgba(0, 229, 255, 0.3) 2px,
+    transparent 2px,
+    transparent 14px
+  );
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+.edge-tech-tag-h {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  color: #ffffff;
+  text-shadow: 0 0 10px #00e5ff, 0 0 20px #00e5ff;
+  z-index: 3;
+  background: rgba(3, 10, 22, 0.96);
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1.5px solid #00e5ff;
+  box-shadow: 0 0 16px rgba(0, 229, 255, 0.65);
+  white-space: nowrap;
+}
+
+.edge-led-cluster-h {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  z-index: 3;
 }
 
 /* FRONT FACE: Cyberpunk Glassmorphism with Heavy 96px 3D Slab Thickness */
@@ -2817,12 +2872,11 @@ code, pre, kbd, .mono {
   border: 1px solid rgba(0, 229, 255, 0.25);
   border-radius: 13px;
   pointer-events: none;
-  transform: translateZ(4px);
   box-shadow: inset 0 0 14px rgba(0, 229, 255, 0.08);
   transition: border-color 0.35s ease, box-shadow 0.35s ease;
 }
 
-/* Internal 3D Floating Layers (Parallax Relief) */
+/* Corner Holo Accents (Pinned flat to face surface) */
 .card-face-front .holo-corner {
   position: absolute;
   width: 10px;
@@ -2830,7 +2884,6 @@ code, pre, kbd, .mono {
   pointer-events: none;
   border: 2px solid var(--accent-cyan);
   opacity: 0.7;
-  transform: translateZ(32px);
   transition: opacity 0.3s ease, border-color 0.3s ease;
 }
 
@@ -2885,19 +2938,14 @@ code, pre, kbd, .mono {
 }
 
 .orbital-card-rig.is-front-active .card-edge-left,
-.orbital-card-rig.is-front-active .card-edge-right {
-  border-left-color: #00e5ff;
-  border-right-color: #00e5ff;
+.orbital-card-rig.is-front-active .card-edge-right,
+.orbital-card-rig.is-front-active .card-edge-top,
+.orbital-card-rig.is-front-active .card-edge-bottom {
+  border-color: #00e5ff;
   border-width: 4px;
   box-shadow: 
     0 0 45px rgba(0, 229, 255, 0.95),
     inset 0 0 30px rgba(0, 229, 255, 0.7);
-}
-
-.orbital-card-rig.is-front-active .card-edge-top {
-  border-top-color: #ffffff;
-  border-bottom-color: #00e5ff;
-  box-shadow: 0 0 45px rgba(0, 229, 255, 1), inset 0 0 30px #ffffff;
 }
 
 .orbital-card-rig.is-front-active .holo-shine-layer {
@@ -2929,8 +2977,6 @@ code, pre, kbd, .mono {
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   position: relative;
   flex-shrink: 0;
-  transform: translateZ(16px);
-  transform-style: preserve-3d;
 }
 
 /* Company Logo Badge: Strictly Constrained 44x44 (Never Expands) */
@@ -2950,7 +2996,6 @@ code, pre, kbd, .mono {
   flex-shrink: 0;
   overflow: hidden;
   box-shadow: 0 0 16px var(--logo-glow, rgba(0, 229, 255, 0.3));
-  transform: translateZ(22px);
 }
 
 .orbital-logo-badge svg,
@@ -3076,10 +3121,9 @@ code, pre, kbd, .mono {
   margin-left: auto;
   align-self: flex-start;
   flex-shrink: 0;
-  transform: translateZ(18px);
 }
 
-/* Card Thumbnail Box with 3D Depth Elevation */
+/* Card Thumbnail Box */
 .orbital-thumb-box {
   width: 100%;
   height: 110px;
@@ -3090,7 +3134,6 @@ code, pre, kbd, .mono {
   background: #060a14;
   flex-shrink: 0;
   position: relative;
-  transform: translateZ(20px);
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.7), 0 0 14px rgba(0, 229, 255, 0.2);
 }
 
@@ -3117,10 +3160,9 @@ code, pre, kbd, .mono {
   -webkit-box-orient: vertical;
   overflow: hidden;
   flex-shrink: 0;
-  transform: translateZ(12px);
 }
 
-/* Tech Pills with Floating 3D Layer */
+/* Tech Pills */
 .orbital-tech-pills,
 .orbital-card-tech {
   display: flex;
@@ -3129,8 +3171,6 @@ code, pre, kbd, .mono {
   margin-bottom: 12px;
   flex: 1;
   align-content: flex-start;
-  transform: translateZ(18px);
-  transform-style: preserve-3d;
 }
 
 .orbital-tech-tag,
@@ -3145,7 +3185,6 @@ code, pre, kbd, .mono {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: #e2e8f0;
-  transform: translateZ(8px);
   box-shadow: 0 5px 12px rgba(0, 0, 0, 0.5);
   transition: all 0.2s ease;
 }
@@ -3155,7 +3194,7 @@ code, pre, kbd, .mono {
   background: rgba(0, 229, 255, 0.12);
   border-color: rgba(0, 229, 255, 0.35);
   color: #FFFFFF;
-  transform: translateZ(14px) translateY(-1px);
+  transform: translateY(-1px);
 }
 
 /* Card Footer & Action Button */
@@ -3168,7 +3207,6 @@ code, pre, kbd, .mono {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   margin-top: auto;
   flex-shrink: 0;
-  transform: translateZ(20px);
 }
 
 .orbital-detail-btn {
@@ -3185,7 +3223,6 @@ code, pre, kbd, .mono {
   font-weight: 600;
   letter-spacing: 0.04em;
   cursor: pointer;
-  transform: translateZ(10px);
   box-shadow: 0 8px 18px rgba(0, 229, 255, 0.28);
   transition: all 0.25s ease;
 }
@@ -3201,7 +3238,7 @@ code, pre, kbd, .mono {
   color: #050912;
   box-shadow: 0 12px 28px rgba(0, 229, 255, 0.55), 0 0 22px var(--glow-cyan-strong);
   border-color: var(--accent-cyan);
-  transform: translateZ(16px) translateY(-2px);
+  transform: translateY(-2px);
 }
 
 .orbital-detail-btn:hover svg {
@@ -3249,7 +3286,6 @@ code, pre, kbd, .mono {
   font-size: 0.7rem;
   color: var(--accent-cyan);
   letter-spacing: 0.1em;
-  transform: translateZ(10px);
 }
 
 .back-status-dot,
@@ -3272,7 +3308,6 @@ code, pre, kbd, .mono {
   text-align: center;
   gap: 8px;
   margin: auto 0;
-  transform: translateZ(20px);
 }
 
 .back-hex-core .orbital-logo-badge {
@@ -3308,7 +3343,6 @@ code, pre, kbd, .mono {
   border: 1px solid rgba(255, 255, 255, 0.05);
   font-family: var(--font-mono);
   font-size: 0.68rem;
-  transform: translateZ(14px);
 }
 
 .back-spec-item,
@@ -3333,7 +3367,6 @@ code, pre, kbd, .mono {
   justify-content: center;
   gap: 6px;
   padding-top: 8px;
-  transform: translateZ(6px);
 }
 
 .back-circuit-vent span {
